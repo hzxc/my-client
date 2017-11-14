@@ -19,9 +19,27 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles.scss"
+        "styles.scss",
+        "../node_modules/famfamfam-flags/dist/sprite/famfamfam-flags.min.css",
+        "../node_modules/toastr/build/toastr.css"
       ],
-      "scripts": [],
+      "scripts": [
+        "../node_modules/jquery/dist/jquery.min.js",
+        "../node_modules/js-cookie/src/js.cookie.js",
+        "../node_modules/lodash/lodash.min.js",
+        "../node_modules/moment/min/moment.min.js",
+        "../node_modules/signalr/jquery.signalR.js",
+        "../node_modules/toastr/toastr.js",
+        "../node_modules/block-ui/jquery.blockUI.js",
+        "../node_modules/spin.js/spin.js",
+
+        "./src/app/abp/resources/scripts/abp.js",
+        "./src/app/abp/resources/scripts/libs/abp.jquery.js",
+        "./src/app/abp/resources/scripts/libs/abp.toastr.js",
+        "./src/app/abp/resources/scripts/libs/abp.blockUI.js",
+        "./src/app/abp/resources/scripts/libs/abp.spin.js",
+        "./src/app/abp/resources/scripts/libs/abp.moment.js"
+      ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
