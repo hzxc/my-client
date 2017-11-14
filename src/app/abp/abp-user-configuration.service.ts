@@ -16,5 +16,4 @@ export class AbpUserConfigurationService {
         jQuery.extend(true, abp, result.json());
       });
   }
-
 }

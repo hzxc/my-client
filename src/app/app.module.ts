@@ -15,17 +15,17 @@ import { AbpModule, ABP_HTTP_PROVIDER } from './abp/abp.module';
 
 export function appInitializerFactory(injector: Injector) {
   return () => {
-    abp.ui.setBusy();
+    // abp.ui.setBusy();
     return new Promise<boolean>((resolve, reject) => {
       AppPreBootstrap.run(() => {
         const appSessionService: AppSessionService = injector.get(AppSessionService);
         appSessionService.init().then(
           (result) => {
-            abp.ui.clearBusy();
+            // abp.ui.clearBusy();
             resolve(result);
           },
           (err) => {
-            abp.ui.clearBusy();
+            // abp.ui.clearBusy();
             reject(err);
           }
         );

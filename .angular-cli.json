@@ -20,6 +20,7 @@
       "prefix": "app",
       "styles": [
         "styles.scss",
+        "assets/fonts/roboto/roboto.css",
         "../node_modules/famfamfam-flags/dist/sprite/famfamfam-flags.min.css",
         "../node_modules/toastr/build/toastr.css"
       ],
@@ -31,14 +32,11 @@
         "../node_modules/signalr/jquery.signalR.js",
         "../node_modules/toastr/toastr.js",
         "../node_modules/block-ui/jquery.blockUI.js",
-        "../node_modules/spin.js/spin.js",
-
-        "./src/app/abp/resources/scripts/abp.js",
-        "./src/app/abp/resources/scripts/libs/abp.jquery.js",
-        "./src/app/abp/resources/scripts/libs/abp.toastr.js",
-        "./src/app/abp/resources/scripts/libs/abp.blockUI.js",
-        "./src/app/abp/resources/scripts/libs/abp.spin.js",
-        "./src/app/abp/resources/scripts/libs/abp.moment.js"
+        "./app/abp/resources/scripts/abp.js",
+        "./app/abp/resources/scripts/libs/abp.jquery.js",
+        "./app/abp/resources/scripts/libs/abp.toastr.js",
+        "./app/abp/resources/scripts/libs/abp.blockUI.js",
+        "./app/abp/resources/scripts/libs/abp.moment.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

@@ -1,0 +1,13 @@
+/*---- Common -----*/
+.full-width {
+    width: 100% !important;
+}
+
+.form-field .mat-form-field-subscript-wrapper
+{
+   overflow: visible !important;
+}
+
+.text-center {
+    text-align: center;
+}
