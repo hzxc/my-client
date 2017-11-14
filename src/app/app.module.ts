@@ -13,7 +13,8 @@ export function getRemoteServiceBaseUrl(): string {
 }
 
 export function getCurrentLanguage(): string {
-    return abp.localization.currentLanguage.name;
+    // return abp.localization.currentLanguage.name;
+    return '';
 }
 @NgModule({
   declarations: [
