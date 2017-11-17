@@ -34,5 +34,4 @@ export class LanguagesComponent extends AppComponentBase implements OnInit {
 
     location.reload();
 }
-
 }

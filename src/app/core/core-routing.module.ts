@@ -27,9 +27,10 @@ const routes: Routes = [
         path: 'admin',
         loadChildren: './admin/admin.module#AdminModule', // Lazy load admin module
         data: { preload: true }
-      }, {
-        path: '**', redirectTo: 'notifications'
       }
+      // {
+      //   path: '**', redirectTo: 'notifications'
+      // }
     ]
   }
 ];
