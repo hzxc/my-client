@@ -21,6 +21,10 @@
   -webkit-transition: all .3s cubic-bezier(.35,0,.25,1);
   transition: all .3s cubic-bezier(.35,0,.25,1);
 }
+
+.mat-nav-list[dense] .sidebar-list-item.mat-list-item{
+  height:auto;
+}
 .sidebar-panel.mat-sidenav .sidebar-list-item.open {
   max-height: 1000px;
   overflow: visible;
