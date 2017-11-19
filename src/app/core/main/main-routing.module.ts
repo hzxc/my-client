@@ -8,7 +8,7 @@ const routes: Routes = [
   {
     path: '',
     component: DashboardComponent,
-    canActivate: [AppRouteGuard]
+    // canActivate: [AppRouteGuard]
     // children: [
     //   {
     //     path: 'dashboard',
