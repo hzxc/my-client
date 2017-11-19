@@ -52,7 +52,7 @@ export function getCurrentLanguage(): string {
     AbpModule,
     SharedModule.forRoot(),
     ServiceProxyModule,
-    AppRoutingModule
+    AppRoutingModule,
   ],
   providers: [
     ABP_HTTP_PROVIDER,

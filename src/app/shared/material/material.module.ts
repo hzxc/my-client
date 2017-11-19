@@ -16,11 +16,13 @@ import {
   MatProgressBarModule,
   MatSidenavModule,
   MatSelectModule,
-  MatFormFieldModule
+  MatFormFieldModule,
 } from '@angular/material';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
+    HttpClientModule,
     MatProgressBarModule,
     MatToolbarModule,
     MatIconModule,
