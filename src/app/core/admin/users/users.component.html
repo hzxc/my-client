@@ -1,38 +1,44 @@
 <!-- <div class="example-container mat-elevation-z8"> -->
-<mat-card>
+<mat-card class="users-card">
   <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon class="icon-card-header">supervisor_account</mat-icon>
+    </div>
     <!-- <div mat-card-avatar class="example-header-image"></div> -->
-    <mat-icon>account_box</mat-icon>
+
     <!-- <mat-card-avatar class="example-header-image"></div> -->
     <mat-card-title>Users</mat-card-title>
     <!-- <mat-card-subtitle>Users</mat-card-subtitle> -->
   </mat-card-header>
-  <mat-table #table [dataSource]="dataSource">
+  <mat-form-field class="full-width">
+    <input matInput #filter placeholder="Filter users">
+  </mat-form-field>
+  <mat-table #table [dataSource]="dataSource" matSort>
 
     <!--- Note that these columns can be defined in any order.
             The actual rendered columns are set as a property on the row definition" -->
 
     <!-- ID Column -->
     <ng-container matColumnDef="userId">
-      <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
       <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
     </ng-container>
 
     <!-- Progress Column -->
     <ng-container matColumnDef="progress">
-      <mat-header-cell *matHeaderCellDef> Progress </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Progress </mat-header-cell>
       <mat-cell *matCellDef="let row"> {{row.progress}}% </mat-cell>
     </ng-container>
 
     <!-- Name Column -->
     <ng-container matColumnDef="userName">
-      <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
       <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
     </ng-container>
 
     <!-- Color Column -->
     <ng-container matColumnDef="color">
-      <mat-header-cell *matHeaderCellDef> Color </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Color </mat-header-cell>
       <mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </mat-cell>
     </ng-container>
 

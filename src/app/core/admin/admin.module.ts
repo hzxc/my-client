@@ -1,3 +1,4 @@
+import { MaterialModule } from './../../shared/material/material.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UsersComponent } from './users/users.component';
@@ -6,8 +7,9 @@ import {
   MatTableModule,
   MatPaginator,
   MatPaginatorModule,
+  MatSortModule,
   MatCardModule,
-  MatIconModule
+  MatIconModule,
 } from '@angular/material';
 
 @NgModule({
@@ -16,8 +18,8 @@ import {
     AdminRoutingModule,
     MatTableModule,
     MatPaginatorModule,
-    MatCardModule,
-    MatIconModule
+    MatSortModule,
+    MaterialModule
   ],
   declarations: [UsersComponent]
 })

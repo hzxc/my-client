@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, SkipSelf, Optional } from '@angular/core';
 import {
   MatToolbarModule,
   MatIconModule,
@@ -17,8 +17,12 @@ import {
   MatSidenavModule,
   MatSelectModule,
   MatFormFieldModule,
+  MatIconRegistry,
 } from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
+import { Options } from 'selenium-webdriver';
+import { loadsvgResources } from './svg-manager';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @NgModule({
   imports: [
@@ -38,7 +42,7 @@ import { HttpClientModule } from '@angular/common/http';
     MatTooltipModule,
     MatSidenavModule,
     MatSelectModule,
-    MatFormFieldModule
+    MatFormFieldModule,
   ],
   exports: [
     MatProgressBarModule,
@@ -57,8 +61,20 @@ import { HttpClientModule } from '@angular/common/http';
     MatTooltipModule,
     MatSidenavModule,
     MatSelectModule,
-    MatFormFieldModule
+    MatFormFieldModule,
   ],
   declarations: []
 })
-export class MaterialModule { }
+export class MaterialModule {
+  // constructor(@Optional() @SkipSelf() parent: MaterialModule) {
+  //   if (parent) {
+  //     throw new Error('Current module already exists');
+  //   }
+  // }
+  constructor(
+    iconRegistry: MatIconRegistry,
+    sanitizer: DomSanitizer
+  ) {
+    loadsvgResources(iconRegistry, sanitizer);
+  }
+}

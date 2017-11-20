@@ -8,13 +8,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(
-    iconRegistry: MatIconRegistry,
-    sanitizer: DomSanitizer,
-  ) {
-    iconRegistry.addSvgIcon('mc1', sanitizer.bypassSecurityTrustResourceUrl('assets/svg/minecraft/mc7.svg'));
-  }
-
   ngOnInit() {
 
   }
