@@ -20,7 +20,7 @@ export class LanguagesComponent extends AppComponentBase implements OnInit {
   }
   ngOnInit() {
     this.languages = _.filter(this.localization.languages, l => !l.isDisabled);
-    this.languages = this.localization.languages;
+    // this.languages = this.localization.languages;
     this.currentLanguage = this.localization.currentLanguage;
   }
 
