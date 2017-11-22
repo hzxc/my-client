@@ -12,20 +12,26 @@ import { API_BASE_URL } from './shared/service-proxies/service-proxies';
 import { AbpModule, ABP_HTTP_PROVIDER } from './abp/abp.module';
 import { AppSessionService } from './shared/common/session/app-session.service';
 import { CommonModule } from './shared/common/common.module';
+import { AppAuthService } from './core/shared/common/auth/app-auth.service';
+import { UrlHelper } from './shared/helpers/UrlHelper';
 
 export function appInitializerFactory(injector: Injector) {
   return () => {
-    // abp.ui.setBusy();
+
+    abp.ui.setBusy();
+
+    handleLogoutRequest(injector.get(AppAuthService));
+
     return new Promise<boolean>((resolve, reject) => {
       AppPreBootstrap.run(() => {
         const appSessionService: AppSessionService = injector.get(AppSessionService);
         appSessionService.init().then(
           (result) => {
-            // abp.ui.clearBusy();
+            abp.ui.clearBusy();
             resolve(result);
           },
           (err) => {
-            // abp.ui.clearBusy();
+            abp.ui.clearBusy();
             reject(err);
           }
         );
@@ -41,6 +47,15 @@ export function getRemoteServiceBaseUrl(): string {
 export function getCurrentLanguage(): string {
   return abp.localization.currentLanguage.name;
 }
+
+function handleLogoutRequest(authService: AppAuthService) {
+  const currentUrl = UrlHelper.initialUrl;
+  const returnUrl = UrlHelper.getReturnUrl();
+  if (currentUrl.indexOf(('account/logout')) >= 0 && returnUrl) {
+    authService.logout(true, returnUrl);
+  }
+}
+
 @NgModule({
   declarations: [
     AppComponent
@@ -49,11 +64,12 @@ export function getCurrentLanguage(): string {
     BrowserModule,
     BrowserAnimationsModule,
     AbpModule,
-    CommonModule.forRoot(),
     ServiceProxyModule,
     AppRoutingModule,
   ],
   providers: [
+    AppSessionService,
+    AppAuthService,
     ABP_HTTP_PROVIDER,
     { provide: API_BASE_URL, useFactory: getRemoteServiceBaseUrl },
     {

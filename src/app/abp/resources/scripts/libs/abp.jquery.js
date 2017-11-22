@@ -1,4 +1,4 @@
-﻿var abp = abp || {};
+﻿﻿var abp = abp || {};
 (function ($) {
 
     if (!$) {
@@ -13,6 +13,17 @@
         userOptions = userOptions || {};
 
         var options = $.extend(true, {}, abp.ajax.defaultOpts, userOptions);
+        var oldBeforeSendOption = options.beforeSend;
+        options.beforeSend = function(xhr) {
+            if (oldBeforeSendOption) {
+                 oldBeforeSendOption(xhr);
+            }
+
+            xhr.setRequestHeader("Pragma", "no-cache");
+            xhr.setRequestHeader("Cache-Control", "no-cache");
+            xhr.setRequestHeader("Expires", "Sat, 01 Jan 2000 00:00:00 GMT");
+        };
+
         options.success = undefined;
         options.error = undefined;
 
@@ -196,7 +207,7 @@
 
     /* JQUERY PLUGIN ENHANCEMENTS ********************************************/
 
-    /* jQuery Form Plugin 
+    /* jQuery Form Plugin
      * http://www.malsup.com/jquery/form/
      */
 
