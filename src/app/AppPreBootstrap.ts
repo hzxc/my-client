@@ -5,8 +5,8 @@ import { AppConsts } from './shared/AppConsts';
 import { UrlHelper } from './shared/helpers/UrlHelper';
 import { LocalizedResourcesHelper } from './shared/helpers/LocalizedResourcesHelper';
 import { UtilsService } from './abp/utils/utils.service';
-import { AppAuthService } from './core/common/auth/app-auth.service';
 import { SubdomainTenancyNameFinder } from './shared/helpers/SubdomainTenancyNameFinder';
+import { AppAuthService } from './core/shared/common/auth/app-auth.service';
 
 export class AppPreBootstrap {
 

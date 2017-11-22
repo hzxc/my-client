@@ -9,7 +9,17 @@
       "outDir": "dist",
       "assets": [
         "assets",
-        "favicon.ico"
+        "favicon.ico",
+        {
+          "glob": "abp.signalr.js",
+          "input": "../node_modules/abp-web-resources/Abp/Framework/scripts/libs/",
+          "output": "./assets/abp/"
+        },
+        {
+          "glob": "**.*",
+          "input": "../node_modules/timeago/locales/",
+          "output": "./assets/localization/jquery-timeago/"
+        }
       ],
       "index": "index.html",
       "main": "main.ts",
@@ -40,7 +50,8 @@
         "./app/abp/resources/scripts/libs/abp.moment.js",
         "../node_modules/localforage/dist/localforage.min.js",
         "../node_modules/jquery.inputmask/dist/jquery.inputmask.bundle.js",
-        "../node_modules/tether/dist/js/tether.min.js"
+        "../node_modules/tether/dist/js/tether.min.js",
+        "../node_modules/timeago/jquery.timeago.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
