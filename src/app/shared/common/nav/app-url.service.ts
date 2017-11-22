@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AppSessionService } from '../session/app-session.service';
-import { AppConsts } from '../AppConsts';
+import { AppConsts } from '../../AppConsts';
 
 @Injectable()
 export class AppUrlService {
@@ -25,7 +25,7 @@ export class AppUrlService {
      * Returning url ends with '/'.
      */
     getAppRootUrlOfTenant(tenancyName?: string): string {
-        let baseUrl = this.ensureEndsWith(AppConsts.appBaseUrl, '/');
+        let baseUrl = this.ensureEndsWith(AppConsts.appBaseUrlFormat, '/');
 
         if (baseUrl.indexOf(AppUrlService.tenancyNamePlaceHolder) < 0) {
             return baseUrl;

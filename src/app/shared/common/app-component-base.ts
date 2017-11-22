@@ -1,14 +1,14 @@
-import { Injector, ElementRef } from '@angular/core';
-
-import { AppConsts } from './AppConsts';
+import { Injector } from '@angular/core';
+import { AppConsts } from '../AppConsts';
+import { LocalizationService } from '../../abp/localization/localization.service';
+import { PermissionCheckerService } from '../../abp/auth/permission-checker.service';
+import { FeatureCheckerService } from '../../abp/features/feature-checker.service';
+import { NotifyService } from '../../abp/notify/notify.service';
+import { SettingService } from '../../abp/settings/setting.service';
+import { MessageService } from '../../abp/message/message.service';
+import { AbpMultiTenancyService } from '../../abp/multi-tenancy/abp-multi-tenancy.service';
 import { AppSessionService } from './session/app-session.service';
-import { LocalizationService } from '../abp/localization/localization.service';
-import { PermissionCheckerService } from '../abp/auth/permission-checker.service';
-import { FeatureCheckerService } from '../abp/features/feature-checker.service';
-import { NotifyService } from '../abp/notify/notify.service';
-import { SettingService } from '../abp/settings/setting.service';
-import { MessageService } from '../abp/message/message.service';
-import { AbpMultiTenancyService } from '../abp/multi-tenancy/abp-multi-tenancy.service';
+
 
 export abstract class AppComponentBase {
 
@@ -22,7 +22,6 @@ export abstract class AppComponentBase {
     message: MessageService;
     multiTenancy: AbpMultiTenancyService;
     appSession: AppSessionService;
-    elementRef: ElementRef;
 
     constructor(injector: Injector) {
         this.localization = injector.get(LocalizationService);
@@ -33,11 +32,14 @@ export abstract class AppComponentBase {
         this.message = injector.get(MessageService);
         this.multiTenancy = injector.get(AbpMultiTenancyService);
         this.appSession = injector.get(AppSessionService);
-        this.elementRef = injector.get(ElementRef);
     }
 
     l(key: string, ...args: any[]): string {
-        let localizedText = this.localization.localize(key, this.localizationSourceName);
+        return this.ls(this.localizationSourceName, key, args);
+    }
+
+    ls(sourcename: string, key: string, ...args: any[]): string {
+        let localizedText = this.localization.localize(key, sourcename);
 
         if (!localizedText) {
             localizedText = key;
@@ -47,11 +49,26 @@ export abstract class AppComponentBase {
             return localizedText;
         }
 
-        args.unshift(localizedText);
-        return abp.utils.formatString.apply(this, args);
+        args[0].unshift(localizedText);
+
+        return abp.utils.formatString.apply(this, args[0]);
     }
 
     isGranted(permissionName: string): boolean {
         return this.permission.isGranted(permissionName);
+    }
+
+    isGrantedAny(...permissions: string[]): boolean {
+        if (!permissions) {
+            return false;
+        }
+
+        for (const permission of permissions) {
+            if (this.isGranted(permission)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

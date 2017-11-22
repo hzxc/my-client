@@ -1,5 +1,5 @@
-import { AppComponentBase } from './app-component-base';
 import { Injector, OnInit } from '@angular/core';
+import { AppComponentBase } from './common/app-component-base';
 
 export class PagedResultDto {
   items: any[];

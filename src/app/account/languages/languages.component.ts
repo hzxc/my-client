@@ -1,7 +1,7 @@
 import { Component, OnInit, Injector } from '@angular/core';
 
 import * as _ from 'lodash';
-import { AppComponentBase } from '../../shared/app-component-base';
+import { AppComponentBase } from '../../shared/common/app-component-base';
 
 @Component({
   selector: 'app-account-languages',

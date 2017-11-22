@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CoreComponent } from './core.component';
-import { AppRouteGuard } from '../shared/auth/auth-route-guard';
+import { AppRouteGuard } from './common/auth/auth-route-guard';
 
 
 const routes: Routes = [
@@ -11,26 +11,19 @@ const routes: Routes = [
     // canActivate: [AppRouteGuard],
     // canActivateChild: [AppRouteGuard],
     children: [
-      // {
-      //     path: '',
-      //     children: [
-      //         { path: 'notifications', component: NotificationsComponent },
-      //         { path: '', redirectTo: '/app/main/dashboard', pathMatch: 'full' }
-      //     ]
-      // },
       {
         path: 'main',
-        loadChildren: './main/main.module#MainModule', // Lazy load main module
-        data: { preload: true }
+        // canActivate: [AppRouteGuard],
+        loadChildren: 'main/main.module#MainModule', // Lazy load main module
+        // data: { preload: true }
       },
       {
         path: 'admin',
-        loadChildren: './admin/admin.module#AdminModule', // Lazy load admin module
-        data: { preload: true }
+        // canActivate: [AppRouteGuard],
+        loadChildren: 'admin/admin.module#AdminModule', // Lazy load admin module
+        // data: { preload: true }
       }
-      // {
-      //   path: '**', redirectTo: 'notifications'
-      // }
+
     ]
   }
 ];

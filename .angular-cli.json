@@ -37,7 +37,10 @@
         "./app/abp/resources/scripts/libs/abp.jquery.js",
         "./app/abp/resources/scripts/libs/abp.toastr.js",
         "./app/abp/resources/scripts/libs/abp.blockUI.js",
-        "./app/abp/resources/scripts/libs/abp.moment.js"
+        "./app/abp/resources/scripts/libs/abp.moment.js",
+        "../node_modules/localforage/dist/localforage.min.js",
+        "../node_modules/jquery.inputmask/dist/jquery.inputmask.bundle.js",
+        "../node_modules/tether/dist/js/tether.min.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

@@ -2,20 +2,24 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
-  // { path: '', redirectTo: '/app/main', pathMatch: 'full' },
+  // {
+  //   path: '',
+  //   redirectTo: 'app',
+  //   pathMatch: 'full'
+  // },
   {
     path: '',
-    loadChildren: './core/core.module#CoreModule', // Lazy load account module
+    loadChildren: '../app/core/core.module#CoreModule', // Lazy load account module
     data: { preload: true }
   },
   {
     path: 'account',
-    loadChildren: './account/account.module#AccountModule', // Lazy load account module
+    loadChildren: '../app/account/account.module#AccountModule', // Lazy load account module
     data: { preload: true }
   },
-  {
-        path: '**', redirectTo: 'notifications'
-  }
+  // {
+  //   path: '**', redirectTo: 'sessions/404'
+  // }
 ];
 
 @NgModule({

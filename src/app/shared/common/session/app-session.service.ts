@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import {
-  SessionServiceProxy,
   UserLoginInfoDto,
   TenantLoginInfoDto,
   ApplicationInfoDto,
+  SessionServiceProxy,
   GetCurrentLoginInformationsOutput
-} from '../service-proxies/service-proxies';
-import { AbpMultiTenancyService } from '../../abp/multi-tenancy/abp-multi-tenancy.service';
+} from '../../service-proxies/service-proxies';
+import { AbpMultiTenancyService } from '../../../abp/multi-tenancy/abp-multi-tenancy.service';
 
 @Injectable()
 export class AppSessionService {
@@ -55,7 +55,6 @@ export class AppSessionService {
         this._application = result.application;
         this._user = result.user;
         this._tenant = result.tenant;
-
         resolve(true);
       }, (err) => {
         reject(err);
