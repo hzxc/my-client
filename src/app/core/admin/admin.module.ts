@@ -11,6 +11,7 @@ import {
   MatCardModule,
   MatIconModule,
 } from '@angular/material';
+import { TenantsComponent } from './tenants/tenants.component';
 
 @NgModule({
   imports: [
@@ -21,6 +22,6 @@ import {
     MatSortModule,
     MaterialModule
   ],
-  declarations: [UsersComponent]
+  declarations: [UsersComponent, TenantsComponent]
 })
 export class AdminModule { }
