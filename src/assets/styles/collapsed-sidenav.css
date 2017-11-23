@@ -28,7 +28,8 @@
   left: 40px;
   top: 0;
   width: 200px;
-  z-index: 9999;
+  background: #fff;
+  /* z-index: 9999; */
   display: block;
   max-height: 200px !important;
   overflow-y: scroll;
@@ -41,7 +42,7 @@
   margin: 0;
 }
 .collapsed-menu .sidebar-panel .mat-nav-list > div > .sidebar-list-item a span:not(.menu-item-tooltip),
-.collapsed-menu .sidebar-panel .mat-nav-list > div >  .sidebar-list-item a .menu-caret,
+.collapsed-menu .sidebar-panel .mat-nav-list > div > .sidebar-list-item a .menu-caret,
 .collapsed-menu .sidebar-panel .sub-menu {
   display: none;
 }

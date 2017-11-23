@@ -10,11 +10,21 @@ const routes: Routes = [
   {
     path: 'account',
     loadChildren: './account/account.module#AccountModule', // Lazy load account module
-    // data: { preload: true }
-  },
+    data: { preload: true }
+  }
   // {
-  //   path: '**', redirectTo: 'sessions/404'
-  // }
+  //   path: '',
+  //   loadChildren: './core/core.module#CoreModule', // Lazy load account module
+  //   // data: { preload: true }
+  // },
+  // {
+  //   path: 'account',
+  //   loadChildren: './account/account.module#AccountModule', // Lazy load account module
+  //   // data: { preload: true }
+  // },
+  // // {
+  // //   path: '**', redirectTo: 'sessions/404'
+  // // }
 ];
 
 @NgModule({

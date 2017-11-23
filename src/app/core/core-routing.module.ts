@@ -7,8 +7,8 @@ const routes: Routes = [
   {
     path: '',
     component: CoreComponent,
-    // canActivate: [AppRouteGuard],
-    // canActivateChild: [AppRouteGuard],
+    canActivate: [AppRouteGuard],
+    canActivateChild: [AppRouteGuard],
     children: [
       {
         path: 'main',

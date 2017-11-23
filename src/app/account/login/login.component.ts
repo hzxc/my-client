@@ -17,9 +17,9 @@ import {
 import { Router } from '@angular/router';
 import { MatButton, MatInput } from '@angular/material';
 import { SharedAccountLoginService } from '../services/shared-account-login-service';
-import { LoginService } from '../services/login.service';
+import { LoginService, ExternalLoginProvider } from '../services/login.service';
 import { AbpSessionService } from '../../abp/session/abp-session.service';
-import { SessionServiceProxy } from '../../shared/service-proxies/service-proxies';
+import { SessionServiceProxy, UpdateUserSignInTokenOutput } from '../../shared/service-proxies/service-proxies';
 import { UrlHelper } from '../../shared/helpers/UrlHelper';
 import { AppComponentBase } from '../../shared/common/app-component-base';
 
@@ -28,7 +28,7 @@ import { AppComponentBase } from '../../shared/common/app-component-base';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent extends AppComponentBase implements AfterContentInit {
+export class LoginComponent extends AppComponentBase implements OnInit, AfterContentInit {
 
 
   @ViewChild(MatInput) matInput: MatInput;
@@ -89,5 +89,24 @@ export class LoginComponent extends AppComponentBase implements AfterContentInit
     this.loginService.authenticate(
       () => { this.submitButton.disabled = false; this.progressBarChange(); }
     );
+  }
+
+  externalLogin(provider: ExternalLoginProvider) {
+    this.loginService.externalAuthenticate(provider);
+  }
+
+  ngOnInit(): void {
+    if (this._sessionService.userId > 0 && UrlHelper.getReturnUrl() && UrlHelper.getSingleSignIn()) {
+      this._sessionAppService.updateUserSignInToken()
+        .subscribe((result: UpdateUserSignInTokenOutput) => {
+          const initialReturnUrl = UrlHelper.getReturnUrl();
+          const returnUrl = initialReturnUrl + (initialReturnUrl.indexOf('?') >= 0 ? '&' : '?') +
+            'accessToken=' + result.signInToken +
+            '&userId=' + result.encodedUserId +
+            '&tenantId=' + result.encodedTenantId;
+
+          location.href = returnUrl;
+        });
+    }
   }
 }

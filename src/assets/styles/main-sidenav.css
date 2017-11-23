@@ -53,7 +53,7 @@
   align-items: center;
   height: 40px;
   padding: 0 16px 0 0;
-  z-index: 99;
+  /* z-index: 99; */
 }
 
 .sidebar-panel.mat-sidenav .sidebar-list-item mat-icon:not(.menu-caret) {
@@ -76,6 +76,10 @@
   transform: rotate(180deg);
 }
 
+/* .sidebar-panel.mat-sidenav .sidebar-list-item .sub-menu .mat-list-item.selected {
+  background: rgba(0, 0, 0, .05);
+} */
+
 .sidebar-panel.mat-sidenav .sub-menu a {
-  padding-left: 54px;
+  padding-left: 20px;
 }

@@ -23,13 +23,13 @@ $indigo-light-theme:mat-light-theme($indigo-light-primary,$indigo-light-accent,$
 
     .mat-color-primary,
     .list-item-active,
-    .sidebar-panel.mat-sidenav .sidebar-list-item.open mat-icon:not(.menu-caret),
+    .sidebar-panel.mat-sidenav .sidebar-list-item.open > .mat-list-item-content > a > mat-icon:not(.menu-caret),
     .sidebar-panel.mat-sidenav .sidebar-list-item.open > .mat-list-item-content > a > span,
     .sidebar-panel.mat-sidenav .sidebar-list-item.open .sub-menu .mat-list-item.selected a {
         color: map-get($mat-indigo, 500) !important;
     }
     .sidebar-panel.mat-sidenav .sidebar-list-item.open > .mat-list-item-content > .sub-menu,
-    .sidebar-panel.mat-sidenav .sidebar-list-item.open mat-icon:not(.menu-caret),
+    .sidebar-panel.mat-sidenav .sidebar-list-item.open > .mat-list-item-content > a > mat-icon:not(.menu-caret),
     .list-item-active {
         border-color: map-get($mat-indigo, 500);
     }
@@ -58,13 +58,13 @@ $deeppurple-light-theme:mat-light-theme($deeppurple-light-primary,$deeppurple-li
 
     .mat-color-primary,
     .list-item-active,
-    .sidebar-panel.mat-sidenav .sidebar-list-item.open mat-icon:not(.menu-caret),
+    .sidebar-panel.mat-sidenav .sidebar-list-item.open > .mat-list-item-content > a > mat-icon:not(.menu-caret),
     .sidebar-panel.mat-sidenav .sidebar-list-item.open > .mat-list-item-content > a > span,
     .sidebar-panel.mat-sidenav .sidebar-list-item.open .sub-menu .mat-list-item.selected a {
         color: map-get($mat-deep-purple, 500) !important;
     }
     .sidebar-panel.mat-sidenav .sidebar-list-item.open > .mat-list-item-content > .sub-menu,
-    .sidebar-panel.mat-sidenav .sidebar-list-item.open mat-icon:not(.menu-caret),
+    .sidebar-panel.mat-sidenav .sidebar-list-item.open > .mat-list-item-content > a > mat-icon:not(.menu-caret),
     .list-item-active {
         border-color: map-get($mat-deep-purple, 500);
     }
@@ -92,13 +92,13 @@ $purple-dark-theme:mat-dark-theme($purple-dark-primary,$purple-dark-accent,$purp
 
     .mat-color-primary,
     .list-item-active,
-    .sidebar-panel.mat-sidenav .sidebar-list-item.open mat-icon:not(.menu-caret),
+    .sidebar-panel.mat-sidenav .sidebar-list-item.open > .mat-list-item-content > a > mat-icon:not(.menu-caret),
     .sidebar-panel.mat-sidenav .sidebar-list-item.open > .mat-list-item-content > a > span,
     .sidebar-panel.mat-sidenav .sidebar-list-item.open .sub-menu .mat-list-item.selected a {
         color: map-get($mat-purple, 500) !important;
     }
     .sidebar-panel.mat-sidenav .sidebar-list-item.open > .mat-list-item-content > .sub-menu,
-    .sidebar-panel.mat-sidenav .sidebar-list-item.open mat-icon:not(.menu-caret),
+    .sidebar-panel.mat-sidenav .sidebar-list-item.open > .mat-list-item-content > a > mat-icon:not(.menu-caret),
     .list-item-active {
         border-color: map-get($mat-purple, 500);
     }
@@ -126,13 +126,13 @@ $pink-dark-theme:mat-dark-theme($pink-dark-primary,$pink-dark-accent,$pink-dark-
 
     .mat-color-primary,
     .list-item-active,
-    .sidebar-panel.mat-sidenav .sidebar-list-item.open mat-icon:not(.menu-caret),
+    .sidebar-panel.mat-sidenav .sidebar-list-item.open > .mat-list-item-content > a > mat-icon:not(.menu-caret),
     .sidebar-panel.mat-sidenav .sidebar-list-item.open > .mat-list-item-content > a > span,
     .sidebar-panel.mat-sidenav .sidebar-list-item.open .sub-menu .mat-list-item.selected a {
         color: map-get($mat-pink, 500) !important;
     }
     .sidebar-panel.mat-sidenav .sidebar-list-item.open > .mat-list-item-content > .sub-menu,
-    .sidebar-panel.mat-sidenav .sidebar-list-item.open mat-icon:not(.menu-caret),
+    .sidebar-panel.mat-sidenav .sidebar-list-item.open > .mat-list-item-content > a > mat-icon:not(.menu-caret),
     .list-item-active {
         border-color: map-get($mat-pink, 500);
     }
@@ -225,13 +225,13 @@ $blue-primary-dark: darken( map-get($blue-primary, 500), 8% );
 
     .mat-color-primary,
     .list-item-active,
-    .sidebar-panel.mat-sidenav .sidebar-list-item.open mat-icon:not(.menu-caret),
+    .sidebar-panel.mat-sidenav .sidebar-list-item.open > .mat-list-item-content > a > mat-icon:not(.menu-caret),
     .sidebar-panel.mat-sidenav .sidebar-list-item.open > .mat-list-item-content > a > span,
     .sidebar-panel.mat-sidenav .sidebar-list-item.open .sub-menu .mat-list-item.selected a {
         color: map-get($blue-primary, 500) !important;
     }
     .sidebar-panel.mat-sidenav .sidebar-list-item.open > .mat-list-item-content > .sub-menu,
-    .sidebar-panel.mat-sidenav .sidebar-list-item.open mat-icon:not(.menu-caret),
+    .sidebar-panel.mat-sidenav .sidebar-list-item.open > .mat-list-item-content > a > mat-icon:not(.menu-caret),
     .list-item-active {
         border-color: map-get($blue-primary, 500);
     }

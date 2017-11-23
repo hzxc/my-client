@@ -21,9 +21,9 @@ export class CoreComponent implements OnInit {
   ) {
     router.events.filter(event => event instanceof NavigationEnd).subscribe((routeChange: NavigationEnd) => {
       this.url = routeChange.url;
-      // if(this.isNavOver()) {
-      //   this.sideNave.close();
-      // }
+      if (this.isNavOver()) {
+        this.sideNave.close();
+      }
     });
   }
 
