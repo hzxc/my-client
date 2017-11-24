@@ -3,21 +3,25 @@
     <div mat-card-avatar>
       <mat-icon class="icon-card-header">public</mat-icon>
     </div>
-    <mat-card-title>Tenants</mat-card-title>
-    <mat-card-subtitle>Manage your tenants.</mat-card-subtitle>
+    <mat-card-title>{{l("Tenants")}}</mat-card-title>
+    <mat-card-subtitle>{{l("TenantsHeaderInfo")}}</mat-card-subtitle>
   </mat-card-header>
-  <form #tenantsForm="ngForm" novalidate [formGroup]="tenantsModel" (ngSubmit)="search()">
-    <mat-form-field class="form-field">
+  <!-- #tenantsForm="ngForm"  -->
+  <form #tenantsForm="ngForm" novalidate (ngSubmit)="getTenants()" fxLayout="row" fxLayoutWrap>
+    <mat-form-field class="form-field" fxFlex="50">
       <mat-icon matPrefix>person</mat-icon>
-      <input required matInput formControlName="userNameOrEmailAddress" [(ngModel)]="loginService.authenticateModel.userNameOrEmailAddress"
-        placeholder="{{l('UserNameOrEmail')}}">
-      <mat-error>{{userNameOrEmailAddressErrorMessage()}}</mat-error>
+      <input matInput [(ngModel)]="filters.filterText" name="filterText"
+        placeholder="{{l('SearchWithThreeDot')}}">
     </mat-form-field>
-    <mat-form-field class="form-field">
+    <mat-form-field class="form-field" fxFlex="50">
       <mat-icon matPrefix>person</mat-icon>
-      <input required matInput formControlName="userNameOrEmailAddress" [(ngModel)]="loginService.authenticateModel.userNameOrEmailAddress"
-        placeholder="{{l('UserNameOrEmail')}}">
-      <mat-error>{{userNameOrEmailAddressErrorMessage()}}</mat-error>
+      <input matInput [(ngModel)]="filters.filterText" name="filterText"
+        placeholder="{{l('SearchWithThreeDot')}}">
     </mat-form-field>
+    <!-- <mat-form-field class="form-field" fxFlex="50">
+      <mat-icon matPrefix>person</mat-icon>
+      <input matInput formControlName="userNameOrEmailAddress"
+        placeholder="{{l('UserNameOrEmail')}}">
+    </mat-form-field> -->
   </form>
 </mat-card>

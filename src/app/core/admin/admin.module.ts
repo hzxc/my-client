@@ -12,6 +12,10 @@ import {
   MatIconModule,
 } from '@angular/material';
 import { TenantsComponent } from './tenants/tenants.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
+import { ImpersonationService } from './users/impersonation.service';
+import { AppUrlService } from '../../shared/common/nav/app-url.service';
 
 @NgModule({
   imports: [
@@ -20,8 +24,18 @@ import { TenantsComponent } from './tenants/tenants.component';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MaterialModule
+    MaterialModule,
+    ReactiveFormsModule,
+    FormsModule,
+    HttpModule
   ],
-  declarations: [UsersComponent, TenantsComponent]
+  providers: [
+    ImpersonationService,
+    AppUrlService
+  ],
+  declarations: [
+    UsersComponent,
+    TenantsComponent
+  ]
 })
 export class AdminModule { }
