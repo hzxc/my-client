@@ -1,3 +1,23 @@
-<p>
-  tenants works!
-</p>
+<mat-card class="tenants-card">
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon class="icon-card-header">public</mat-icon>
+    </div>
+    <mat-card-title>Tenants</mat-card-title>
+    <mat-card-subtitle>Manage your tenants.</mat-card-subtitle>
+  </mat-card-header>
+  <form #tenantsForm="ngForm" novalidate [formGroup]="tenantsModel" (ngSubmit)="search()">
+    <mat-form-field class="form-field">
+      <mat-icon matPrefix>person</mat-icon>
+      <input required matInput formControlName="userNameOrEmailAddress" [(ngModel)]="loginService.authenticateModel.userNameOrEmailAddress"
+        placeholder="{{l('UserNameOrEmail')}}">
+      <mat-error>{{userNameOrEmailAddressErrorMessage()}}</mat-error>
+    </mat-form-field>
+    <mat-form-field class="form-field">
+      <mat-icon matPrefix>person</mat-icon>
+      <input required matInput formControlName="userNameOrEmailAddress" [(ngModel)]="loginService.authenticateModel.userNameOrEmailAddress"
+        placeholder="{{l('UserNameOrEmail')}}">
+      <mat-error>{{userNameOrEmailAddressErrorMessage()}}</mat-error>
+    </mat-form-field>
+  </form>
+</mat-card>
