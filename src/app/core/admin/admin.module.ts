@@ -16,6 +16,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { ImpersonationService } from './users/impersonation.service';
 import { AppUrlService } from '../../shared/common/nav/app-url.service';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { AppUrlService } from '../../shared/common/nav/app-url.service';
     MaterialModule,
     ReactiveFormsModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    FlexLayoutModule
   ],
   providers: [
     ImpersonationService,

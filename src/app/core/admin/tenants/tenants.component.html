@@ -7,13 +7,13 @@
     <mat-card-subtitle>{{l("TenantsHeaderInfo")}}</mat-card-subtitle>
   </mat-card-header>
   <!-- #tenantsForm="ngForm"  -->
-  <form #tenantsForm="ngForm" novalidate (ngSubmit)="getTenants()" fxLayout="row" fxLayoutWrap>
-    <mat-form-field class="form-field" fxFlex="50">
+  <form #tenantsForm="ngForm" novalidate (ngSubmit)="getTenants()" fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutWrap>
+    <mat-form-field class="form-field" fxFlex="45">
       <mat-icon matPrefix>person</mat-icon>
       <input matInput [(ngModel)]="filters.filterText" name="filterText"
         placeholder="{{l('SearchWithThreeDot')}}">
     </mat-form-field>
-    <mat-form-field class="form-field" fxFlex="50">
+    <mat-form-field class="form-field" fxFlex="45">
       <mat-icon matPrefix>person</mat-icon>
       <input matInput [(ngModel)]="filters.filterText" name="filterText"
         placeholder="{{l('SearchWithThreeDot')}}">
