@@ -7,16 +7,18 @@
     <mat-card-subtitle>{{l("TenantsHeaderInfo")}}</mat-card-subtitle>
   </mat-card-header>
   <!-- #tenantsForm="ngForm"  -->
-  <form #tenantsForm="ngForm" novalidate (ngSubmit)="getTenants()" fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutWrap>
+  <form #tenantsForm="ngForm" [formGroup]="tenantsGroup" novalidate (ngSubmit)="getTenants()" fxLayout="row" fxLayoutAlign="space-evenly center"
+    fxLayoutWrap>
     <mat-form-field class="form-field" fxFlex="45" fxFlex.lt-md="100">
-      <input matInput [(ngModel)]="filters.filterText" name="filterText"
-        placeholder="{{l('SearchWithThreeDot')}}">
-        <button mat-raised-button color="accent" matSuffix><mat-icon>search</mat-icon></button>
+      <input matInput formControlName="filterText" placeholder="{{l('SearchWithThreeDot')}}">
+      <button mat-raised-button color="accent" matSuffix>
+        <mat-icon>search</mat-icon>
+      </button>
     </mat-form-field>
     <mat-form-field class="form-field" fxFlex="45" fxFlex.lt-md="100">
-      <input type="text" placeholder="Pick one" aria-label="displayText" matInput [matAutocomplete]="auto">
-      <mat-autocomplete #auto="matAutocomplete">
-        <mat-option *ngFor="let edition of editions" [value]="edition.value">
+      <input type="text" formControlName="selectedEditionId" placeholder="Pick one" aria-label="edition" matInput [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+        <mat-option *ngFor="let edition of editions" [value]="edition">
           {{edition.displayText}}
         </mat-option>
       </mat-autocomplete>
@@ -33,3 +35,5 @@
     </mat-form-field> -->
   </form>
 </mat-card>
+
+<div>{{tenantsForm.value | json}}</div>

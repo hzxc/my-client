@@ -37,7 +37,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
   ],
   declarations: [
     UsersComponent,
-    TenantsComponent
+    TenantsComponent,
   ]
 })
 export class AdminModule { }

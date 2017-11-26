@@ -5,12 +5,15 @@ import {
   CommonLookupServiceProxy,
   TenantListDto,
   EditionServiceProxy,
-  ComboboxItemDto
+  ComboboxItemDto,
 } from '../../../shared/service-proxies/service-proxies';
 import { ActivatedRoute } from '@angular/router';
 import { ImpersonationService } from '../users/impersonation.service';
 import * as moment from 'moment';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'app-tenants',
@@ -30,7 +33,7 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
     selectedEditionId: number;
   } = <any>{};
 
-  private tenantsModel: FormGroup;
+  private tenantsGroup: FormGroup;
   editions: ComboboxItemDto[] = [];
 
   constructor(
@@ -44,7 +47,7 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
   ) {
     super(injector);
     this.setFiltersFromRoute();
-    this.tenantsModel = fb.group({
+    this.tenantsGroup = fb.group({
       filterText: [''],
       creationDateRangeActive: [false],
       subscriptionEndDateRangeActive: [false],
@@ -54,6 +57,10 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
       creationDateEnd: [],
       selectedEditionId: [],
     });
+  }
+
+  displayFn(edition: ComboboxItemDto): string {
+    return edition ? edition.displayText : '';
   }
 
   setFiltersFromRoute(): void {
@@ -86,11 +93,16 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
     }
   }
 
+
   ngOnInit(): void {
     this.filters.filterText = this._activatedRoute.snapshot.queryParams['filterText'] || '';
     this._editionService.getEditionComboboxItems(0, true, false).subscribe(editions => {
       this.editions = editions;
     });
+
+    this.tenantsGroup.controls['selectedEditionId'].valueChanges
+    .startWith(null)
+    .map(edition => edition && typeof edition === 'object' ? edition.name : edition);
 
     // this.impersonateUserLookupModal.configure({
     //   title: this.l('SelectAUser'),
