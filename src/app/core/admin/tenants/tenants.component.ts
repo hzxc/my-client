@@ -1,6 +1,12 @@
 import { Component, OnInit, Injector } from '@angular/core';
 import { AppComponentBase } from '../../../shared/common/app-component-base';
-import { TenantServiceProxy, CommonLookupServiceProxy, TenantListDto } from '../../../shared/service-proxies/service-proxies';
+import {
+  TenantServiceProxy,
+  CommonLookupServiceProxy,
+  TenantListDto,
+  EditionServiceProxy,
+  ComboboxItemDto
+} from '../../../shared/service-proxies/service-proxies';
 import { ActivatedRoute } from '@angular/router';
 import { ImpersonationService } from '../users/impersonation.service';
 import * as moment from 'moment';
@@ -12,6 +18,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   styleUrls: ['./tenants.component.scss']
 })
 export class TenantsComponent extends AppComponentBase implements OnInit {
+
   filters: {
     filterText: string;
     creationDateRangeActive: boolean;
@@ -24,10 +31,12 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
   } = <any>{};
 
   private tenantsModel: FormGroup;
+  editions: ComboboxItemDto[] = [];
 
   constructor(
     injector: Injector,
     fb: FormBuilder,
+    private _editionService: EditionServiceProxy,
     private _tenantService: TenantServiceProxy,
     private _activatedRoute: ActivatedRoute,
     private _commonLookupService: CommonLookupServiceProxy,
@@ -79,6 +88,9 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
 
   ngOnInit(): void {
     this.filters.filterText = this._activatedRoute.snapshot.queryParams['filterText'] || '';
+    this._editionService.getEditionComboboxItems(0, true, false).subscribe(editions => {
+      this.editions = editions;
+    });
 
     // this.impersonateUserLookupModal.configure({
     //   title: this.l('SelectAUser'),

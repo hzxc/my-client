@@ -19,6 +19,7 @@ import { SharedAccountLoginService } from './services/shared-account-login-servi
     AccountRoutingModule,
     FormsModule,
     HttpModule,
+    HttpModule,
     ServiceProxyModule,
     ReactiveFormsModule,
     MaterialModule,

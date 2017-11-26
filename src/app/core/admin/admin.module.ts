@@ -29,7 +29,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     ReactiveFormsModule,
     FormsModule,
     HttpModule,
-    FlexLayoutModule
+    FlexLayoutModule,
   ],
   providers: [
     ImpersonationService,

@@ -8,16 +8,24 @@
   </mat-card-header>
   <!-- #tenantsForm="ngForm"  -->
   <form #tenantsForm="ngForm" novalidate (ngSubmit)="getTenants()" fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutWrap>
-    <mat-form-field class="form-field" fxFlex="45">
+    <mat-form-field class="form-field" fxFlex="45" fxFlex.lt-md="100">
+      <input matInput [(ngModel)]="filters.filterText" name="filterText"
+        placeholder="{{l('SearchWithThreeDot')}}">
+        <button mat-raised-button color="accent" matSuffix><mat-icon>search</mat-icon></button>
+    </mat-form-field>
+    <mat-form-field class="form-field" fxFlex="45" fxFlex.lt-md="100">
+      <input type="text" placeholder="Pick one" aria-label="displayText" matInput [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let edition of editions" [value]="edition.value">
+          {{edition.displayText}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <!-- <mat-form-field class="form-field" fxFlex="45">
       <mat-icon matPrefix>person</mat-icon>
       <input matInput [(ngModel)]="filters.filterText" name="filterText"
         placeholder="{{l('SearchWithThreeDot')}}">
-    </mat-form-field>
-    <mat-form-field class="form-field" fxFlex="45">
-      <mat-icon matPrefix>person</mat-icon>
-      <input matInput [(ngModel)]="filters.filterText" name="filterText"
-        placeholder="{{l('SearchWithThreeDot')}}">
-    </mat-form-field>
+    </mat-form-field> -->
     <!-- <mat-form-field class="form-field" fxFlex="50">
       <mat-icon matPrefix>person</mat-icon>
       <input matInput formControlName="userNameOrEmailAddress"
