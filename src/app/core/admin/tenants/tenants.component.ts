@@ -112,7 +112,7 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
         edition.displayText.toLowerCase().indexOf(displayText.toLowerCase()) === 0);
   }
 
-  valueBinding(propertyName: string, newValue: any) {
+  autocompleteValueBinding(propertyName: string, newValue: any) {
     this.filters[propertyName] = newValue;
     console.log(this.filters.selectedEditionId);
   }
@@ -126,7 +126,7 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
     this.tenantsGroup.controls['selectedEdition'].valueChanges
       .startWith(null)
       .do(edition => edition && typeof edition === 'object' ?
-        this.valueBinding('selectedEditionId', edition.value) : null)
+        this.autocompleteValueBinding('selectedEditionId', edition.value) : null)
       .map(edition => edition && typeof edition === 'object' ? edition.displayText : edition)
       .map(displayText => displayText ? this.filter(displayText) : this.editions.slice())
       .subscribe(filterResult => this.filteredEditions = filterResult);
