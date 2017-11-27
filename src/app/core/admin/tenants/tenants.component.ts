@@ -15,6 +15,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/first';
 import 'rxjs/add/operator/last';
 import { CustomEditionService } from '../../../shared/service-proxies/custom/custom-edition-service';
 @Component({
@@ -36,14 +37,14 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
   } = <any>{};
 
   private tenantsGroup: FormGroup;
-  editions: Observable<ComboboxItemDto>;
-  filteredEditions: Observable<ComboboxItemDto>;
+  editions: ComboboxItemDto[] = [];
+  filteredEditions: ComboboxItemDto[] = [];
 
   constructor(
     injector: Injector,
     fb: FormBuilder,
-    private _editionService: CustomEditionService,
-    // private _editionService: EditionServiceProxy,
+    // private _editionService: CustomEditionService,
+    private _editionService: EditionServiceProxy,
     private _tenantService: TenantServiceProxy,
     private _activatedRoute: ActivatedRoute,
     private _commonLookupService: CommonLookupServiceProxy,
@@ -97,21 +98,23 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
     }
   }
 
-  filter(displayText: string): Observable<ComboboxItemDto> {
+  filter(displayText: string): ComboboxItemDto[] {
     return this.editions.filter(
       edition =>
         edition.displayText.toLowerCase().indexOf(displayText.toLowerCase()) === 0);
-    // .forEach.displayText.toLowerCase().indexOf(displayText.toLowerCase()) === 0)
   }
 
   ngOnInit(): void {
     this.filters.filterText = this._activatedRoute.snapshot.queryParams['filterText'] || '';
-    this.editions = this._editionService.getEditionComboboxItems(0, true, false);
-    this.filteredEditions = this.tenantsGroup.controls['selectedEditionId'].valueChanges
+    this._editionService
+      .getEditionComboboxItems(0, true, false)
+      .subscribe(editions => { this.editions = editions; this.filteredEditions = editions.slice(); });
+
+    this.tenantsGroup.controls['selectedEditionId'].valueChanges
       .startWith(null)
       .map(edition => edition && typeof edition === 'object' ? edition.displayText : edition)
-      .map(displayText => displayText ? this.filter(displayText) : this.editions);
-
+      .map(displayText => displayText ? this.filter(displayText) : this.editions.slice())
+      .subscribe(filterResult => this.filteredEditions = filterResult);
     // this.impersonateUserLookupModal.configure({
     //   title: this.l('SelectAUser'),
     //   dataSource: (skipCount: number, maxResultCount: number, filter: string, tenantId?: number) => {

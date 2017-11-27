@@ -20,7 +20,7 @@
                          placeholder="Pick one" aria-label="edition"
                          matInput [matAutocomplete]="auto">
       <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-        <mat-option *ngFor="let edition of editions | async" [value]="edition">
+        <mat-option *ngFor="let edition of filteredEditions" [value]="edition">
           {{edition.displayText}}
         </mat-option>
       </mat-autocomplete>

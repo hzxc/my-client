@@ -35,7 +35,7 @@ export class CustomEditionService {
   getEditionComboboxItems(
     selectedEditionId: number,
     addAllItem: boolean,
-    onlyFreeItems: boolean): Observable<SubscribableEditionComboboxItemDto> {
+    onlyFreeItems: boolean) {
     let url_ = this.baseUrl + '/api/services/app/Edition/GetEditionComboboxItems?';
     if (selectedEditionId !== undefined) {
       url_ += 'selectedEditionId=' + encodeURIComponent('' + selectedEditionId) + '&';
@@ -57,7 +57,7 @@ export class CustomEditionService {
       })
     };
     return this.http.request(url_, options_)
-      .map(res => res.json() as SubscribableEditionComboboxItemDto);
+      .map(res => res.json());
 
     // return this.http.request(url_, options_)
     //   .do(res => console.log(res.json() as SubscribableEditionComboboxItemDto))

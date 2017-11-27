@@ -14,6 +14,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/from';
 
 import { Observable } from 'rxjs/Observable';
 import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
@@ -1731,7 +1732,7 @@ export class EditionServiceProxy {
             const _responseText = response.text();
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Observable.of<SubscribableEditionComboboxItemDto[]>(<any>null);
+        return Observable.from<SubscribableEditionComboboxItemDto[]>(<any>null);
     }
 }
 
