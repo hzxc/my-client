@@ -4,17 +4,19 @@ import {
   TenantServiceProxy,
   CommonLookupServiceProxy,
   TenantListDto,
-  EditionServiceProxy,
   ComboboxItemDto,
+  EditionServiceProxy,
 } from '../../../shared/service-proxies/service-proxies';
 import { ActivatedRoute } from '@angular/router';
 import { ImpersonationService } from '../users/impersonation.service';
 import * as moment from 'moment';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import {Observable} from 'rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
-
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/last';
+import { CustomEditionService } from '../../../shared/service-proxies/custom/custom-edition-service';
 @Component({
   selector: 'app-tenants',
   templateUrl: './tenants.component.html',
@@ -34,12 +36,14 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
   } = <any>{};
 
   private tenantsGroup: FormGroup;
-  editions: ComboboxItemDto[] = [];
+  editions: Observable<ComboboxItemDto>;
+  filteredEditions: Observable<ComboboxItemDto>;
 
   constructor(
     injector: Injector,
     fb: FormBuilder,
-    private _editionService: EditionServiceProxy,
+    private _editionService: CustomEditionService,
+    // private _editionService: EditionServiceProxy,
     private _tenantService: TenantServiceProxy,
     private _activatedRoute: ActivatedRoute,
     private _commonLookupService: CommonLookupServiceProxy,
@@ -60,7 +64,7 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
   }
 
   displayFn(edition: ComboboxItemDto): string {
-    return edition ? edition.displayText : '';
+    return edition ? edition.displayText : null;
   }
 
   setFiltersFromRoute(): void {
@@ -93,16 +97,20 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
     }
   }
 
+  filter(displayText: string): Observable<ComboboxItemDto> {
+    return this.editions.filter(
+      edition =>
+        edition.displayText.toLowerCase().indexOf(displayText.toLowerCase()) === 0);
+    // .forEach.displayText.toLowerCase().indexOf(displayText.toLowerCase()) === 0)
+  }
 
   ngOnInit(): void {
     this.filters.filterText = this._activatedRoute.snapshot.queryParams['filterText'] || '';
-    this._editionService.getEditionComboboxItems(0, true, false).subscribe(editions => {
-      this.editions = editions;
-    });
-
-    this.tenantsGroup.controls['selectedEditionId'].valueChanges
-    .startWith(null)
-    .map(edition => edition && typeof edition === 'object' ? edition.name : edition);
+    this.editions = this._editionService.getEditionComboboxItems(0, true, false);
+    this.filteredEditions = this.tenantsGroup.controls['selectedEditionId'].valueChanges
+      .startWith(null)
+      .map(edition => edition && typeof edition === 'object' ? edition.displayText : edition)
+      .map(displayText => displayText ? this.filter(displayText) : this.editions);
 
     // this.impersonateUserLookupModal.configure({
     //   title: this.l('SelectAUser'),

@@ -16,12 +16,12 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatButton, MatInput } from '@angular/material';
-import { SharedAccountLoginService } from '../services/shared-account-login-service';
 import { LoginService, ExternalLoginProvider } from '../services/login.service';
 import { AbpSessionService } from '../../abp/session/abp-session.service';
 import { SessionServiceProxy, UpdateUserSignInTokenOutput } from '../../shared/service-proxies/service-proxies';
 import { UrlHelper } from '../../shared/helpers/UrlHelper';
 import { AppComponentBase } from '../../shared/common/app-component-base';
+import { SharedAccountLoginService } from '../services/shared-account-login.service';
 
 @Component({
   selector: 'app-account-login',

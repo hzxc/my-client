@@ -11,7 +11,7 @@ import { LanguagesComponent } from './languages/languages.component';
 import { AbpModule } from '../abp/abp.module';
 import { MaterialModule } from '../shared/material/material.module';
 import { ThemeModule } from '../shared/theme/theme.module';
-import { SharedAccountLoginService } from './services/shared-account-login-service';
+import { SharedAccountLoginService } from './services/shared-account-login.service';
 
 @NgModule({
   imports: [

@@ -1725,6 +1725,7 @@ export class EditionServiceProxy {
                 for (let item of resultData200)
                     result200.push(SubscribableEditionComboboxItemDto.fromJS(item));
             }
+            console.log(result200);
             return Observable.of(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.text();

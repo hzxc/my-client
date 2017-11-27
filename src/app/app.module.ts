@@ -14,6 +14,7 @@ import { AppSessionService } from './shared/common/session/app-session.service';
 import { CommonModule } from './shared/common/common.module';
 import { AppAuthService } from './core/shared/common/auth/app-auth.service';
 import { UrlHelper } from './shared/helpers/UrlHelper';
+import { CustomServiceProxyModule } from './shared/service-proxies/custom/custom-service-proxy.module';
 
 export function appInitializerFactory(injector: Injector) {
   return () => {
@@ -65,6 +66,7 @@ function handleLogoutRequest(authService: AppAuthService) {
     BrowserAnimationsModule,
     AbpModule,
     ServiceProxyModule,
+    CustomServiceProxyModule,
     AppRoutingModule,
   ],
   providers: [

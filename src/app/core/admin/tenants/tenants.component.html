@@ -16,9 +16,11 @@
       </button>
     </mat-form-field>
     <mat-form-field class="form-field" fxFlex="45" fxFlex.lt-md="100">
-      <input type="text" formControlName="selectedEditionId" placeholder="Pick one" aria-label="edition" matInput [matAutocomplete]="auto">
+      <input type="text" formControlName="selectedEditionId"
+                         placeholder="Pick one" aria-label="edition"
+                         matInput [matAutocomplete]="auto">
       <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-        <mat-option *ngFor="let edition of editions" [value]="edition">
+        <mat-option *ngFor="let edition of editions | async" [value]="edition">
           {{edition.displayText}}
         </mat-option>
       </mat-autocomplete>
