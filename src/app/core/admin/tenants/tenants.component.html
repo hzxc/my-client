@@ -16,7 +16,7 @@
       </button>
     </mat-form-field>
     <mat-form-field class="form-field" fxFlex="45" fxFlex.lt-md="100">
-      <input type="text" formControlName="selectedEditionId"
+      <input type="text" formControlName="selectedEdition"
                          placeholder="Pick one" aria-label="edition"
                          matInput [matAutocomplete]="auto">
       <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
@@ -37,5 +37,5 @@
     </mat-form-field> -->
   </form>
 </mat-card>
-
+<div>{{filters | json}}</div>
 <div>{{tenantsForm.value | json}}</div>

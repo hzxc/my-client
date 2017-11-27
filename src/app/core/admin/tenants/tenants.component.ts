@@ -60,9 +60,17 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
       subscriptionEndDateEnd: [],
       creationDateStart: [],
       creationDateEnd: [],
-      selectedEditionId: [],
+      selectedEdition: [],
     });
   }
+
+  // selectedEditionChange(selectedEdition: any): void {
+  //   if (selectedEdition && typeof selectedEdition === 'object') {
+  //     console.log(selectedEdition);
+  //     console.log(typeof selectedEdition);
+  //     console.log(selectedEdition.value);
+  //   }
+  // }
 
   displayFn(edition: ComboboxItemDto): string {
     return edition ? edition.displayText : null;
@@ -104,14 +112,21 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
         edition.displayText.toLowerCase().indexOf(displayText.toLowerCase()) === 0);
   }
 
+  valueBinding(propertyName: string, newValue: any) {
+    this.filters[propertyName] = newValue;
+    console.log(this.filters.selectedEditionId);
+  }
+
   ngOnInit(): void {
     this.filters.filterText = this._activatedRoute.snapshot.queryParams['filterText'] || '';
     this._editionService
       .getEditionComboboxItems(0, true, false)
       .subscribe(editions => { this.editions = editions; this.filteredEditions = editions.slice(); });
 
-    this.tenantsGroup.controls['selectedEditionId'].valueChanges
+    this.tenantsGroup.controls['selectedEdition'].valueChanges
       .startWith(null)
+      .do(edition => edition && typeof edition === 'object' ?
+        this.valueBinding('selectedEditionId', edition.value) : null)
       .map(edition => edition && typeof edition === 'object' ? edition.displayText : edition)
       .map(displayText => displayText ? this.filter(displayText) : this.editions.slice())
       .subscribe(filterResult => this.filteredEditions = filterResult);
