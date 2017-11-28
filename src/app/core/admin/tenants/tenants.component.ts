@@ -36,6 +36,8 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
     selectedEditionId: number;
   } = <any>{};
 
+  disabled: boolean;
+
   private tenantsGroup: FormGroup;
   editions: ComboboxItemDto[] = [];
   filteredEditions: ComboboxItemDto[] = [];
@@ -54,12 +56,16 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
     this.setFiltersFromRoute();
     this.tenantsGroup = fb.group({
       filterText: [''],
-      creationDateRangeActive: [false],
-      subscriptionEndDateRangeActive: [false],
-      subscriptionEndDateStart: [],
-      subscriptionEndDateEnd: [],
-      creationDateStart: [],
-      creationDateEnd: [],
+      subscriptionDateGroup: fb.group({
+        subscriptionEndDateRangeActive: [false],
+        subscriptionEndDateStart: [],
+        subscriptionEndDateEnd: [],
+      }),
+      creationDateGroup: fb.group({
+        creationDateRangeActive: [false],
+        creationDateStart: [],
+        creationDateEnd: [],
+      }),
       selectedEdition: [],
     });
   }
@@ -130,6 +136,8 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
       .map(edition => edition && typeof edition === 'object' ? edition.displayText : edition)
       .map(displayText => displayText ? this.filter(displayText) : this.editions.slice())
       .subscribe(filterResult => this.filteredEditions = filterResult);
+
+
     // this.impersonateUserLookupModal.configure({
     //   title: this.l('SelectAUser'),
     //   dataSource: (skipCount: number, maxResultCount: number, filter: string, tenantId?: number) => {

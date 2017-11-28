@@ -35,7 +35,7 @@ export class CustomEditionService {
   getEditionComboboxItems(
     selectedEditionId: number,
     addAllItem: boolean,
-    onlyFreeItems: boolean) {
+    onlyFreeItems: boolean):Observable<SubscribableEditionComboboxItemDto> {
     let url_ = this.baseUrl + '/api/services/app/Edition/GetEditionComboboxItems?';
     if (selectedEditionId !== undefined) {
       url_ += 'selectedEditionId=' + encodeURIComponent('' + selectedEditionId) + '&';
@@ -56,27 +56,27 @@ export class CustomEditionService {
         'Accept': 'application/json'
       })
     };
-    return this.http.request(url_, options_)
-      .map(res => res.json());
-
     // return this.http.request(url_, options_)
-    //   .do(res => console.log(res.json() as SubscribableEditionComboboxItemDto))
-    //   .flatMap((response_: any) => {
-    //     return this.processGetEditionComboboxItems(response_);
-    //   }).catch((response_: any) => {
-    //     if (response_ instanceof Response) {
-    //       try {
-    //         return this.processGetEditionComboboxItems(response_);
-    //       } catch (e) {
-    //         return <Observable<SubscribableEditionComboboxItemDto[]>><any>Observable.throw(e);
-    //       }
-    //     } else {
-    //       return <Observable<SubscribableEditionComboboxItemDto[]>><any>Observable.throw(response_);
-    //     }
-    //   });
+    //   .map(res => res.json());
+
+    return this.http.request(url_, options_)
+      .do(res => console.log(res.json() as SubscribableEditionComboboxItemDto))
+      .flatMap((response_: any) => {
+        return this.processGetEditionComboboxItems(response_);
+      }).catch((response_: any) => {
+        if (response_ instanceof Response) {
+          try {
+            return this.processGetEditionComboboxItems(response_);
+          } catch (e) {
+            return <Observable<SubscribableEditionComboboxItemDto[]>><any>Observable.throw(e);
+          }
+        } else {
+          return <Observable<SubscribableEditionComboboxItemDto[]>><any>Observable.throw(response_);
+        }
+      });
   }
 
-  protected processGetEditionComboboxItems(response: Response): Observable<SubscribableEditionComboboxItemDto[]> {
+  protected processGetEditionComboboxItems(response: Response): Observable<SubscribableEditionComboboxItemDto> {
     const status = response.status;
 
     const _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -91,12 +91,12 @@ export class CustomEditionService {
           result200.push(SubscribableEditionComboboxItemDto.fromJS(item));
         }
       }
-      return Observable.of(result200);
+      return Observable.from<SubscribableEditionComboboxItemDto>(result200);
     } else if (status !== 200 && status !== 204) {
       const _responseText = response.text();
       return throwException('An unexpected server error occurred.', status, _responseText, _headers);
     }
-    return Observable.of<SubscribableEditionComboboxItemDto[]>(<any>null);
+    return Observable.of<SubscribableEditionComboboxItemDto>(<any>null);
   }
 }
 
