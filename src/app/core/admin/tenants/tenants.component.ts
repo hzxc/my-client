@@ -36,7 +36,6 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
     selectedEditionId: number;
   } = <any>{};
 
-  disabled: boolean;
 
   private tenantsGroup: FormGroup;
   editions: ComboboxItemDto[] = [];

@@ -30,14 +30,14 @@
       </mat-checkbox>
       <mat-form-field>
         <span matPrefix>from &nbsp;</span>
-        <input matInput #tinput [matDatepicker]="subscriptionEndDateStartPicker" formControlName="subscriptionEndDateStart" [(ngModel)]="filters.subscriptionEndDateStart"
+        <input matInput #dpInput [matDatepicker]="subscriptionEndDateStartPicker" formControlName="subscriptionEndDateStart" [(ngModel)]="filters.subscriptionEndDateStart"
           placeholder="Choose a date">
-        <mat-datepicker-toggle matSuffix [for]="subscriptionEndDateStartPicker"></mat-datepicker-toggle>
+        <mat-datepicker-toggle #dpToggle matSuffix [for]="subscriptionEndDateStartPicker"></mat-datepicker-toggle>
         <mat-datepicker #subscriptionEndDateStartPicker></mat-datepicker>
       </mat-form-field>
       <mat-form-field>
         <span matPrefix>from &nbsp;</span>
-        <input [disabled]="disabled" matInput [matDatepicker]="dp1" placeholder="Completely">
+        <input disabled matInput [matDatepicker]="dp1" placeholder="Completely">
         <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
         <mat-datepicker #dp1></mat-datepicker>
       </mat-form-field>
@@ -65,7 +65,7 @@
         <mat-datepicker-toggle matSuffix [for]="creationDateEndPicker"></mat-datepicker-toggle>
         <mat-datepicker #creationDateEndPicker></mat-datepicker>
       </mat-form-field>
-      <button mat-raised-button (click)="#tinput.disabled = true">change</button>
+      <button mat-raised-button (click)="dpInput.disabled = true;dpToggle.disable = true">change</button>
     </div>
     <!-- <mat-form-field class="form-field" fxFlex="45">
       <mat-icon matPrefix>person</mat-icon>
@@ -79,5 +79,6 @@
     </mat-form-field> -->
   </form>
 </mat-card>
+<div>{{dpInput.value}}</div>
 <div>{{filters | json}}</div>
 <div>{{tenantsForm.value | json}}</div>
