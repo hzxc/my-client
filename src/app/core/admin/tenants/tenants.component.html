@@ -62,39 +62,46 @@
     </div>
   </form>
   <mat-table #table [dataSource]="dataSource" matSort>
-      <ng-container matColumnDef="userId">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
-        </ng-container>
+    <ng-container matColumnDef="tenancyName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{l('TenancyCodeName')}} </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.tenancyName}} </mat-cell>
+    </ng-container>
 
-        <!-- Progress Column -->
-        <ng-container matColumnDef="progress">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Progress </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.progress}}% </mat-cell>
-        </ng-container>
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>{{l('Name')}} </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
+    </ng-container>
 
-        <!-- Name Column -->
-        <ng-container matColumnDef="userName">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
-        </ng-container>
+    <ng-container matColumnDef="editionDisplayName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{l('Edition')}} </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.editionDisplayName}} </mat-cell>
+    </ng-container>
 
-        <!-- Color Column -->
-        <ng-container matColumnDef="color">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Color </mat-header-cell>
-          <mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </mat-cell>
-        </ng-container>
+    <ng-container matColumnDef="subscriptionEndDateUtc">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{l('SubscriptionEndDateUtc')}} </mat-header-cell>
+      <mat-cell *matCellDef="let row" [style.color]="row.subscriptionEndDateUtc">
+          {{ row.subscriptionEndDateUtc ? (row.subscriptionEndDateUtc | momentFormat:'L') : '-'}}
+      </mat-cell>
+    </ng-container>
 
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-      </mat-table>
+    <ng-container matColumnDef="isActive">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{l('Active')}} </mat-header-cell>
+      <mat-cell *matCellDef="let row" [style.color]="row.isActive"> {{row.isActive}} </mat-cell>
+    </ng-container>
 
-      <mat-paginator #paginator
-                    [length]="exampleDatabase.data.length"
-                    [pageIndex]="0"
-                    [pageSize]="25"
-                    [pageSizeOptions]="[5, 10, 25, 100]">
-      </mat-paginator>
+    <ng-container matColumnDef="creationTime">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>{{l('CreationTime')}}</mat-header-cell>
+      <mat-cell *matCellDef="let row" [style.color]="row.creationTime">
+          {{row.creationTime | momentFormat:'L'}}
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+  <mat-paginator #paginator [length]="resultsLength" [pageIndex]="0" [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]">
+  </mat-paginator>
 </mat-card>
 <div>{{filters | json}}</div>
 <div>{{tenantsForm.value | json}}</div>

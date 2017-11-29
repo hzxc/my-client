@@ -14,6 +14,7 @@ import { HttpModule } from '@angular/http';
 import { ImpersonationService } from './users/impersonation.service';
 import { AppUrlService } from '../../shared/common/nav/app-url.service';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { UtilsModule } from '../../shared/utils/utils.module';
 
 @NgModule({
   imports: [
@@ -27,6 +28,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     FormsModule,
     HttpModule,
     FlexLayoutModule,
+    UtilsModule
   ],
   providers: [
     ImpersonationService,

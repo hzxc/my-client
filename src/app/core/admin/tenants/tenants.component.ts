@@ -6,6 +6,7 @@ import {
   TenantListDto,
   ComboboxItemDto,
   EditionServiceProxy,
+  PagedResultDtoOfTenantListDto,
 } from '../../../shared/service-proxies/service-proxies';
 import { ActivatedRoute } from '@angular/router';
 import { ImpersonationService } from '../users/impersonation.service';
@@ -19,6 +20,7 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/first';
 import 'rxjs/add/operator/last';
 import 'rxjs/add/observable/merge';
+import 'rxjs/add/operator/switchMap';
 
 import { MatPaginator, MatSort } from '@angular/material';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -38,27 +40,14 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
     'isActive',
     'creationTime'
   ];
-  exampleDatabase = new ExampleDatabase();
-  dataSource: ExampleDataSource | null;
+  dataSource: TenantsDataSource | null;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-
-  filters: {
-    filterText: string;
-    creationDateRangeActive: boolean;
-    subscriptionEndDateRangeActive: boolean;
-    subscriptionEndDateStart: moment.Moment;
-    subscriptionEndDateEnd: moment.Moment;
-    creationDateStart: moment.Moment;
-    creationDateEnd: moment.Moment;
-    selectedEditionId: number;
-  } = <any>{};
-
 
   private tenantsGroup: FormGroup;
   editions: ComboboxItemDto[] = [];
   filteredEditions: ComboboxItemDto[] = [];
-
+  private filters: FilterDto = new FilterDto();
   constructor(
     injector: Injector,
     fb: FormBuilder,
@@ -67,7 +56,7 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
     private _tenantService: TenantServiceProxy,
     private _activatedRoute: ActivatedRoute,
     private _commonLookupService: CommonLookupServiceProxy,
-    private _impersonationService: ImpersonationService
+    private _impersonationService: ImpersonationService,
   ) {
     super(injector);
     this.setFiltersFromRoute();
@@ -75,13 +64,13 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
       filterText: [''],
       subscriptionDateGroup: fb.group({
         subscriptionEndDateRangeActive: [false],
-        subscriptionEndDateStart: [{ disabled: true }],
-        subscriptionEndDateEnd: [{ disabled: true }],
+        subscriptionEndDateStart: [],
+        subscriptionEndDateEnd: [],
       }),
       creationDateGroup: fb.group({
         creationDateRangeActive: [false],
-        creationDateStart: [{ disabled: true }],
-        creationDateEnd: [{ disabled: true }],
+        creationDateStart: [],
+        creationDateEnd: [],
       }),
       selectedEdition: [],
     });
@@ -148,8 +137,7 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
 
   ngOnInit(): void {
     // forTable
-    this.dataSource = new ExampleDataSource(this.exampleDatabase, this.paginator, this.sort);
-
+    this.dataSource = new TenantsDataSource(this.filters, this.paginator, this.sort, this._tenantService);
     this.filters.filterText = this._activatedRoute.snapshot.queryParams['filterText'] || '';
     this._editionService
       .getEditionComboboxItems(0, true, false)
@@ -239,99 +227,70 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
 
 }
 
-const COLORS = ['maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple',
-  'fuchsia', 'lime', 'teal', 'aqua', 'blue', 'navy', 'black', 'gray'];
-const NAMES = ['Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack',
-  'Charlotte', 'Theodore', 'Isla', 'Oliver', 'Isabella', 'Jasper',
-  'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'];
-
-export interface UserData {
-  id: string;
-  name: string;
-  progress: string;
-  color: string;
+export class FilterDto {
+  filterText: string;
+  creationDateRangeActive: boolean;
+  subscriptionEndDateRangeActive: boolean;
+  subscriptionEndDateStart: moment.Moment;
+  subscriptionEndDateEnd: moment.Moment;
+  creationDateStart: moment.Moment;
+  creationDateEnd: moment.Moment;
+  selectedEditionId: number;
 }
 
-export class ExampleDatabase {
-  /** Stream that emits whenever the data has been modified. */
-  dataChange: BehaviorSubject<UserData[]> = new BehaviorSubject<UserData[]>([]);
-  get data(): UserData[] { return this.dataChange.value; }
+export class TenantsDataSource extends DataSource<TenantListDto> {
+  // The number of issues returned by github matching the query.
+  resultsLength = 0;
+  isLoadingResults = true;
+  isRateLimitReached = false;
 
-  constructor() {
-    // Fill up the database with 100 users.
-    for (let i = 0; i < 100; i++) { this.addUser(); }
-  }
-
-  /** Adds a new user to the database. */
-  addUser() {
-    const copiedData = this.data.slice();
-    copiedData.push(this.createNewUser());
-    this.dataChange.next(copiedData);
-  }
-
-  /** Builds and returns a new User. */
-  private createNewUser() {
-    const name =
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
-
-    return {
-      id: (this.data.length + 1).toString(),
-      name: name,
-      progress: Math.round(Math.random() * 100).toString(),
-      color: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
-    };
-  }
-}
-
-export class ExampleDataSource extends DataSource<any> {
   constructor(
-    private _exampleDatabase: ExampleDatabase,
-    private _paginator: MatPaginator,
-    private _sort: MatSort
+    private filters: FilterDto,
+    private paginator: MatPaginator,
+    private sort: MatSort,
+    private _tenantService: TenantServiceProxy,
   ) {
     super();
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<UserData[]> {
+  connect(): Observable<TenantListDto[]> {
     const displayDataChanges = [
-      this._exampleDatabase.dataChange,
-      this._paginator.page,
-      this._sort.sortChange,
+      this.sort.sortChange,
+      this.paginator.page
     ];
+    // If the user changes the sort order, reset back to the first page.
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    if (!this.sort.active) {
+      this.sort.active = 'tenancyName';
+    }
+    if (this.sort.direction === '') {
+      this.sort.direction = 'asc';
+    }
 
-    return Observable.merge(...displayDataChanges).map(() => {
-      const data = this.getSortedData();
-      // Grab the page's slice of data.
-      const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
-      return data.splice(startIndex, this._paginator.pageSize);
-    });
+    return Observable.merge(...displayDataChanges)
+      .startWith(null)
+      .switchMap(() => {
+        return this._tenantService.getTenants(
+          this.filters.filterText,
+          this.filters.subscriptionEndDateRangeActive ? this.filters.subscriptionEndDateStart : undefined,
+          this.filters.subscriptionEndDateRangeActive ? this.filters.subscriptionEndDateEnd : undefined,
+          this.filters.creationDateRangeActive ? this.filters.creationDateStart : undefined,
+          this.filters.creationDateRangeActive ? this.filters.creationDateEnd : undefined,
+          this.filters.selectedEditionId,
+          this.filters.selectedEditionId !== undefined && (this.filters.selectedEditionId + '') !== '-1',
+          this.sort.active + ' ' + this.sort.direction,
+          this.paginator.pageSize,
+          this.paginator.pageIndex * this.paginator.pageSize);
+      })
+      .map(result => {
+        // Flip flag to show that loading has finished.
+        this.paginator.length = result.totalCount;
+        return result.items;
+      });
   }
 
   disconnect() { }
-
-  getSortedData(): UserData[] {
-    const data = this._exampleDatabase.data.slice();
-    if (!this._sort.active || this._sort.direction === '') { return data; }
-
-    return data.sort((a, b) => {
-      let propertyA: number | string = '';
-      let propertyB: number | string = '';
-
-      switch (this._sort.active) {
-        case 'userId': [propertyA, propertyB] = [a.id, b.id]; break;
-        case 'userName': [propertyA, propertyB] = [a.name, b.name]; break;
-        case 'progress': [propertyA, propertyB] = [a.progress, b.progress]; break;
-        case 'color': [propertyA, propertyB] = [a.color, b.color]; break;
-      }
-
-      const valueA = isNaN(+propertyA) ? propertyA : +propertyA;
-      const valueB = isNaN(+propertyB) ? propertyB : +propertyB;
-
-      return (valueA < valueB ? -1 : 1) * (this._sort.direction === 'asc' ? 1 : -1);
-    });
-  }
 }
 
 
