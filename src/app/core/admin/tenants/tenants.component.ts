@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild } from '@angular/core';
 import { AppComponentBase } from '../../../shared/common/app-component-base';
 import {
   TenantServiceProxy,
@@ -10,20 +10,38 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { ImpersonationService } from '../users/impersonation.service';
 import * as moment from 'moment';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
+import { DataSource } from '@angular/cdk/collections';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/first';
 import 'rxjs/add/operator/last';
-import { CustomEditionService } from '../../../shared/service-proxies/custom/custom-edition-service';
+import 'rxjs/add/observable/merge';
+
+import { MatPaginator, MatSort } from '@angular/material';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 @Component({
   selector: 'app-tenants',
   templateUrl: './tenants.component.html',
   styleUrls: ['./tenants.component.scss']
 })
 export class TenantsComponent extends AppComponentBase implements OnInit {
+
+  // ForTable
+  displayedColumns = [
+    'tenancyName',
+    'name',
+    'editionDisplayName',
+    'subscriptionEndDateUtc',
+    'isActive',
+    'creationTime'
+  ];
+  exampleDatabase = new ExampleDatabase();
+  dataSource: ExampleDataSource | null;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   filters: {
     filterText: string;
@@ -57,25 +75,32 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
       filterText: [''],
       subscriptionDateGroup: fb.group({
         subscriptionEndDateRangeActive: [false],
-        subscriptionEndDateStart: [],
-        subscriptionEndDateEnd: [],
+        subscriptionEndDateStart: [{ disabled: true }],
+        subscriptionEndDateEnd: [{ disabled: true }],
       }),
       creationDateGroup: fb.group({
         creationDateRangeActive: [false],
-        creationDateStart: [],
-        creationDateEnd: [],
+        creationDateStart: [{ disabled: true }],
+        creationDateEnd: [{ disabled: true }],
       }),
       selectedEdition: [],
     });
-  }
 
-  // selectedEditionChange(selectedEdition: any): void {
-  //   if (selectedEdition && typeof selectedEdition === 'object') {
-  //     console.log(selectedEdition);
-  //     console.log(typeof selectedEdition);
-  //     console.log(selectedEdition.value);
-  //   }
-  // }
+    // this.tenantsGroup = new FormGroup({
+    //   filterText: new FormControl(),
+    //   subscriptionDateGroup: new FormGroup({
+    //     subscriptionEndDateRangeActive: new FormControl(),
+    //     subscriptionEndDateStart: new FormControl({ value: null, disabled: true }, Validators.required),
+    //     subscriptionEndDateEnd: new FormControl({ value: null, disabled: true }, Validators.required),
+    //   }),
+    //   creationDateGroup: new FormGroup({
+    //     creationDateRangeActive: new FormControl(),
+    //     creationDateStart: new FormControl({ value: null, disabled: true }, Validators.required),
+    //     creationDateEnd: new FormControl({ value: null, disabled: true }, Validators.required),
+    //   }),
+    //   selectedEdition: new FormControl(),
+    // });
+  }
 
   displayFn(edition: ComboboxItemDto): string {
     return edition ? edition.displayText : null;
@@ -119,10 +144,12 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
 
   autocompleteValueBinding(propertyName: string, newValue: any) {
     this.filters[propertyName] = newValue;
-    console.log(this.filters.selectedEditionId);
   }
 
   ngOnInit(): void {
+    // forTable
+    this.dataSource = new ExampleDataSource(this.exampleDatabase, this.paginator, this.sort);
+
     this.filters.filterText = this._activatedRoute.snapshot.queryParams['filterText'] || '';
     this._editionService
       .getEditionComboboxItems(0, true, false)
@@ -150,32 +177,24 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
     // });
   }
 
-  getTenants() {
-    // if (this.primengDatatableHelper.shouldResetPaging(event)) {
-    //   this.paginator.changePage(0);
-
-    //   return;
-    // }
-
-    // this.primengDatatableHelper.showLoadingIndicator();
-
-    // this._tenantService.getTenants(
-    //   this.filters.filterText,
-    //   this.filters.subscriptionEndDateRangeActive ? this.filters.subscriptionEndDateStart : undefined,
-    //   this.filters.subscriptionEndDateRangeActive ? this.filters.subscriptionEndDateEnd : undefined,
-    //   this.filters.creationDateRangeActive ? this.filters.creationDateStart : undefined,
-    //   this.filters.creationDateRangeActive ? this.filters.creationDateEnd : undefined,
-    //   this.filters.selectedEditionId,
-    //   this.filters.selectedEditionId !== undefined && (this.filters.selectedEditionId + '') !== '-1'
-    //   this.primengDatatableHelper.getSorting(this.dataTable),
-    //   this.primengDatatableHelper.getMaxResultCount(this.paginator, event),
-    //   this.primengDatatableHelper.getSkipCount(this.paginator, event)
-    // ).subscribe(result => {
-    //   this.primengDatatableHelper.totalRecordsCount = result.totalCount;
-    //   this.primengDatatableHelper.records = result.items;
-    //   this.primengDatatableHelper.hideLoadingIndicator();
-    // });
-  }
+  // getTenants() {
+  //   this._tenantService.getTenants(
+  //     this.filters.filterText,
+  //     this.filters.subscriptionEndDateRangeActive ? this.filters.subscriptionEndDateStart : undefined,
+  //     this.filters.subscriptionEndDateRangeActive ? this.filters.subscriptionEndDateEnd : undefined,
+  //     this.filters.creationDateRangeActive ? this.filters.creationDateStart : undefined,
+  //     this.filters.creationDateRangeActive ? this.filters.creationDateEnd : undefined,
+  //     this.filters.selectedEditionId,
+  //     this.filters.selectedEditionId !== undefined && (this.filters.selectedEditionId + '') !== '-1'
+  //     this.primengDatatableHelper.getSorting(this.dataTable),
+  //     this.primengDatatableHelper.getMaxResultCount(this.paginator, event),
+  //     this.primengDatatableHelper.getSkipCount(this.paginator, event)
+  //   ).subscribe(result => {
+  //     this.primengDatatableHelper.totalRecordsCount = result.totalCount;
+  //     this.primengDatatableHelper.records = result.items;
+  //     this.primengDatatableHelper.hideLoadingIndicator();
+  //   });
+  // }
 
   // showUserImpersonateLookUpModal(record: any): void {
   //   this.impersonateUserLookupModal.tenantId = record.id;
@@ -219,3 +238,102 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
   // }
 
 }
+
+const COLORS = ['maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple',
+  'fuchsia', 'lime', 'teal', 'aqua', 'blue', 'navy', 'black', 'gray'];
+const NAMES = ['Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack',
+  'Charlotte', 'Theodore', 'Isla', 'Oliver', 'Isabella', 'Jasper',
+  'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'];
+
+export interface UserData {
+  id: string;
+  name: string;
+  progress: string;
+  color: string;
+}
+
+export class ExampleDatabase {
+  /** Stream that emits whenever the data has been modified. */
+  dataChange: BehaviorSubject<UserData[]> = new BehaviorSubject<UserData[]>([]);
+  get data(): UserData[] { return this.dataChange.value; }
+
+  constructor() {
+    // Fill up the database with 100 users.
+    for (let i = 0; i < 100; i++) { this.addUser(); }
+  }
+
+  /** Adds a new user to the database. */
+  addUser() {
+    const copiedData = this.data.slice();
+    copiedData.push(this.createNewUser());
+    this.dataChange.next(copiedData);
+  }
+
+  /** Builds and returns a new User. */
+  private createNewUser() {
+    const name =
+      NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
+      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
+
+    return {
+      id: (this.data.length + 1).toString(),
+      name: name,
+      progress: Math.round(Math.random() * 100).toString(),
+      color: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
+    };
+  }
+}
+
+export class ExampleDataSource extends DataSource<any> {
+  constructor(
+    private _exampleDatabase: ExampleDatabase,
+    private _paginator: MatPaginator,
+    private _sort: MatSort
+  ) {
+    super();
+  }
+
+  /** Connect function called by the table to retrieve one stream containing the data to render. */
+  connect(): Observable<UserData[]> {
+    const displayDataChanges = [
+      this._exampleDatabase.dataChange,
+      this._paginator.page,
+      this._sort.sortChange,
+    ];
+
+    return Observable.merge(...displayDataChanges).map(() => {
+      const data = this.getSortedData();
+      // Grab the page's slice of data.
+      const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
+      return data.splice(startIndex, this._paginator.pageSize);
+    });
+  }
+
+  disconnect() { }
+
+  getSortedData(): UserData[] {
+    const data = this._exampleDatabase.data.slice();
+    if (!this._sort.active || this._sort.direction === '') { return data; }
+
+    return data.sort((a, b) => {
+      let propertyA: number | string = '';
+      let propertyB: number | string = '';
+
+      switch (this._sort.active) {
+        case 'userId': [propertyA, propertyB] = [a.id, b.id]; break;
+        case 'userName': [propertyA, propertyB] = [a.name, b.name]; break;
+        case 'progress': [propertyA, propertyB] = [a.progress, b.progress]; break;
+        case 'color': [propertyA, propertyB] = [a.color, b.color]; break;
+      }
+
+      const valueA = isNaN(+propertyA) ? propertyA : +propertyA;
+      const valueB = isNaN(+propertyB) ? propertyB : +propertyB;
+
+      return (valueA < valueB ? -1 : 1) * (this._sort.direction === 'asc' ? 1 : -1);
+    });
+  }
+}
+
+
+
+

@@ -5,11 +5,8 @@ import { UsersComponent } from './users/users.component';
 import { AdminRoutingModule } from './admin-routing.module';
 import {
   MatTableModule,
-  MatPaginator,
   MatPaginatorModule,
   MatSortModule,
-  MatCardModule,
-  MatIconModule,
 } from '@angular/material';
 import { TenantsComponent } from './tenants/tenants.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
