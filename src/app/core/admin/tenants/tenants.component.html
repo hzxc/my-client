@@ -7,16 +7,16 @@
     <mat-card-subtitle>{{l("TenantsHeaderInfo")}}</mat-card-subtitle>
   </mat-card-header>
   <!-- #tenantsForm="ngForm"  -->
-  <form #tenantsForm="ngForm" [formGroup]="tenantsGroup" novalidate (ngSubmit)="getTenants()" fxLayout="row" fxLayoutAlign="start center"
+  <form #tenantsForm="ngForm" [formGroup]="tenantsGroup" novalidate (ngSubmit)="getTenants()" fxLayout="row" fxLayoutAlign="space-between center"
     fxLayoutWrap>
-    <mat-form-field class="form-field" fxFlex="48" fxFlex.lt-sm="100">
+    <mat-form-field class="form-field" fxFlex="49" fxFlex.lt-sm="100">
       <input matInput formControlName="filterText" [(ngModel)]="filters.filterText" placeholder="{{l('SearchWithThreeDot')}}">
       <button mat-raised-button color="accent" matSuffix>
         <mat-icon>search</mat-icon>
       </button>
     </mat-form-field>
-    <span fxHide.lt-sm fxFlex="3"></span>
-    <mat-form-field class="form-field" fxFlex="48" fxFlex.lt-sm="100">
+    <!-- <span fxHide.lt-sm fxFlex="3"></span> -->
+    <mat-form-field class="form-field" fxFlex="49" fxFlex.lt-sm="100">
       <input formControlName="selectedEdition" placeholder="Pick one" aria-label="edition" matInput [matAutocomplete]="auto">
       <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
         <mat-option *ngFor="let edition of filteredEditions" [value]="edition">
@@ -24,48 +24,57 @@
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
-    <div formGroupName="subscriptionDateGroup" fxLayout="row" fxLayoutWrap fxLayoutAlign="start center" fxFill>
+    <div formGroupName="subscriptionDateGroup" fxLayout="row" fxLayoutWrap fxLayoutAlign="start center"  fxFlex.gt-md="50" fxFlex.lt-lg="100">
       <mat-checkbox formControlName="subscriptionEndDateRangeActive" [(ngModel)]="filters.subscriptionEndDateRangeActive" fxFill>
         {{l('SubscriptionEndDate')}}
       </mat-checkbox>
-      <mat-form-field>
+      <mat-form-field [ngClass]="{'datepicker-item-readonly': !filters.subscriptionEndDateRangeActive}">
         <span matPrefix>from &nbsp;</span>
-        <input matInput #dpInput [matDatepicker]="subscriptionEndDateStartPicker" formControlName="subscriptionEndDateStart" [(ngModel)]="filters.subscriptionEndDateStart"
-          placeholder="Choose a date">
-        <mat-datepicker-toggle #dpToggle matSuffix [for]="subscriptionEndDateStartPicker"></mat-datepicker-toggle>
+        <input matInput [readonly]="!filters.subscriptionEndDateRangeActive"
+                        [disabled]="!filters.subscriptionEndDateRangeActive"
+                        [matDatepicker]="subscriptionEndDateStartPicker"
+                        formControlName="subscriptionEndDateStart"
+                        [(ngModel)]="filters.subscriptionEndDateStart"
+                        placeholder="Choose a date">
+        <mat-datepicker-toggle matSuffix [for]="subscriptionEndDateStartPicker"></mat-datepicker-toggle>
         <mat-datepicker #subscriptionEndDateStartPicker></mat-datepicker>
       </mat-form-field>
-      <mat-form-field>
-        <span matPrefix>from &nbsp;</span>
-        <input disabled matInput [matDatepicker]="dp1" placeholder="Completely">
-        <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
-        <mat-datepicker #dp1></mat-datepicker>
-      </mat-form-field>
-      <mat-form-field>
+      <mat-form-field [ngClass]="{'datepicker-item-readonly': !filters.subscriptionEndDateRangeActive}">
         <span matPrefix>to &nbsp;</span>
-        <input matInput formControlName="subscriptionEndDateEnd" [(ngModel)]="filters.subscriptionEndDateEnd" [matDatepicker]="subscriptionEndDateEndPicker"
-          placeholder="Choose a date">
+        <input matInput formControlName="subscriptionEndDateEnd"
+                        [readonly]="!filters.subscriptionEndDateRangeActive"
+                        [disabled]="!filters.subscriptionEndDateRangeActive"
+                        [(ngModel)]="filters.subscriptionEndDateEnd"
+                        [matDatepicker]="subscriptionEndDateEndPicker"
+                        placeholder="Choose a date">
         <mat-datepicker-toggle matSuffix [for]="subscriptionEndDateEndPicker"></mat-datepicker-toggle>
         <mat-datepicker #subscriptionEndDateEndPicker></mat-datepicker>
       </mat-form-field>
     </div>
-    <div formGroupName="creationDateGroup" fxLayout="row" fxLayoutWrap fxLayoutAlign="start center" fxFill>
+    <div formGroupName="creationDateGroup" fxLayout="row" fxLayoutWrap fxLayoutAlign="start center"  fxFlex.gt-md="50" fxFlex.lt-lg="100">
       <mat-checkbox formControlName="creationDateRangeActive" [(ngModel)]="filters.creationDateRangeActive" fxFill>{{l('CreationTime')}}</mat-checkbox>
-      <mat-form-field>
+      <mat-form-field [ngClass]="{'datepicker-item-readonly': !filters.creationDateRangeActive}">
         <span matPrefix>from &nbsp;</span>
-        <input matInput formControlName="creationDateStart" [(ngModel)]="filters.creationDateStart" [matDatepicker]="creationDateStartPicker"
-          placeholder="Choose a date">
+        <input matInput formControlName="creationDateStart"
+                        [readonly]="!filters.creationDateRangeActive"
+                        [disabled]="!filters.creationDateRangeActive"
+                        [(ngModel)]="filters.creationDateStart"
+                        [matDatepicker]="creationDateStartPicker"
+                        placeholder="Choose a date">
         <mat-datepicker-toggle matSuffix [for]="creationDateStartPicker"></mat-datepicker-toggle>
         <mat-datepicker #creationDateStartPicker></mat-datepicker>
       </mat-form-field>
-      <mat-form-field>
+      <mat-form-field [ngClass]="{'datepicker-item-readonly': !filters.creationDateRangeActive}">
         <span matPrefix>to &nbsp;</span>
-        <input matInput [matDatepicker]="creationDateEndPicker" formControlName="creationDateEnd" [(ngModel)]="filters.creationDateEnd"
-          placeholder="Choose a date disabled">
+        <input matInput [matDatepicker]="creationDateEndPicker"
+                        [readonly]="!filters.creationDateRangeActive"
+                        [disabled]="!filters.creationDateRangeActive"
+                        formControlName="creationDateEnd"
+                        [(ngModel)]="filters.creationDateEnd"
+                        placeholder="Choose a date disabled">
         <mat-datepicker-toggle matSuffix [for]="creationDateEndPicker"></mat-datepicker-toggle>
         <mat-datepicker #creationDateEndPicker></mat-datepicker>
       </mat-form-field>
-      <button mat-raised-button (click)="dpInput.disabled = true;dpToggle.disable = true">change</button>
     </div>
     <!-- <mat-form-field class="form-field" fxFlex="45">
       <mat-icon matPrefix>person</mat-icon>
@@ -79,6 +88,5 @@
     </mat-form-field> -->
   </form>
 </mat-card>
-<div>{{dpInput.value}}</div>
 <div>{{filters | json}}</div>
 <div>{{tenantsForm.value | json}}</div>

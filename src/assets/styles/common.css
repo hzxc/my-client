@@ -12,16 +12,6 @@
     text-align: center;
 }
 
-/*---- datepicker-readonly -----*/
-.datepicker-item-readonly.mat-form-field .mat-form-field-underline {
-  background-image: linear-gradient(to right, rgba(0, 0, 0, .42) 0, rgba(0, 0, 0, .42) 33%, transparent 0);
-  background-size: 4px 1px;
-  background-repeat: repeat-x;
-}
 
-.datepicker-item-readonly.mat-form-field .mat-form-field-underline {
-  background-position: 0;
-  background-color: transparent;
-}
 
 
