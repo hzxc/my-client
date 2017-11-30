@@ -19,7 +19,9 @@ import {
   MatFormFieldModule,
   MatIconRegistry,
   MatDatepickerModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatChipsModule,
+  MatSnackBarModule
 } from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
 import { Options } from 'selenium-webdriver';
@@ -46,7 +48,9 @@ import { DomSanitizer } from '@angular/platform-browser';
     MatSelectModule,
     MatFormFieldModule,
     MatDatepickerModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatChipsModule,
+    MatSnackBarModule
   ],
   exports: [
     MatProgressBarModule,
@@ -67,7 +71,9 @@ import { DomSanitizer } from '@angular/platform-browser';
     MatSelectModule,
     MatFormFieldModule,
     MatDatepickerModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatChipsModule,
+    MatSnackBarModule
   ],
   declarations: []
 })

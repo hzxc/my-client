@@ -22,15 +22,15 @@ export class ThemeService {
       baseColor: '#e91e63',
       isActive: false
     },
-    {
-      name: 'blue-light-theme',
-      baseColor: '#247ba0',
-      isActive: false
-    },
+    // {
+    //   name: 'blue-light-theme',
+    //   baseColor: '#247ba0',
+    //   isActive: false
+    // },
   ];
   activatedThemeName: String;
   constructor() {
-    this.changeTheme({ name: 'pink-dark-theme' });
+    this.changeTheme({ name: 'purple-dark-theme' });
   }
   changeTheme(theme) {
     domHelper.changeTheme(this.themes, theme.name);

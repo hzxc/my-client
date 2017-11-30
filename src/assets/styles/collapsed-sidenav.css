@@ -29,7 +29,6 @@
   top: 0;
   width: 200px;
   background: #fff;
-  /* z-index: 9999; */
   display: block;
   max-height: 200px !important;
   overflow-y: scroll;

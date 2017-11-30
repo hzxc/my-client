@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector, ViewChild } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild, ElementRef } from '@angular/core';
 import { AppComponentBase } from '../../../shared/common/app-component-base';
 import {
   TenantServiceProxy,
@@ -21,8 +21,9 @@ import 'rxjs/add/operator/first';
 import 'rxjs/add/operator/last';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/finally';
 
-import { MatPaginator, MatSort } from '@angular/material';
+import { MatPaginator, MatSort, MatSnackBar } from '@angular/material';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 @Component({
   selector: 'app-tenants',
@@ -33,6 +34,7 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
 
   // ForTable
   displayedColumns = [
+    'action',
     'tenancyName',
     'name',
     'editionDisplayName',
@@ -43,6 +45,7 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
   dataSource: TenantsDataSource | null;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('tenantsForm') tenantsForm: ElementRef;
 
   private tenantsGroup: FormGroup;
   editions: ComboboxItemDto[] = [];
@@ -57,6 +60,7 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
     private _activatedRoute: ActivatedRoute,
     private _commonLookupService: CommonLookupServiceProxy,
     private _impersonationService: ImpersonationService,
+    private snackBar: MatSnackBar
   ) {
     super(injector);
     this.setFiltersFromRoute();
@@ -137,7 +141,7 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
 
   ngOnInit(): void {
     // forTable
-    this.dataSource = new TenantsDataSource(this.filters, this.paginator, this.sort, this._tenantService);
+    this.dataSource = new TenantsDataSource(this.filters, this.paginator, this.sort, this.tenantsForm, this.snackBar, this._tenantService);
     this.filters.filterText = this._activatedRoute.snapshot.queryParams['filterText'] || '';
     this._editionService
       .getEditionComboboxItems(0, true, false)
@@ -242,12 +246,14 @@ export class TenantsDataSource extends DataSource<TenantListDto> {
   // The number of issues returned by github matching the query.
   resultsLength = 0;
   isLoadingResults = true;
-  isRateLimitReached = false;
+  isNoData = false;
 
   constructor(
     private filters: FilterDto,
     private paginator: MatPaginator,
     private sort: MatSort,
+    private form: ElementRef,
+    private snackBar: MatSnackBar,
     private _tenantService: TenantServiceProxy,
   ) {
     super();
@@ -257,7 +263,8 @@ export class TenantsDataSource extends DataSource<TenantListDto> {
   connect(): Observable<TenantListDto[]> {
     const displayDataChanges = [
       this.sort.sortChange,
-      this.paginator.page
+      this.paginator.page,
+      Observable.fromEvent(this.form.nativeElement, 'submit')
     ];
     // If the user changes the sort order, reset back to the first page.
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
@@ -270,6 +277,7 @@ export class TenantsDataSource extends DataSource<TenantListDto> {
 
     return Observable.merge(...displayDataChanges)
       .startWith(null)
+      .do(_ => { this.isLoadingResults = true; })
       .switchMap(() => {
         return this._tenantService.getTenants(
           this.filters.filterText,
@@ -285,8 +293,18 @@ export class TenantsDataSource extends DataSource<TenantListDto> {
       })
       .map(result => {
         // Flip flag to show that loading has finished.
+        this.isLoadingResults = false;
         this.paginator.length = result.totalCount;
+        if (result.totalCount === 0 || !result.items) {
+          this.snackBar.open('NoData', 'Close', {
+            duration: 2000,
+          });
+        }
         return result.items;
+      })
+      .catch(() => {
+        this.isLoadingResults = false;
+        return Observable.of([]);
       });
   }
 
