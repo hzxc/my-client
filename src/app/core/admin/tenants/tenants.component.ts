@@ -23,8 +23,9 @@ import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/finally';
 
-import { MatPaginator, MatSort, MatSnackBar } from '@angular/material';
+import { MatPaginator, MatSort, MatSnackBar, MatDialog } from '@angular/material';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { EditTenantModalComponent } from './edit-tenant-modal/edit-tenant-modal.component';
 @Component({
   selector: 'app-tenants',
   templateUrl: './tenants.component.html',
@@ -51,16 +52,18 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
   editions: ComboboxItemDto[] = [];
   filteredEditions: ComboboxItemDto[] = [];
   private filters: FilterDto = new FilterDto();
+  animal: string;
+  name: string;
   constructor(
     injector: Injector,
     fb: FormBuilder,
-    // private _editionService: CustomEditionService,
     private _editionService: EditionServiceProxy,
     private _tenantService: TenantServiceProxy,
     private _activatedRoute: ActivatedRoute,
     private _commonLookupService: CommonLookupServiceProxy,
     private _impersonationService: ImpersonationService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    public dialog: MatDialog
   ) {
     super(injector);
     this.setFiltersFromRoute();
@@ -93,6 +96,18 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
     //   }),
     //   selectedEdition: new FormControl(),
     // });
+  }
+
+  openEditDialog(): void {
+    const dialogRef = this.dialog.open(EditTenantModalComponent, {
+      width: '250px',
+      data: {  }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.animal = result;
+    });
   }
 
   displayFn(edition: ComboboxItemDto): string {
@@ -150,11 +165,10 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
     this.tenantsGroup.controls['selectedEdition'].valueChanges
       .startWith(null)
       .do(edition => edition && typeof edition === 'object' ?
-        this.autocompleteValueBinding('selectedEditionId', edition.value) : null)
+        this.autocompleteValueBinding('selectedEditionId', edition.value) : this.filters.selectedEditionId = undefined)
       .map(edition => edition && typeof edition === 'object' ? edition.displayText : edition)
       .map(displayText => displayText ? this.filter(displayText) : this.editions.slice())
       .subscribe(filterResult => this.filteredEditions = filterResult);
-
 
     // this.impersonateUserLookupModal.configure({
     //   title: this.l('SelectAUser'),

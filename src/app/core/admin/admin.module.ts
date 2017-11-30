@@ -15,6 +15,7 @@ import { ImpersonationService } from './users/impersonation.service';
 import { AppUrlService } from '../../shared/common/nav/app-url.service';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { UtilsModule } from '../../shared/utils/utils.module';
+import { EditTenantModalComponent } from './tenants/edit-tenant-modal/edit-tenant-modal.component';
 
 @NgModule({
   imports: [
@@ -30,6 +31,9 @@ import { UtilsModule } from '../../shared/utils/utils.module';
     FlexLayoutModule,
     UtilsModule
   ],
+  entryComponents: [
+    EditTenantModalComponent
+  ],
   providers: [
     ImpersonationService,
     AppUrlService
@@ -37,6 +41,7 @@ import { UtilsModule } from '../../shared/utils/utils.module';
   declarations: [
     UsersComponent,
     TenantsComponent,
+    EditTenantModalComponent,
   ]
 })
 export class AdminModule { }
