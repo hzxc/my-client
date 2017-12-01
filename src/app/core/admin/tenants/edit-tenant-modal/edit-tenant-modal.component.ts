@@ -8,7 +8,9 @@ import {
   SubscribableEditionComboboxItemDto
 } from '../../../../shared/service-proxies/service-proxies';
 import { FormBuilder, FormGroup } from '@angular/forms';
-
+import * as _ from 'lodash';
+import * as moment from 'moment';
+import { AbstractControl } from '@angular/forms/src/model';
 @Component({
   selector: 'app-edit-tenant-modal',
   templateUrl: './edit-tenant-modal.component.html',
@@ -23,6 +25,7 @@ export class EditTenantModalComponent extends AppComponentBase implements OnInit
   private isSubscriptionFieldsVisible = false;
   private tenantEditDto: TenantEditDto = new TenantEditDto();
   private tenantId: number;
+  private isUnlimited: boolean;
 
   constructor(
     injector: Injector,
@@ -65,7 +68,7 @@ export class EditTenantModalComponent extends AppComponentBase implements OnInit
         this.tenantEditDto = tenantResult;
         this.currentConnectionString = tenantResult.connectionString;
         this.tenantEditDto.editionId = this.tenantEditDto.editionId || 0;
-        this.tenantEditGroup.controls['isUnlimited'].setValue(!this.tenantEditDto.subscriptionEndDateUtc);
+        this.isUnlimited = !this.tenantEditDto.subscriptionEndDateUtc;
         this.subscriptionEndDateUtcIsValid = this.isUnlimited || this.tenantEditDto.subscriptionEndDateUtc !== undefined;
         this.toggleSubscriptionFields();
       });
@@ -78,6 +81,44 @@ export class EditTenantModalComponent extends AppComponentBase implements OnInit
     } else {
       this.isSubscriptionFieldsVisible = false;
     }
+  }
+
+  onEditionChange(): void {
+    if (this.selectedEditionIsFree()) {
+      this.tenantEditDto.isInTrialPeriod = false;
+    }
+
+    this.toggleSubscriptionFields();
+  }
+
+  selectedEditionIsFree(): boolean {
+    if (!this.tenantEditDto.editionId) {
+      return true;
+    }
+
+    const selectedEditions = _.filter(this.editions, { value: this.tenantEditDto.editionId + '' });
+    console.log(selectedEditions);
+    if (selectedEditions.length !== 1) {
+      return true;
+    }
+
+    const selectedEdition = selectedEditions[0];
+    return selectedEdition.isFree;
+  }
+
+  onUnlimitedChange(): void {
+    if (this.isUnlimited) {
+      this.tenantEditDto.subscriptionEndDateUtc = null;
+      this.subscriptionEndDateUtcIsValid = true;
+    } else {
+      if (!this.tenantEditDto.subscriptionEndDateUtc) {
+        this.subscriptionEndDateUtcIsValid = false;
+      }
+    }
+  }
+
+  subscriptionEndDateUtcValidator(control: AbstractControl): { [key: string]: any } {
+    return {};
   }
 }
 

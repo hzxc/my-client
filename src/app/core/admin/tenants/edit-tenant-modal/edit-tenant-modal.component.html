@@ -7,18 +7,27 @@
       <input required matInput formControlName="name" [(ngModel)]="tenantEditDto.name" placeholder="{{l('Name')}}">
     </mat-form-field>
     <mat-form-field class="full-width form-field">
-      <mat-select placeholder="Choose" formControlName="editionId" [(ngModel)]="tenantEditDto.editionId" required>
+      <mat-select placeholder="Choose" (change)="onEditionChange()" formControlName="editionId" [(ngModel)]="tenantEditDto.editionId"
+        required>
         <mat-option *ngFor="let edition of editions" [value]="edition.value | convertToInt">
           {{ edition.displayText }}
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <!-- <mat-checkbox [(ngModel)]="isUnlimited">
+    <div *ngIf="isSubscriptionFieldsVisible">
+      <mat-checkbox formControlName="isUnlimited" [(ngModel)]="isUnlimited" (change)="onUnlimitedChange()">
         {{l("UnlimitedTimeSubscription")}}
-    </mat-checkbox> -->
-
+      </mat-checkbox>
+      <mat-form-field *ngIf="!isUnlimited">
+        <input matInput [matDatepicker]="subscriptionEndDateUtcPicker" formControlName="subscriptionEndDateUtc"
+          [(ngModel)]="tenantEditDto.subscriptionEndDateUtc" placeholder="Choose a date">
+        <mat-datepicker-toggle matSuffix [for]="subscriptionEndDateUtcPicker"></mat-datepicker-toggle>
+        <mat-datepicker #subscriptionEndDateUtcPicker></mat-datepicker>
+        <!-- <mat-error>{{passwordErrorMessage()}}</mat-error> -->
+      </mat-form-field>
+    </div>
     <mat-checkbox formControlName="isActive" [(ngModel)]="tenantEditDto.isActive">
-        {{l("Active")}}
+      {{l("Active")}}
     </mat-checkbox>
   </form>
 </mat-dialog-content>
@@ -28,5 +37,5 @@
 </mat-dialog-actions>
 <div>{{tenantEditDto | json}}</div>
 <div>{{tenantEditGroup.value | json}}</div>
-<div>{{tenantEditDto.editionId}}</div>
-<div>{{editions | json}}</div>
+<!-- <div>{{tenantEditDto.editionId}}</div>
+<div>{{editions | json}}</div> -->
