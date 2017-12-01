@@ -27,7 +27,6 @@ $indigo-light-theme:mat-light-theme($indigo-light-primary, $indigo-light-accent,
   .list-item-active {
     border-color: map-get($mat-indigo, 500);
   }
-
   /*---- datepicker-readonly -----*/
   .datepicker-item-readonly.mat-form-field .mat-form-field-underline {
     background-image: linear-gradient(to right, rgba(0, 0, 0, .42) 0, rgba(0, 0, 0, .42) 33%, transparent 0);
@@ -41,6 +40,18 @@ $indigo-light-theme:mat-light-theme($indigo-light-primary, $indigo-light-accent,
   .datepicker-item-readonly.mat-form-field .mat-input-element {
     color: rgba(0, 0, 0, .42); // color: rgba(255,255,255,.7);
   }
+  /*---- hr-class -----*/
+  .hr-class {
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: map-get($indigo-light-primary, 500);
+    border-right-color: map-get($indigo-light-primary, 500);
+    border-bottom-color: map-get($indigo-light-primary, 500);
+    border-left-color: map-get($indigo-light-primary, 500);
+    background-color: map-get($indigo-light-primary, 500);
+  }
 }
 
 // @include angular-material-theme($indigo-light-theme);
@@ -51,7 +62,6 @@ $deeppurple-light-warn:mat-palette($mat-red);
 $deeppurple-light-theme:mat-light-theme($deeppurple-light-primary, $deeppurple-light-accent, $deeppurple-light-warn);
 .deeppurple-light-theme {
   @include angular-material-theme($deeppurple-light-theme);
-
   .mat-bg-primary {
     background: map-get($mat-deep-purple, 500) !important;
     color: #ffffff !important;
@@ -72,8 +82,9 @@ $deeppurple-light-theme:mat-light-theme($deeppurple-light-primary, $deeppurple-l
   .list-item-active {
     border-color: map-get($mat-deep-purple, 500);
   }
-
-  .mat-mini-fab.mat-accent{color:#fff !important}
+  .mat-mini-fab.mat-accent {
+    color: #fff !important
+  }
   /*---- datepicker-readonly -----*/
   .datepicker-item-readonly.mat-form-field .mat-form-field-underline {
     background-image: linear-gradient(to right, rgba(0, 0, 0, .42) 0, rgba(0, 0, 0, .42) 33%, transparent 0);
@@ -86,6 +97,18 @@ $deeppurple-light-theme:mat-light-theme($deeppurple-light-primary, $deeppurple-l
   }
   .datepicker-item-readonly.mat-form-field .mat-input-element {
     color: rgba(0, 0, 0, .42); // color: rgba(255,255,255,.7);
+  }
+  /*---- hr-class -----*/
+  .hr-class {
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: map-get($deeppurple-light-primary, 500);
+    border-right-color: map-get($deeppurple-light-primary, 500);
+    border-bottom-color: map-get($deeppurple-light-primary, 500);
+    border-left-color: map-get($deeppurple-light-primary, 500);
+    background-color: map-get($deeppurple-light-primary, 500);
   }
 }
 
@@ -104,9 +127,6 @@ $purple-dark-theme:mat-dark-theme($purple-dark-primary, $purple-dark-accent, $pu
     background-color: map-get($mat-green, 500);
     color: black;
   }
-
-
-
   .mat-color-primary,
   .list-item-active,
   .sidebar-panel.mat-sidenav .sidebar-list-item.open>.mat-list-item-content>a>mat-icon:not(.menu-caret),
@@ -119,11 +139,9 @@ $purple-dark-theme:mat-dark-theme($purple-dark-primary, $purple-dark-accent, $pu
   .list-item-active {
     border-color: map-get($mat-purple, 500);
   }
-
   &.collapsed-menu .sidebar-panel .sidebar-list-item.open .sub-menu {
     background: rgba(66, 66, 66, 0.92)!important;
   }
-
   /*---- datepicker-readonly -----*/
   .datepicker-item-readonly.mat-form-field .mat-form-field-underline {
     background-image: linear-gradient(to right, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.7) 33%, transparent 0%);
@@ -137,6 +155,18 @@ $purple-dark-theme:mat-dark-theme($purple-dark-primary, $purple-dark-accent, $pu
   .datepicker-item-readonly.mat-form-field .mat-input-element {
     // color: rgba(0,0,0,.42);
     color: rgba(255, 255, 255, .7);
+  }
+  /*---- hr-class -----*/
+  .hr-class {
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: map-get($purple-dark-primary, 500);
+    border-right-color: map-get($purple-dark-primary, 500);
+    border-bottom-color: map-get($purple-dark-primary, 500);
+    border-left-color: map-get($purple-dark-primary, 500);
+    background-color: map-get($purple-dark-primary, 500);
   }
 }
 
@@ -184,6 +214,18 @@ $pink-dark-theme:mat-dark-theme($pink-dark-primary, $pink-dark-accent, $pink-dar
     // color: rgba(0,0,0,.42);
     color: rgba(255, 255, 255, .7);
   }
+  /*---- hr-class -----*/
+  .hr-class {
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: map-get($pink-dark-primary, 500);
+    border-right-color: map-get($pink-dark-primary, 500);
+    border-bottom-color: map-get($pink-dark-primary, 500);
+    border-left-color: map-get($pink-dark-primary, 500);
+    background-color: map-get($pink-dark-primary, 500);
+  }
 }
 
 //custom bule
@@ -228,5 +270,16 @@ $blue-primary-dark: darken( map-get($blue-primary, 500), 8%);
   }
   .datepicker-item-readonly.mat-form-field .mat-input-element {
     color: rgba(0, 0, 0, .42); // color: rgba(255,255,255,.7);
+  }
+  .hr-class {
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: map-get($blue-primary, 500);
+    border-right-color: map-get($blue-primary, 500);
+    border-bottom-color: map-get($blue-primary, 500);
+    border-left-color: map-get($blue-primary, 500);
+    background-color: map-get($blue-primary, 500);
   }
 }

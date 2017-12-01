@@ -70,13 +70,14 @@
   </form>
 
   <div class="table-container">
-    <hr />
+    <!-- <hr /> -->
+    <hr class="hr-class">
     <div class="loading-shade" *ngIf="dataSource.isLoadingResults">
       <mat-progress-spinner [mode]="dataSource.isLoadingResults? 'indeterminate':'determinate'">
       </mat-progress-spinner>
     </div>
     <mat-table #table [dataSource]="dataSource" matSort>
-      <ng-container matColumnDef="action">
+      <ng-container matColumnDef="actions">
         <mat-header-cell *matHeaderCellDef>
           {{l('Actions')}}
         </mat-header-cell>
@@ -85,7 +86,7 @@
             <mat-icon>settings</mat-icon>
           </button>
           <mat-menu #editMenu="matMenu">
-            <button mat-menu-item (click)="openEditDialog()">{{l('Edit')}}</button>
+            <button mat-menu-item (click)="openEditDialog(row.id)">{{l('Edit')}}</button>
           </mat-menu>
         </mat-cell>
       </ng-container>

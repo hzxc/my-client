@@ -7,6 +7,7 @@ import {
   ComboboxItemDto,
   EditionServiceProxy,
   PagedResultDtoOfTenantListDto,
+  TenantEditDto,
 } from '../../../shared/service-proxies/service-proxies';
 import { ActivatedRoute } from '@angular/router';
 import { ImpersonationService } from '../users/impersonation.service';
@@ -21,7 +22,6 @@ import 'rxjs/add/operator/first';
 import 'rxjs/add/operator/last';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/finally';
 
 import { MatPaginator, MatSort, MatSnackBar, MatDialog } from '@angular/material';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -35,7 +35,7 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
 
   // ForTable
   displayedColumns = [
-    'action',
+    'actions',
     'tenancyName',
     'name',
     'editionDisplayName',
@@ -81,7 +81,6 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
       }),
       selectedEdition: [],
     });
-
     // this.tenantsGroup = new FormGroup({
     //   filterText: new FormControl(),
     //   subscriptionDateGroup: new FormGroup({
@@ -98,10 +97,12 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
     // });
   }
 
-  openEditDialog(): void {
+  openEditDialog(tenantId: number): void {
     const dialogRef = this.dialog.open(EditTenantModalComponent, {
-      width: '250px',
-      data: {  }
+      maxWidth: '500px',
+      data: {
+        tenantId: tenantId
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -169,80 +170,7 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
       .map(edition => edition && typeof edition === 'object' ? edition.displayText : edition)
       .map(displayText => displayText ? this.filter(displayText) : this.editions.slice())
       .subscribe(filterResult => this.filteredEditions = filterResult);
-
-    // this.impersonateUserLookupModal.configure({
-    //   title: this.l('SelectAUser'),
-    //   dataSource: (skipCount: number, maxResultCount: number, filter: string, tenantId?: number) => {
-    //     let input = new FindUsersInput();
-    //     input.filter = filter;
-    //     input.maxResultCount = maxResultCount;
-    //     input.skipCount = skipCount;
-    //     input.tenantId = tenantId;
-    //     return this._commonLookupService.findUsers(input);
-    //   }
-    // });
   }
-
-  // getTenants() {
-  //   this._tenantService.getTenants(
-  //     this.filters.filterText,
-  //     this.filters.subscriptionEndDateRangeActive ? this.filters.subscriptionEndDateStart : undefined,
-  //     this.filters.subscriptionEndDateRangeActive ? this.filters.subscriptionEndDateEnd : undefined,
-  //     this.filters.creationDateRangeActive ? this.filters.creationDateStart : undefined,
-  //     this.filters.creationDateRangeActive ? this.filters.creationDateEnd : undefined,
-  //     this.filters.selectedEditionId,
-  //     this.filters.selectedEditionId !== undefined && (this.filters.selectedEditionId + '') !== '-1'
-  //     this.primengDatatableHelper.getSorting(this.dataTable),
-  //     this.primengDatatableHelper.getMaxResultCount(this.paginator, event),
-  //     this.primengDatatableHelper.getSkipCount(this.paginator, event)
-  //   ).subscribe(result => {
-  //     this.primengDatatableHelper.totalRecordsCount = result.totalCount;
-  //     this.primengDatatableHelper.records = result.items;
-  //     this.primengDatatableHelper.hideLoadingIndicator();
-  //   });
-  // }
-
-  // showUserImpersonateLookUpModal(record: any): void {
-  //   this.impersonateUserLookupModal.tenantId = record.id;
-  //   this.impersonateUserLookupModal.show();
-  // }
-
-  // unlockUser(record: any): void {
-  //   this._tenantService.unlockTenantAdmin(new EntityDtoOfInt64({ id: record.id })).subscribe(() => {
-  //     this.notify.success(this.l('UnlockedTenandAdmin', record.name));
-  //   });
-  // }
-
-  reloadPage(): void {
-    // this.paginator.changePage(this.paginator.getPage());
-  }
-
-  // createTenant(): void {
-  //   this.createTenantModal.show();
-  // }
-
-  // deleteTenant(tenant: TenantListDto): void {
-  //   this.message.confirm(
-  //     this.l('TenantDeleteWarningMessage', tenant.tenancyName),
-  //     isConfirmed => {
-  //       if (isConfirmed) {
-  //         this._tenantService.deleteTenant(tenant.id).subscribe(() => {
-  //           this.reloadPage();
-  //           this.notify.success(this.l('SuccessfullyDeleted'));
-  //         });
-  //       }
-  //     }
-  //   );
-  // }
-
-  // impersonateUser(item: NameValueDto): void {
-  //   this._impersonationService
-  //     .impersonate(
-  //     parseInt(item.value),
-  //     this.impersonateUserLookupModal.tenantId
-  //     );
-  // }
-
 }
 
 export class FilterDto {

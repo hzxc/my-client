@@ -12,6 +12,7 @@ import { FriendProfilePictureComponent } from './friend-profile-picture.componen
 import { MomentFormatPipe } from './moment-format.pipe';
 import { CurrencyInputDirective } from './currency-input.directive';
 import { NormalizeDropdownPositionDirective } from './normalize-dropdown-position.directive';
+import { ConvertStringToNumberPipe } from './convert-string-to-number.pipe';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { NormalizeDropdownPositionDirective } from './normalize-dropdown-positio
         BusyIfDirective,
         FriendProfilePictureComponent,
         MomentFormatPipe,
+        ConvertStringToNumberPipe,
         CurrencyInputDirective,
         NormalizeDropdownPositionDirective
     ],
@@ -40,6 +42,7 @@ import { NormalizeDropdownPositionDirective } from './normalize-dropdown-positio
         BusyIfDirective,
         FriendProfilePictureComponent,
         MomentFormatPipe,
+        ConvertStringToNumberPipe,
         CurrencyInputDirective,
         NormalizeDropdownPositionDirective
     ]

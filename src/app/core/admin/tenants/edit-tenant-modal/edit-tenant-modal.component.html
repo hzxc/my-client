@@ -1,3 +1,32 @@
-<p>
-  edit-tenant-modal works!
-</p>
+<span>{{l("EditTenant")}}: {{tenantEditDto.tenancyName}}
+</span>
+<hr class="hr-class">
+<mat-dialog-content>
+  <form novalidate [formGroup]="tenantEditGroup" (ngSubmit)="save()">
+    <mat-form-field class="full-width form-field">
+      <input required matInput formControlName="name" [(ngModel)]="tenantEditDto.name" placeholder="{{l('Name')}}">
+    </mat-form-field>
+    <mat-form-field class="full-width form-field">
+      <mat-select placeholder="Choose" formControlName="editionId" [(ngModel)]="tenantEditDto.editionId" required>
+        <mat-option *ngFor="let edition of editions" [value]="edition.value | convertToInt">
+          {{ edition.displayText }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <!-- <mat-checkbox [(ngModel)]="isUnlimited">
+        {{l("UnlimitedTimeSubscription")}}
+    </mat-checkbox> -->
+
+    <mat-checkbox formControlName="isActive" [(ngModel)]="tenantEditDto.isActive">
+        {{l("Active")}}
+    </mat-checkbox>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>No</button>
+  <button mat-button [mat-dialog-close]="true">Yes</button>
+</mat-dialog-actions>
+<div>{{tenantEditDto | json}}</div>
+<div>{{tenantEditGroup.value | json}}</div>
+<div>{{tenantEditDto.editionId}}</div>
+<div>{{editions | json}}</div>
