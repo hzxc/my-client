@@ -7,7 +7,11 @@ import {
   CommonLookupServiceProxy,
   SubscribableEditionComboboxItemDto
 } from '../../../../shared/service-proxies/service-proxies';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { AbstractControl } from '@angular/forms/src/model';
@@ -25,7 +29,7 @@ export class EditTenantModalComponent extends AppComponentBase implements OnInit
   private isSubscriptionFieldsVisible = false;
   private tenantEditDto: TenantEditDto = new TenantEditDto();
   private tenantId: number;
-  private isUnlimited: boolean;
+  private isUnlimited = false;
 
   constructor(
     injector: Injector,
@@ -40,12 +44,15 @@ export class EditTenantModalComponent extends AppComponentBase implements OnInit
     this.tenantEditGroup = fb.group({
       name: [],
       connectionString: [],
-      editionId: [],
       isActive: [],
-      subscriptionEndDateUtc: [],
-      isInTrialPeriod: [],
-      id: [],
-      isUnlimited: [false]
+      editGroup: fb.group(
+        {
+          editionId: [],
+          isUnlimited: [],
+          subscriptionEndDateUtc: [],
+          isInTrialPeriod: [],
+        }
+      ),
     });
   }
 
@@ -117,8 +124,34 @@ export class EditTenantModalComponent extends AppComponentBase implements OnInit
     }
   }
 
-  subscriptionEndDateUtcValidator(control: AbstractControl): { [key: string]: any } {
-    return {};
+  subscriptionEndDateUtcValidator(editGroup: AbstractControl): { [key: string]: any } {
+
+    let isValid = true;
+
+    const editionId = editGroup.get('editionId').value;
+    const isUnlimited = editGroup.get('isUnlimited').value;
+    const subscriptionEndDateUtc = editGroup.get('subscriptionEndDateUtc').value;
+    const isInTrialPeriod = editGroup.get('isInTrialPeriod').value;
+
+    if (editionId <= 0) {
+      // subscriptionEndDateUtc = null
+      // isInTrialPeriod = null
+    } else {
+
+    }
+
+
+    // editionId: [],
+    // isUnlimited: [],
+    // subscriptionEndDateUtc: [],
+    // isInTrialPeriod: [],
+
+    // if (!this.tenantEditDto.subscriptionEndDateUtc) {
+    //   isValid = false;
+    //   // return { 'subscriptionEndDateUtcIsValid': 'false' };
+    // }
+    console.log('验证结果：' + isValid);
+    return isValid ? null : { 'subscriptionEndDateUtcIsValid': 'false' };
   }
 }
 
