@@ -15,7 +15,7 @@ import {
 
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { AbstractControl } from '@angular/forms/src/model';
+import { AbstractControl, FormControl } from '@angular/forms/src/model';
 
 @Component({
   selector: 'app-edit-tenant-modal',
@@ -25,14 +25,15 @@ import { AbstractControl } from '@angular/forms/src/model';
 export class EditTenantModalComponent extends AppComponentBase implements OnInit, AfterViewInit {
 
   private tenantEditGroup: FormGroup;
-  private currentConnectionString: string;
+  private editGroup: FormGroup;
   private editions: SubscribableEditionComboboxItemDto[] = [];
-  private subscriptionEndDateUtcIsValid = false;
-  private isSubscriptionFieldsVisible = false;
+  private filteredEditions: SubscribableEditionComboboxItemDto[] = [];
   private tenantEditDto: TenantEditDto = new TenantEditDto();
   private tenantId: number;
-  private isUnlimited = false;
-  private filteredEditions: SubscribableEditionComboboxItemDto[] = [];
+
+  private isSubscriptionFieldsVisible = false;
+  private edtionVisible = false;
+  private saving = true;
 
   constructor(
     injector: Injector,
@@ -46,7 +47,6 @@ export class EditTenantModalComponent extends AppComponentBase implements OnInit
     this.tenantId = data.tenantId;
     this.tenantEditGroup = fb.group({
       name: [],
-      connectionString: [],
       isActive: [],
       editGroup: fb.group(
         {
@@ -58,9 +58,11 @@ export class EditTenantModalComponent extends AppComponentBase implements OnInit
         { validator: this.editGroupValidator }
       ),
     });
+    this.editGroup = this.tenantEditGroup.get('editGroup') as FormGroup;
   }
 
-  save() {
+  save(): void {
+
   }
 
   filter(displayText: string): SubscribableEditionComboboxItemDto[] {
@@ -92,106 +94,88 @@ export class EditTenantModalComponent extends AppComponentBase implements OnInit
 
       this._tenantService.getTenantForEdit(tenantId).subscribe((tenantResult) => {
         this.tenantEditDto = tenantResult;
-        this.currentConnectionString = tenantResult.connectionString;
-        this.tenantEditDto.editionId = this.tenantEditDto.editionId || 0;
-        this.tenantEditGroup.get('editGroup').get('edition').setValue(this.editions.find(
-          e => e.value === this.tenantEditDto.editionId.toString()
-        ));
-        this.isUnlimited = !this.tenantEditDto.subscriptionEndDateUtc;
-        this.subscriptionEndDateUtcIsValid = this.isUnlimited || this.tenantEditDto.subscriptionEndDateUtc !== undefined;
+        this.formGroupInit(tenantResult);
+        // this.subscriptionEndDateUtcIsValid = this.isUnlimited || this.tenantEditDto.subscriptionEndDateUtc !== undefined;
       });
     });
   }
 
+  formGroupInit(data: TenantEditDto) {
+    this.tenantEditGroup.get('name').setValue(data.name);
+    this.tenantEditGroup.get('isActive').setValue(data.isActive);
+    data.editionId = data.editionId || 0;
+    this.editGroup.get('edition').setValue(
+      this.editions.find(
+        e => e.value === data.editionId.toString()));
+    this.editGroup.get('subscriptionEndDateUtc').setValue(data.subscriptionEndDateUtc);
+    this.editGroup.get('isUnlimited').setValue(!data.subscriptionEndDateUtc);
+    this.editGroup.get('isInTrialPeriod').setValue(data.isInTrialPeriod);
+  }
+
   edtionChange(selectedEdition: SubscribableEditionComboboxItemDto) {
-    if (selectedEdition && typeof selectedEdition === 'object') {
-      this.autocompleteValueBinding('editionId', selectedEdition.value);
+    if (!selectedEdition) {
+      return;
+    }
+    if (selectedEdition.value === '0') {
+      this.edtionVisible = false;
     } else {
-      this.tenantEditDto.editionId = undefined;
+      this.edtionVisible = true;
     }
-    const trialPeriodControl = this.tenantEditGroup.controls['editGroup'].get('isInTrialPeriod');
-    if (selectedEdition) {
-      if (selectedEdition.isFree) {
-        trialPeriodControl.setValue(false);
-        trialPeriodControl.disable();
-      } else {
-        trialPeriodControl.enable();
-      }
-      console.log(trialPeriodControl.value);
-    }
-
-    if (selectedEdition && selectedEdition.value === '0') {
-
+    const trialPeriodControl = this.editGroup.get('isInTrialPeriod');
+    if (selectedEdition.isFree) {
+      trialPeriodControl.setValue(false);
+      trialPeriodControl.disable();
+    } else {
+      trialPeriodControl.enable();
     }
   }
 
-  // selectedEditionIsFree(): boolean {
-  //   if (!this.tenantEditDto.editionId) {
-  //     return true;
-  //   }
-
-  //   const selectedEditions = _.filter(this.editions, { value: this.tenantEditDto.editionId + '' });
-  //   if (selectedEditions.length !== 1) {
-  //     return true;
-  //   }
-
-  //   const selectedEdition = selectedEditions[0];
-  //   return selectedEdition.isFree;
-  // }
-
-  onUnlimitedChange(): void {
-    if (this.isUnlimited) {
-      this.tenantEditDto.subscriptionEndDateUtc = null;
-      this.subscriptionEndDateUtcIsValid = true;
+  onUnlimitedChange(isCheck: boolean): void {
+    if (isCheck) {
+      this.editGroup.get('subscriptionEndDateUtc').setValue(null);
+      this.isSubscriptionFieldsVisible = false;
     } else {
-      if (!this.tenantEditDto.subscriptionEndDateUtc) {
-        this.subscriptionEndDateUtcIsValid = false;
-      }
+      this.isSubscriptionFieldsVisible = true;
     }
   }
 
-  editGroupValidator(editGroup: FormGroup): { [key: string]: any } {
+  editGroupValidator(group: FormGroup): { [key: string]: any } {
 
     // let isValid = true;
-    const edition = editGroup.get('edition').value;
-    const isUnlimited = editGroup.get('isUnlimited').value;
-    const subscriptionEndDateUtc = editGroup.get('subscriptionEndDateUtc').value;
-    const isInTrialPeriod = editGroup.get('isInTrialPeriod').value;
+    const edition = group.get('edition') as FormControl;
+    const isUnlimited = group.get('isUnlimited') as FormControl;
+    const subscriptionEndDateUtc = group.get('subscriptionEndDateUtc') as FormControl;
+    const isInTrialPeriod = group.get('isInTrialPeriod') as FormControl;
 
-    if (!edition) {
+    if (!edition || edition.value <= 0) {
       return {
         edit: { desc: 'editionIdValidationFailed' }
       };
     }
 
-    // if (edition.value <= 0) {
-    //   return {
-    //     edit: { desc: 'editionIdValidationFailed' }
-    //   };
-    // } else if (isUnlimited && subscriptionEndDateUtc != null) {
-    //   return {
-    //     edit: { desc: 'subscriptionEndDateUtcValidationFailed' }
-    //   };
-    // } else if (!isUnlimited && subscriptionEndDateUtc == null) {
-    //   return {
-    //     edit: { desc: 'subscriptionEndDateUtcValidationFailed' }
-    //   };
-    // } else if (edition.isFree && isInTrialPeriod) {
-    //   return {
-    //     edit: { desc: 'isInTrialPeriodValidationFailed' }
-    //   };
-    // }
+    if (isUnlimited.value && subscriptionEndDateUtc.value != null) {
+      return {
+        edit: { desc: 'subscriptionEndDateUtcValidationFailed' }
+      };
+    }
+
+    if (!isUnlimited.value && subscriptionEndDateUtc.value == null) {
+      return {
+        edit: { desc: 'subscriptionEndDateUtcValidationFailed' }
+      };
+    }
+
+    if (edition.value.isFree && isInTrialPeriod.value) {
+      return {
+        edit: { desc: 'isInTrialPeriodValidationFailed' }
+      };
+    }
+
     return null;
-    // console.log('验证结果：' + isValid);
-    // return isValid ? null : { 'subscriptionEndDateUtcIsValid': 'false' };
   }
 
   displayFn(edition: SubscribableEditionComboboxItemDto): string {
     return edition ? edition.displayText : null;
-  }
-
-  autocompleteValueBinding(propertyName: string, newValue: any) {
-    this.tenantEditDto[propertyName] = parseInt(newValue, 10);
   }
 }
 
