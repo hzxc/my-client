@@ -1,43 +1,62 @@
 <span>{{l("EditTenant")}}: {{tenantEditDto.tenancyName}}
 </span>
 <hr class="hr-class">
-<mat-dialog-content>
+<mat-dialog-content class="dialog-content">
   <form novalidate [formGroup]="tenantEditGroup" (ngSubmit)="save()">
     <mat-form-field class="full-width form-field">
       <input required matInput formControlName="name" [(ngModel)]="tenantEditDto.name" placeholder="{{l('Name')}}">
     </mat-form-field>
     <div formGroupName="editGroup">
-      <mat-form-field class="full-width form-field">
+      <!-- <mat-form-field class="full-width form-field">
         <mat-select placeholder="Choose" (change)="onEditionChange()" formControlName="editionId" [(ngModel)]="tenantEditDto.editionId"
           required>
           <mat-option *ngFor="let edition of editions" [value]="edition.value | convertToInt">
             {{ edition.displayText }}
           </mat-option>
         </mat-select>
+      </mat-form-field> -->
+      <mat-form-field class="full-width form-field">
+        <input formControlName="edition" placeholder="Pick one" aria-label="edition" matInput [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+          <mat-option *ngFor="let edition of filteredEditions" [value]="edition">
+            {{edition.displayText}}
+          </mat-option>
+        </mat-autocomplete>
       </mat-form-field>
-      <div *ngIf="isSubscriptionFieldsVisible">
+      <div *ngIf="tenantEditDto.editionId > 0" fxLayout="row" fxLayoutAlign="start center" fxLayoutWrap>
         <mat-checkbox formControlName="isUnlimited" [(ngModel)]="isUnlimited" (change)="onUnlimitedChange()">
           {{l("UnlimitedTimeSubscription")}}
         </mat-checkbox>
-        <mat-form-field *ngIf="!isUnlimited">
+        <span fxFill></span>
+        <mat-form-field *ngIf="!isUnlimited" class="full-width form-field">
           <input matInput [matDatepicker]="subscriptionEndDateUtcPicker" formControlName="subscriptionEndDateUtc" [(ngModel)]="tenantEditDto.subscriptionEndDateUtc"
             placeholder="Choose a date">
           <mat-datepicker-toggle matSuffix [for]="subscriptionEndDateUtcPicker"></mat-datepicker-toggle>
           <mat-datepicker #subscriptionEndDateUtcPicker></mat-datepicker>
           <!-- <mat-error>{{passwordErrorMessage()}}</mat-error> -->
         </mat-form-field>
+        <mat-checkbox fxFill formControlName="isInTrialPeriod" [(ngModel)]="tenantEditDto.isInTrialPeriod">
+          {{l("IsInTrialPeriod")}}
+        </mat-checkbox>
+        <mat-chip *ngIf="tenantEditGroup.get('editGroup').get('edition').value.isFree" color="primary" selected="true">
+          {{l("FreeEditionsCannotHaveTrialVersions")}}
+        </mat-chip>
       </div>
     </div>
     <mat-checkbox formControlName="isActive" [(ngModel)]="tenantEditDto.isActive">
       {{l("Active")}}
     </mat-checkbox>
+    <mat-error *ngIf="tenantEditGroup.hasError('edit','editGroup')">
+      {{tenantEditGroup.getError('edit','editGroup')?.desc}}
+    </mat-error>
   </form>
+  <!-- <div>{{tenantEditDto | json}}</div> -->
+  <!-- <div>{{tenantEditGroup.value | json}}</div> -->
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button mat-dialog-close>No</button>
-  <button mat-button [mat-dialog-close]="true">Yes</button>
+  <button mat-raised-button color="accent" mat-dialog-close>No</button>
+  <button mat-raised-button color="accent" [mat-dialog-close]="true">Yes</button>
 </mat-dialog-actions>
-<div>{{tenantEditDto | json}}</div>
-<div>{{tenantEditGroup.value | json}}</div>
+
 <!-- <div>{{tenantEditDto.editionId}}</div>
 <div>{{editions | json}}</div> -->

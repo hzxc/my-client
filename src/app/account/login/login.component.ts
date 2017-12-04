@@ -47,8 +47,9 @@ export class LoginComponent extends AppComponentBase implements OnInit, AfterCon
     this.loginModel = fb.group({
       userNameOrEmailAddress: ['', [Validators.required, Validators.minLength(4)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      rememberClient: false
-    });
+      rememberClient: false,
+    }
+    );
   }
 
   get multiTenancySideIsTeanant(): boolean {

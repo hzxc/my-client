@@ -22,10 +22,12 @@ import 'rxjs/add/operator/first';
 import 'rxjs/add/operator/last';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/delay';
 
 import { MatPaginator, MatSort, MatSnackBar, MatDialog } from '@angular/material';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { EditTenantModalComponent } from './edit-tenant-modal/edit-tenant-modal.component';
+import { timer } from 'rxjs/observable/timer';
 @Component({
   selector: 'app-tenants',
   templateUrl: './tenants.component.html',
@@ -99,7 +101,7 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
 
   openEditDialog(tenantId: number): void {
     const dialogRef = this.dialog.open(EditTenantModalComponent, {
-      maxWidth: '500px',
+      width: '400px',
       data: {
         tenantId: tenantId
       }
@@ -217,7 +219,8 @@ export class TenantsDataSource extends DataSource<TenantListDto> {
       this.sort.direction = 'asc';
     }
 
-    return Observable.merge(...displayDataChanges)
+    return Observable
+      .merge(...displayDataChanges)
       .startWith(null)
       .do(_ => { this.isLoadingResults = true; })
       .switchMap(() => {
@@ -233,6 +236,7 @@ export class TenantsDataSource extends DataSource<TenantListDto> {
           this.paginator.pageSize,
           this.paginator.pageIndex * this.paginator.pageSize);
       })
+      // .delay(2000)
       .map(result => {
         // Flip flag to show that loading has finished.
         this.isLoadingResults = false;
