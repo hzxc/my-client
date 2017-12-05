@@ -16,6 +16,7 @@ import { AppUrlService } from '../../shared/common/nav/app-url.service';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { UtilsModule } from '../../shared/utils/utils.module';
 import { EditTenantModalComponent } from './tenants/edit-tenant-modal/edit-tenant-modal.component';
+import { RolesComponent } from './roles/roles.component';
 
 @NgModule({
   imports: [
@@ -42,6 +43,7 @@ import { EditTenantModalComponent } from './tenants/edit-tenant-modal/edit-tenan
     UsersComponent,
     TenantsComponent,
     EditTenantModalComponent,
+    RolesComponent,
   ]
 })
 export class AdminModule { }

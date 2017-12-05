@@ -1,0 +1,59 @@
+<mat-card class="roles-card">
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon class="icon-card-header">assignment_ind</mat-icon>
+    </div>
+    <mat-card-title>{{l("Roles")}}</mat-card-title>
+    <mat-card-subtitle>{{l("RolesHeaderInfo")}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-tab-group selectedIndex="1">
+    <mat-tab label="RoleList">
+      <div class="table-container">
+        <!-- <hr class="hr-class"> -->
+        <div class="loading-shade" *ngIf="dataSource.isLoadingResults">
+          <mat-spinner></mat-spinner>
+        </div>
+        <mat-table [dataSource]="dataSource" matSort>
+          <ng-container matColumnDef="actions">
+            <mat-header-cell *matHeaderCellDef class="custom-cell-width">
+              {{l('Actions')}}
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row" class="custom-cell-width">
+              <button mat-icon-button [matMenuTriggerFor]="editMenu">
+                <mat-icon>settings</mat-icon>
+              </button>
+              <mat-menu #editMenu="matMenu">
+                <button mat-menu-item (click)="openEditDialog(row.id)">{{l('Edit')}}</button>
+              </mat-menu>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="displayName">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{l('RoleName')}}</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.displayName}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="creationTime">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{l('CreationTime')}}</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.creationTime | momentFormat:'L'}} </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+        <mat-paginator #paginator [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+        </mat-paginator>
+      </div>
+    </mat-tab>
+    <mat-tab label="RoleEdit" isActive="true">
+      <form>
+        123
+      </form>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        The
+        <em>best</em> pasta
+      </ng-template>
+      <h1>Best pasta restaurants</h1>
+      <p>...</p>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card>

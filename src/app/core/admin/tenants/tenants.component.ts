@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild, ElementRef, EventEmitter, Output } from '@angular/core';
 import { AppComponentBase } from '../../../shared/common/app-component-base';
 import {
   TenantServiceProxy,
@@ -24,7 +24,7 @@ import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/delay';
 
-import { MatPaginator, MatSort, MatSnackBar, MatDialog } from '@angular/material';
+import { MatPaginator, MatSort, MatSnackBar, MatDialog, MatTable } from '@angular/material';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { EditTenantModalComponent } from './edit-tenant-modal/edit-tenant-modal.component';
 import { timer } from 'rxjs/observable/timer';
@@ -54,8 +54,8 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
   editions: ComboboxItemDto[] = [];
   filteredEditions: ComboboxItemDto[] = [];
   private filters: FilterDto = new FilterDto();
-  animal: string;
   name: string;
+  reloadEvent: EventEmitter<boolean> = new EventEmitter();
   constructor(
     injector: Injector,
     fb: FormBuilder,
@@ -65,7 +65,7 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
     private _commonLookupService: CommonLookupServiceProxy,
     private _impersonationService: ImpersonationService,
     private snackBar: MatSnackBar,
-    public dialog: MatDialog
+    public dialog: MatDialog,
   ) {
     super(injector);
     this.setFiltersFromRoute();
@@ -103,13 +103,18 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
     const dialogRef = this.dialog.open(EditTenantModalComponent, {
       width: '400px',
       data: {
-        tenantId: tenantId
-      }
+        tenantId: tenantId,
+        snackBar: this.snackBar
+      },
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.animal = result;
+      if (result) {
+        this.reloadEvent.emit(result);
+        // this.paginator.page.
+        // this.tenantsForm.nativeElement.submit();
+      }
     });
   }
 
@@ -159,7 +164,14 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
 
   ngOnInit(): void {
     // forTable
-    this.dataSource = new TenantsDataSource(this.filters, this.paginator, this.sort, this.tenantsForm, this.snackBar, this._tenantService);
+    this.dataSource = new TenantsDataSource(
+      this.filters,
+      this.paginator,
+      this.sort,
+      this.tenantsForm,
+      this.snackBar,
+      this._tenantService,
+      this.reloadEvent);
     this.filters.filterText = this._activatedRoute.snapshot.queryParams['filterText'] || '';
     this._editionService
       .getEditionComboboxItems(0, true, false)
@@ -188,9 +200,8 @@ export class FilterDto {
 
 export class TenantsDataSource extends DataSource<TenantListDto> {
   // The number of issues returned by github matching the query.
-  resultsLength = 0;
+  // resultsLength = 0;
   isLoadingResults = true;
-  isNoData = false;
 
   constructor(
     private filters: FilterDto,
@@ -199,6 +210,7 @@ export class TenantsDataSource extends DataSource<TenantListDto> {
     private form: ElementRef,
     private snackBar: MatSnackBar,
     private _tenantService: TenantServiceProxy,
+    private reloadEvent: EventEmitter<boolean>
   ) {
     super();
   }
@@ -208,6 +220,7 @@ export class TenantsDataSource extends DataSource<TenantListDto> {
     const displayDataChanges = [
       this.sort.sortChange,
       this.paginator.page,
+      this.reloadEvent,
       Observable.fromEvent(this.form.nativeElement, 'submit')
     ];
     // If the user changes the sort order, reset back to the first page.

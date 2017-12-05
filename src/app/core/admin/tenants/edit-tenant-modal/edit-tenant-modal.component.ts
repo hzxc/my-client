@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, Injector, AfterViewInit, ElementRef } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { AppComponentBase } from '../../../../shared/common/app-component-base';
 import {
   TenantEditDto,
@@ -30,10 +30,12 @@ export class EditTenantModalComponent extends AppComponentBase implements OnInit
   private filteredEditions: SubscribableEditionComboboxItemDto[] = [];
   private tenantEditDto: TenantEditDto = new TenantEditDto();
   private tenantId: number;
+  private snackBar: MatSnackBar;
 
-  private isSubscriptionFieldsVisible = false;
+  // private isSubscriptionFieldsVisible = false;
+  private chipVisible = false;
   private edtionVisible = false;
-  private saving = true;
+  private saving = false;
 
   constructor(
     injector: Injector,
@@ -45,6 +47,7 @@ export class EditTenantModalComponent extends AppComponentBase implements OnInit
   ) {
     super(injector);
     this.tenantId = data.tenantId;
+    this.snackBar = data.snackBar;
     this.tenantEditGroup = fb.group({
       name: [],
       isActive: [],
@@ -62,7 +65,27 @@ export class EditTenantModalComponent extends AppComponentBase implements OnInit
   }
 
   save(): void {
+    if (this.tenantEditGroup.invalid) {
+      return;
+    }
+    this.saving = true;
+    this.tenantEditDto.name = this.tenantEditGroup.get('name').value;
+    this.tenantEditDto.editionId = parseInt(this.editGroup.get('edition').value.value, 10);
+    this.tenantEditDto.isActive = this.tenantEditGroup.get('isActive').value;
+    this.tenantEditDto.subscriptionEndDateUtc = this.editGroup.get('subscriptionEndDateUtc').value;
+    this.tenantEditDto.isInTrialPeriod = this.editGroup.get('isInTrialPeriod').value;
+    if (this.tenantEditDto.editionId === 0) {
+      this.tenantEditDto.editionId = null;
+    }
 
+    this._tenantService.updateTenant(this.tenantEditDto)
+      .finally(() => this.saving = false)
+      .subscribe(() => {
+        this.snackBar.open(this.l('SavedSuccessfully'), this.l('Close'), {
+          duration: 2000,
+        });
+        this.dialogRef.close(true);
+      });
   }
 
   filter(displayText: string): SubscribableEditionComboboxItemDto[] {
@@ -117,6 +140,8 @@ export class EditTenantModalComponent extends AppComponentBase implements OnInit
       return;
     }
     if (selectedEdition.value === '0') {
+      this.editGroup.get('isInTrialPeriod').setValue(false);
+      this.editGroup.get('subscriptionEndDateUtc').setValue(null);
       this.edtionVisible = false;
     } else {
       this.edtionVisible = true;
@@ -124,18 +149,20 @@ export class EditTenantModalComponent extends AppComponentBase implements OnInit
     const trialPeriodControl = this.editGroup.get('isInTrialPeriod');
     if (selectedEdition.isFree) {
       trialPeriodControl.setValue(false);
+      this.chipVisible = true;
       trialPeriodControl.disable();
     } else {
       trialPeriodControl.enable();
+      this.chipVisible = false;
     }
   }
 
   onUnlimitedChange(isCheck: boolean): void {
     if (isCheck) {
       this.editGroup.get('subscriptionEndDateUtc').setValue(null);
-      this.isSubscriptionFieldsVisible = false;
+      // this.isSubscriptionFieldsVisible = false;
     } else {
-      this.isSubscriptionFieldsVisible = true;
+      // this.isSubscriptionFieldsVisible = true;
     }
   }
 
@@ -147,7 +174,7 @@ export class EditTenantModalComponent extends AppComponentBase implements OnInit
     const subscriptionEndDateUtc = group.get('subscriptionEndDateUtc') as FormControl;
     const isInTrialPeriod = group.get('isInTrialPeriod') as FormControl;
 
-    if (!edition || edition.value <= 0) {
+    if (!edition) {
       return {
         edit: { desc: 'editionIdValidationFailed' }
       };

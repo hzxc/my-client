@@ -10,7 +10,7 @@
   <form #tenantsForm [formGroup]="tenantsGroup" novalidate fxLayout="row" fxLayoutAlign="space-between center" fxLayoutWrap>
     <mat-form-field class="form-field" fxFlex="49" fxFlex.lt-sm="100">
       <input matInput formControlName="filterText" [(ngModel)]="filters.filterText" placeholder="{{l('SearchWithThreeDot')}}">
-      <button mat-raised-button color="accent" matSuffix>
+      <button #submitBtn mat-raised-button color="accent" matSuffix>
         <mat-icon>search</mat-icon>
       </button>
     </mat-form-field>
@@ -77,12 +77,12 @@
       </mat-progress-spinner> -->
       <mat-spinner></mat-spinner>
     </div>
-    <mat-table #table [dataSource]="dataSource" matSort>
+    <mat-table [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="actions">
-        <mat-header-cell *matHeaderCellDef>
+        <mat-header-cell *matHeaderCellDef class="custom-cell-width">
           {{l('Actions')}}
         </mat-header-cell>
-        <mat-cell *matCellDef="let row">
+        <mat-cell *matCellDef="let row" class="custom-cell-width">
           <button mat-icon-button [matMenuTriggerFor]="editMenu">
             <mat-icon>settings</mat-icon>
           </button>
@@ -114,8 +114,8 @@
       </ng-container>
 
       <ng-container matColumnDef="isActive">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> {{l('Active')}} </mat-header-cell>
-        <mat-cell *matCellDef="let row" [style.color]="row.isActive">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="custom-cell-width"> {{l('Active')}} </mat-header-cell>
+        <mat-cell *matCellDef="let row" class="custom-cell-width" [style.color]="row.isActive">
           <mat-chip-list>
             <mat-chip *ngIf="row.isActive" color="primary" selected="true">{{l('Yes')}}</mat-chip>
             <mat-chip *ngIf="!row.isActive" color="warn" selected="true">{{l('No')}}</mat-chip>
@@ -134,7 +134,7 @@
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
     </mat-table>
 
-    <mat-paginator #paginator [length]="resultsLength" [pageIndex]="0" [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]">
+    <mat-paginator #paginator [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
     </mat-paginator>
   </div>
 </mat-card>

@@ -1,28 +1,23 @@
-.tenants-card {
+.roles-card{
   margin: 10px;
 }
 
+/* card header css*/
 .icon-card-header {
   font-size: 40px;
 }
-
 .mat-card-title {
   margin-bottom: 5px !important;
 }
-
 .mat-card-subtitle {
   margin-bottom: 0px !important;
 }
 
-.mat-chip {
-  font-size: 7px;
-  line-height: 9px;
-}
 
+/* progress spinner*/
 .table-container {
   position: relative;
 }
-
 .loading-shade {
   position: absolute;
   top: 0;
@@ -36,6 +31,7 @@
   justify-content: center;
 }
 
+/* mat-table css*/
 .mat-menu-item {
   line-height: 40px;
   height: 40px;

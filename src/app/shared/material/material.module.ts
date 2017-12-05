@@ -21,7 +21,8 @@ import {
   MatDatepickerModule,
   MatProgressSpinnerModule,
   MatChipsModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatTabsModule
 } from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
 import { Options } from 'selenium-webdriver';
@@ -50,7 +51,8 @@ import { DomSanitizer } from '@angular/platform-browser';
     MatDatepickerModule,
     MatProgressSpinnerModule,
     MatChipsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTabsModule
   ],
   exports: [
     MatProgressBarModule,
@@ -73,7 +75,8 @@ import { DomSanitizer } from '@angular/platform-browser';
     MatDatepickerModule,
     MatProgressSpinnerModule,
     MatChipsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTabsModule
   ],
   declarations: []
 })
