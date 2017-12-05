@@ -1,0 +1,19 @@
+<form [formGroup]="roleGroup" novalidate (ngSubmit)="save()">
+  <mat-tab-group dynamicHeight="true">
+    <mat-tab label="{{l('RoleProperties')}}">
+      <mat-progress-bar [mode]="saving? 'indeterminate':'Determinate'" class="custom-progress-bar" color="Primary">
+      </mat-progress-bar>
+      <mat-form-field class="full-width form-field">
+        <input required matInput formControlName="displayName" placeholder="{{l('RoleName')}}">
+      </mat-form-field>
+      <mat-checkbox formControlName="isDefault">
+        {{l("Default")}}
+      </mat-checkbox>
+    </mat-tab>
+    <mat-tab label="{{l('Permissions')}}">
+      <mat-progress-bar [mode]="saving? 'indeterminate':'Determinate'" class="custom-progress-bar" color="Primary">
+      </mat-progress-bar>
+      Permissions
+    </mat-tab>
+  </mat-tab-group>
+</form>

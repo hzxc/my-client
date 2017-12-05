@@ -30,7 +30,7 @@ export class ThemeService {
   ];
   activatedThemeName: String;
   constructor() {
-    this.changeTheme({ name: 'purple-dark-theme' });
+    this.changeTheme({ name: 'indigo-light-theme' });
   }
   changeTheme(theme) {
     domHelper.changeTheme(this.themes, theme.name);

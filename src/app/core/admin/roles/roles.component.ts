@@ -1,6 +1,6 @@
 import { Component, OnInit, Injector, ElementRef, ViewChild } from '@angular/core';
 import { AppComponentBase } from '../../../shared/common/app-component-base';
-import { MatPaginator, MatSort, MatSnackBar } from '@angular/material';
+import { MatPaginator, MatSort, MatSnackBar, MatTabGroup } from '@angular/material';
 import { DataSource, CollectionViewer } from '@angular/cdk/collections';
 import { RoleServiceProxy, ListResultDtoOfRoleListDto, RoleListDto } from '../../../shared/service-proxies/service-proxies';
 import { Observable } from 'rxjs/Observable';
@@ -22,6 +22,9 @@ export class RolesComponent extends AppComponentBase implements OnInit {
   dataSource: RolesDataSource | null;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
+
+  private roleId = 0;
 
   constructor(
     injector: Injector,
@@ -40,7 +43,16 @@ export class RolesComponent extends AppComponentBase implements OnInit {
       this._roleService
     );
   }
+
+  openEditDialog(roleId: number) {
+    this.roleId = roleId;
+    this.tabGroup.selectedIndex = 1;
+  }
 }
+
+
+
+
 
 export class RolesDataSource extends DataSource<RoleListDto> {
 

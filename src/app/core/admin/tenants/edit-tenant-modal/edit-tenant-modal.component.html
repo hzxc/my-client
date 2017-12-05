@@ -3,7 +3,7 @@
 <span mat-dialog-title style="text-align:center">
   {{l("EditTenant")}}: {{tenantEditDto.tenancyName}}
 </span>
-<form novalidate [formGroup]="tenantEditGroup" novalidate (ngSubmit)="save()">
+<form [formGroup]="tenantEditGroup" novalidate (ngSubmit)="save()">
 
   <!-- <hr class="hr-class"> -->
   <mat-dialog-content class="dialog-content">
