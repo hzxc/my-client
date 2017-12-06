@@ -1,10 +1,16 @@
-import { Component, OnInit, Injector, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Injector, ElementRef, ViewChild, EventEmitter } from '@angular/core';
 import { AppComponentBase } from '../../../shared/common/app-component-base';
-import { MatPaginator, MatSort, MatSnackBar, MatTabGroup } from '@angular/material';
+import { MatPaginator, MatSort, MatSnackBar, MatTabGroup, MatTab, MatDialog } from '@angular/material';
 import { DataSource, CollectionViewer } from '@angular/cdk/collections';
-import { RoleServiceProxy, ListResultDtoOfRoleListDto, RoleListDto } from '../../../shared/service-proxies/service-proxies';
+import {
+  RoleServiceProxy,
+  ListResultDtoOfRoleListDto,
+  RoleListDto,
+  GetRoleForEditOutput
+} from '../../../shared/service-proxies/service-proxies';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/delay';
+import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-roles',
@@ -24,13 +30,15 @@ export class RolesComponent extends AppComponentBase implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
 
-  private roleId = 0;
 
+  // private roleId = 0;
+  private roleForEditOutput: GetRoleForEditOutput;
+  reloadEvent: EventEmitter<boolean> = new EventEmitter();
   constructor(
     injector: Injector,
     private snackBar: MatSnackBar,
     private _roleService: RoleServiceProxy,
-
+    public dialog: MatDialog,
   ) {
     super(injector);
   }
@@ -40,19 +48,58 @@ export class RolesComponent extends AppComponentBase implements OnInit {
       this.paginator,
       this.sort,
       this.snackBar,
-      this._roleService
+      this._roleService,
+      this.reloadEvent
     );
   }
 
-  openEditDialog(roleId: number) {
-    this.roleId = roleId;
-    this.tabGroup.selectedIndex = 1;
+  tabClick(tab: any) {
+    this.reloadEvent.emit(true);
+  }
+
+  openEditTabs(roleId: number) {
+    if (roleId && roleId > 0) {
+      // this.roleId = roleId;
+      this.fetchRoleDataForEdit(roleId);
+    }
+  }
+
+  openCreateTabs(roleId?: number) {
+    // console.log('openCreateTabs');
+    this.fetchRoleDataForEdit(roleId);
+  }
+
+  fetchRoleDataForEdit(roleId: number) {
+    this.dataSource.isLoadingResults = true;
+    this._roleService.getRoleForEdit(roleId)
+      // .delay(2000)
+      .finally(() => {
+        this.dataSource.isLoadingResults = false;
+        this.tabGroup.selectedIndex = 1;
+      })
+      .subscribe(
+      result => {
+        this.roleForEditOutput = result;
+      }
+      );
+  }
+
+  deleteRole(displayName: string) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        displayName: displayName,
+      },
+      disableClose: false
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+
+      }
+    });
   }
 }
-
-
-
-
 
 export class RolesDataSource extends DataSource<RoleListDto> {
 
@@ -63,6 +110,7 @@ export class RolesDataSource extends DataSource<RoleListDto> {
     private sort: MatSort,
     private snackBar: MatSnackBar,
     private _roleService: RoleServiceProxy,
+    private reloadEvent: EventEmitter<boolean>
   ) {
     super();
   }
@@ -71,6 +119,7 @@ export class RolesDataSource extends DataSource<RoleListDto> {
     const displayDataChanges = [
       this.sort.sortChange,
       this.paginator.page,
+      this.reloadEvent,
     ];
     // If the user changes the sort order, reset back to the first page.
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
@@ -103,7 +152,6 @@ export class RolesDataSource extends DataSource<RoleListDto> {
       });
   }
   disconnect(collectionViewer: CollectionViewer): void {
-    console.log('disconnect');
   }
   // The number of issues returned by github matching the query.
 }

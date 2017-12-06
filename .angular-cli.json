@@ -33,7 +33,9 @@
         "assets/fonts/roboto/roboto.css",
         "../node_modules/famfamfam-flags/dist/sprite/famfamfam-flags.min.css",
         "../node_modules/toastr/build/toastr.css",
-        "../node_modules/material-design-icons/iconfont/material-icons.css"
+        "../node_modules/material-design-icons/iconfont/material-icons.css",
+        "../node_modules/jstree/dist/themes/default/style.min.css",
+        "../node_modules/font-awesome/css/font-awesome.min.css"
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.min.js",
@@ -54,7 +56,8 @@
         "../node_modules/localforage/dist/localforage.min.js",
         "../node_modules/jquery.inputmask/dist/jquery.inputmask.bundle.js",
         "../node_modules/tether/dist/js/tether.min.js",
-        "../node_modules/timeago/jquery.timeago.js"
+        "../node_modules/timeago/jquery.timeago.js",
+        "../node_modules/jstree/dist/jstree.min.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

@@ -18,6 +18,8 @@ import { UtilsModule } from '../../shared/utils/utils.module';
 import { EditTenantModalComponent } from './tenants/edit-tenant-modal/edit-tenant-modal.component';
 import { RolesComponent } from './roles/roles.component';
 import { EditRoleComponent } from './roles/edit-role/edit-role.component';
+import { PermissionTreeComponent } from '../shared/permission-tree.component';
+import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   imports: [
@@ -34,7 +36,8 @@ import { EditRoleComponent } from './roles/edit-role/edit-role.component';
     UtilsModule
   ],
   entryComponents: [
-    EditTenantModalComponent
+    EditTenantModalComponent,
+    ConfirmDialogComponent
   ],
   providers: [
     ImpersonationService,
@@ -46,6 +49,8 @@ import { EditRoleComponent } from './roles/edit-role/edit-role.component';
     EditTenantModalComponent,
     RolesComponent,
     EditRoleComponent,
+    PermissionTreeComponent,
+    ConfirmDialogComponent
   ]
 })
 export class AdminModule { }

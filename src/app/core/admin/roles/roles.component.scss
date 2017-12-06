@@ -1,23 +1,29 @@
-.roles-card{
+.roles-card {
   margin: 10px;
 }
 
+
 /* card header css*/
+
 .icon-card-header {
   font-size: 40px;
 }
+
 .mat-card-title {
   margin-bottom: 5px !important;
 }
+
 .mat-card-subtitle {
   margin-bottom: 0px !important;
 }
 
 
 /* progress spinner*/
+
 .table-container {
   position: relative;
 }
+
 .loading-shade {
   position: absolute;
   top: 0;
@@ -31,7 +37,16 @@
   justify-content: center;
 }
 
+.create-role-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+}
+
+
 /* mat-table css*/
+
 .mat-menu-item {
   line-height: 40px;
   height: 40px;
@@ -46,3 +61,6 @@
   height: auto;
   line-height: 40px;
 }
+
+
+

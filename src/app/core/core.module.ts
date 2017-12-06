@@ -12,6 +12,7 @@ import { SideNavAccordionDirective } from './navigation/sidenav-accordion.direct
 import { CoreCommonModule } from './shared/common/core-common.module';
 import { AppAuthService } from './shared/common/auth/app-auth.service';
 import { AppRouteGuard } from './shared/common/auth/auth-route-guard';
+import { ConfirmDialogComponent } from './shared/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   imports: [
@@ -30,7 +31,7 @@ import { AppRouteGuard } from './shared/common/auth/auth-route-guard';
     CoreComponent,
     NavigationComponent,
     TopbarComponent,
-    SideNavAccordionDirective
+    SideNavAccordionDirective,
   ]
 })
 export class CoreModule { }
