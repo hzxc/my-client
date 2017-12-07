@@ -4,49 +4,49 @@
     <div mat-card-avatar>
       <mat-icon class="icon-card-header">supervisor_account</mat-icon>
     </div>
-    <!-- <div mat-card-avatar class="example-header-image"></div> -->
-
-    <!-- <mat-card-avatar class="example-header-image"></div> -->
-    <mat-card-title>Users</mat-card-title>
-    <!-- <mat-card-subtitle>Users</mat-card-subtitle> -->
+    <mat-card-title>{{l("Users")}}</mat-card-title>
+    <mat-card-subtitle>{{l("UsersHeaderInfo")}}</mat-card-subtitle>
   </mat-card-header>
-  <mat-form-field class="full-width">
-    <input matInput #filter placeholder="Filter users">
-  </mat-form-field>
-  <mat-table #table [dataSource]="dataSource" matSort>
 
-    <!--- Note that these columns can be defined in any order.
-            The actual rendered columns are set as a property on the row definition" -->
+  <form [formGroup]="usersGroup" novalidate fxLayout="row" fxLayoutAlign="space-between center" fxLayoutWrap>
+    <mat-form-field class="full-width form-field">
+      <input matInput formControlName="filterText" placeholder="{{l('SearchWithThreeDot')}}">
+      <button #submitBtn mat-raised-button color="accent" matSuffix>
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
+  </form>
+  <mat-slide-toggle [(ngModel)]="checked">
+    {{checked?l("HideAdvancedFilters"):l("ShowAdvancedFilters")}}
+  </mat-slide-toggle>
 
-    <!-- ID Column -->
-    <ng-container matColumnDef="userId">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
-    </ng-container>
+  <!-- <div class="table-container">
+    <mat-table #table [dataSource]="dataSource" matSort>
 
-    <!-- Progress Column -->
-    <ng-container matColumnDef="progress">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Progress </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.progress}}% </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="userId">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+      </ng-container>
 
-    <!-- Name Column -->
-    <ng-container matColumnDef="userName">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="progress">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Progress </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.progress}}% </mat-cell>
+      </ng-container>
 
-    <!-- Color Column -->
-    <ng-container matColumnDef="color">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Color </mat-header-cell>
-      <mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="userName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
+      </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
+      <ng-container matColumnDef="color">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Color </mat-header-cell>
+        <mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator [length]="exampleDatabase.data.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
+    </mat-paginator>
+  </div> -->
 
-  <mat-paginator #paginator [length]="exampleDatabase.data.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
-  </mat-paginator>
 </mat-card>
-<!-- </div> -->

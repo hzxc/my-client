@@ -17,9 +17,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { UtilsModule } from '../../shared/utils/utils.module';
 import { EditTenantModalComponent } from './tenants/edit-tenant-modal/edit-tenant-modal.component';
 import { RolesComponent } from './roles/roles.component';
-import { EditRoleComponent } from './roles/edit-role/edit-role.component';
-import { PermissionTreeComponent } from '../shared/permission-tree.component';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
+import { CreateOrEditRoleComponent } from './roles/edit-role/create-or-edit-role.component';
+import { PermissionTreeComponent } from './shared/permission-tree.component';
+import { PermissionComboComponent } from './shared/permission-combo/permission-combo.component';
 
 @NgModule({
   imports: [
@@ -48,9 +49,10 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
     TenantsComponent,
     EditTenantModalComponent,
     RolesComponent,
-    EditRoleComponent,
+    CreateOrEditRoleComponent,
     PermissionTreeComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    PermissionComboComponent
   ]
 })
 export class AdminModule { }

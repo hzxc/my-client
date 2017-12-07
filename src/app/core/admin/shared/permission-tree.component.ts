@@ -11,8 +11,8 @@ import {
   OnChanges
 } from '@angular/core';
 import * as _ from 'lodash';
-import { AppComponentBase } from '../../shared/common/app-component-base';
 import { PermissionTreeEditModel } from './permission-tree-edit.model';
+import { AppComponentBase } from '../../../shared/common/app-component-base';
 
 @Component({
   selector: 'app-permission-tree',

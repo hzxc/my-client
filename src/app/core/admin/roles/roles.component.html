@@ -9,7 +9,7 @@
   <mat-tab-group>
     <mat-tab>
       <ng-template mat-tab-label>
-          <div fxLayoutAlign="center center" fxFill (click)="tabClick($event)">RoleList</div>
+        <div fxLayoutAlign="center center" fxFill (click)="tabClick($event)">RoleList</div>
       </ng-template>
       <div class="table-container">
         <!-- <hr class="hr-class"> -->
@@ -27,13 +27,21 @@
               </button>
               <mat-menu #editMenu="matMenu">
                 <button mat-menu-item (click)="openEditTabs(row.id)">{{l('Edit')}}</button>
-                <button *ngIf="row.id!==1" mat-menu-item (click)="deleteRole(row.displayName)">{{l('Delete')}}</button>
+                <button *ngIf="row.id!==1" mat-menu-item (click)="deleteRole(row)">{{l('Delete')}}</button>
               </mat-menu>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="displayName">
             <mat-header-cell *matHeaderCellDef mat-sort-header> {{l('RoleName')}}</mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.displayName}} </mat-cell>
+            <mat-cell *matCellDef="let row">
+              {{row.displayName}}
+              <mat-chip *ngIf="row.id==1" color="accent" selected="true">{{l('Static')}}
+              </mat-chip>
+              <mat-chip *ngIf="row.isDefault" color="accent" selected="true">{{l('Default')}}
+              </mat-chip>
+              <mat-chip-list>
+              </mat-chip-list>
+            </mat-cell>
           </ng-container>
           <ng-container matColumnDef="creationTime">
             <mat-header-cell *matHeaderCellDef mat-sort-header>{{l('CreationTime')}}</mat-header-cell>
@@ -47,8 +55,8 @@
       </div>
     </mat-tab>
     <mat-tab label="{{l('EditRole')}}/{{l('CreateNewRole')}}" disabled>
-      <app-edit-role [roleForEditOutput]="roleForEditOutput">
-      </app-edit-role>
+      <app-create-or-edit-role [roleForEditOutput]="roleForEditOutput">
+      </app-create-or-edit-role>
     </mat-tab>
     <!-- <mat-tab>
       <ng-template mat-tab-label>

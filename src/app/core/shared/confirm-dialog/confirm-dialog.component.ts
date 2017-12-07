@@ -10,12 +10,14 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 export class ConfirmDialogComponent extends AppComponentBase implements OnInit {
 
   private displayName: string;
+  private msg: string;
   constructor(
     injector: Injector,
     public dialogRef: MatDialogRef<ConfirmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
     super(injector);
+    this.msg = data.msg;
     this.displayName = data.displayName;
   }
 

@@ -84,18 +84,25 @@ export class RolesComponent extends AppComponentBase implements OnInit {
       );
   }
 
-  deleteRole(displayName: string) {
+  deleteRole(row: RoleListDto) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
       data: {
-        displayName: displayName,
+        msg: 'RoleDeleteWarningMessage',
+        displayName: row.displayName,
       },
       disableClose: false
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-
+        this._roleService.deleteRole(row.id).subscribe(() => {
+          this.reloadEvent.emit(true);
+          this.snackBar.open(this.l('SuccessfullyDeleted'), this.l('Close'), {
+            duration: 2000,
+          });
+          // abp.notify.success(this.l('SuccessfullyDeleted'));
+        });
       }
     });
   }

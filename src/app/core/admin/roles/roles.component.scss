@@ -63,4 +63,13 @@
 }
 
 
+/* mat-chip */
 
+.mat-chip {
+  font-size: 7px;
+  line-height: 9px;
+}
+
+.mat-chip:not(.mat-basic-chip)+.mat-chip:not(.mat-basic-chip) {
+  margin: 0;
+}

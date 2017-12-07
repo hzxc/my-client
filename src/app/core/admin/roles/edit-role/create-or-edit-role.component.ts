@@ -19,21 +19,21 @@ import {
 } from '@angular/forms';
 import { MatTabGroup, MatTab, MatInput, MatSnackBar } from '@angular/material';
 import { AfterViewInit, OnChanges, DoCheck } from '@angular/core/src/metadata/lifecycle_hooks';
-import { PermissionTreeComponent } from '../../../shared/permission-tree.component';
 import {
   RoleServiceProxy
   , RoleEditDto,
   GetRoleForEditOutput,
   CreateOrUpdateRoleInput
 } from '../../../../shared/service-proxies/service-proxies';
+import { PermissionTreeComponent } from '../../shared/permission-tree.component';
 
 
 @Component({
-  selector: 'app-edit-role',
-  templateUrl: './edit-role.component.html',
-  styleUrls: ['./edit-role.component.scss']
+  selector: 'app-create-or-edit-role',
+  templateUrl: './create-or-edit-role.component.html',
+  styleUrls: ['./create-or-edit-role.component.scss']
 })
-export class EditRoleComponent extends AppComponentBase
+export class CreateOrEditRoleComponent extends AppComponentBase
   implements OnChanges, OnInit {
   @Input() roleForEditOutput: GetRoleForEditOutput;
   @ViewChild('permissionTree') permissionTree: PermissionTreeComponent;
@@ -68,8 +68,6 @@ export class EditRoleComponent extends AppComponentBase
     }
   }
 
-
-
   save() {
     if (this.roleGroup.invalid) {
       return;
@@ -79,7 +77,7 @@ export class EditRoleComponent extends AppComponentBase
     this.input.grantedPermissionNames = this.permissionTree.getGrantedPermissionNames();
     this.saving = true;
     this._roleService.createOrUpdateRole(this.input)
-      .delay(2000)
+      // .delay(2000)
       .finally(() => this.saving = false)
       .subscribe(() => {
         this.snackBar.open(this.l('SavedSuccessfully'), this.l('Close'), {
