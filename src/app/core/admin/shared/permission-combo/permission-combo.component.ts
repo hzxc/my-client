@@ -2,6 +2,9 @@ import { Component, OnInit, Input, Output, EventEmitter, Injector } from '@angul
 import { FlatPermissionWithLevelDto, PermissionServiceProxy } from '../../../../shared/service-proxies/service-proxies';
 import { AppComponentBase } from '../../../../shared/common/app-component-base';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/merge';
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/isEmpty';
 
 @Component({
   selector: 'app-permission-combo',
@@ -11,14 +14,16 @@ import { Observable } from 'rxjs/Observable';
 export class PermissionComboComponent extends AppComponentBase implements OnInit {
 
   permissions: FlatPermissionWithLevelDto[] = [];
-
-  get obPermissions(): Observable<FlatPermissionWithLevelDto[]> {
-    return null;
-  }
+  private flag: any;
+  // get obPermissions(): Observable<FlatPermissionWithLevelDto[]> {
+  //   if (!this.permissions.length) {
+  //   return this.getAllPermissions();
+  //   }
+  //   return Observable.of(this.permissions);
+  // }
 
   @Output()
   selectedPermissionChange: EventEmitter<string> = new EventEmitter<string>();
-
   constructor(
     private _permissionService: PermissionServiceProxy,
     injector: Injector) {
@@ -26,27 +31,15 @@ export class PermissionComboComponent extends AppComponentBase implements OnInit
   }
 
   ngOnInit() {
-    console.log(Observable.of<FlatPermissionWithLevelDto>(<any>null));
-    console.log(Observable.of<FlatPermissionWithLevelDto>(<any>null).map(result => console.log(result)));
-    this._permissionService.getAllPermissions().subscribe(result => {
-      $.each(result.items, (index, item) => {
-        item.displayName = Array(item.level + 1).join('---') + ' ' + item.displayName;
-      });
-      this.permissions = result.items;
-    });
+    this.getAllPermissions();
   }
 
-  // getAllPermissions() {
-  //   this._permissionService.getAllPermissions()
-  //     .map(result => result ? result.items : result)
-  //     .map(items => this.displayItems(items as FlatPermissionWithLevelDto))
-  //     .map(result => {
-  //       $.each(result.items, (index, item) => {
-  //         item.displayName = Array(item.level + 1).join('---') + ' ' + item.displayName;
-  //       });
-  //       this.permissions = result.items;
-  //     });
-  // }
+  getAllPermissions() {
+    this._permissionService.getAllPermissions()
+      .map(listResult => listResult ? listResult.items : listResult)
+      .map(items => items ? this.displayItems(items as FlatPermissionWithLevelDto[]) : [])
+      .subscribe(result => this.permissions = result);
+  }
 
   displayItems(items: FlatPermissionWithLevelDto[]) {
     $.each(items, (index, item) => {
@@ -56,7 +49,6 @@ export class PermissionComboComponent extends AppComponentBase implements OnInit
   }
 
   displayFn(permission: FlatPermissionWithLevelDto): string {
-    console.log(permission);
     return permission ? permission.displayName : null;
   }
 }
