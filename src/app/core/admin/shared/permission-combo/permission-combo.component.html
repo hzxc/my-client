@@ -1,3 +1,10 @@
-<p>
-  permission-combo works!
-</p>
+<mat-form-field class="form-field">
+  <input placeholder="{{l('FilterByPermission')}}"
+  aria-label="filterByPermission"
+  matInput [matAutocomplete]="auto">
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+    <mat-option *ngFor="let permission of permissions" [value]="permission">
+      {{permission.displayName}}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

@@ -15,6 +15,7 @@
         <mat-icon>search</mat-icon>
       </button>
     </mat-form-field>
+    <app-permission-combo></app-permission-combo>
   </form>
   <mat-slide-toggle [(ngModel)]="checked">
     {{checked?l("HideAdvancedFilters"):l("ShowAdvancedFilters")}}

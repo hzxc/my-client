@@ -52,7 +52,7 @@ import { PermissionComboComponent } from './shared/permission-combo/permission-c
     CreateOrEditRoleComponent,
     PermissionTreeComponent,
     ConfirmDialogComponent,
-    PermissionComboComponent
+    PermissionComboComponent,
   ]
 })
 export class AdminModule { }
