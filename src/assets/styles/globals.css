@@ -67,3 +67,13 @@ body .mat-select-trigger {
 .mat-tab-label {
   padding: 0px !important;
 }
+/*select and autocomplete option height*/
+.mat-option{
+  height:40px !important;
+  line-height: 40px !important;
+}
+/*Menu menu-item height*/
+.mat-menu-item {
+  line-height: 40px !important;
+  height: 40px !important;
+}

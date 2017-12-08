@@ -21,6 +21,7 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
 import { CreateOrEditRoleComponent } from './roles/edit-role/create-or-edit-role.component';
 import { PermissionTreeComponent } from './shared/permission-tree.component';
 import { PermissionComboComponent } from './shared/permission-combo/permission-combo.component';
+import { RoleComboComponent } from './shared/role-combo/role-combo.component';
 
 @NgModule({
   imports: [
@@ -53,6 +54,7 @@ import { PermissionComboComponent } from './shared/permission-combo/permission-c
     PermissionTreeComponent,
     ConfirmDialogComponent,
     PermissionComboComponent,
+    RoleComboComponent,
   ]
 })
 export class AdminModule { }

@@ -23,11 +23,12 @@ import 'rxjs/add/operator/last';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/delay';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
 
 import { MatPaginator, MatSort, MatSnackBar, MatDialog, MatTable } from '@angular/material';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { EditTenantModalComponent } from './edit-tenant-modal/edit-tenant-modal.component';
-import { timer } from 'rxjs/observable/timer';
 @Component({
   selector: 'app-tenants',
   templateUrl: './tenants.component.html',
@@ -178,6 +179,8 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
       .subscribe(editions => { this.editions = editions; this.filteredEditions = editions.slice(); });
 
     this.tenantsGroup.controls['selectedEdition'].valueChanges
+      .debounceTime(200)
+      .distinctUntilChanged()
       .startWith(null)
       .do(edition => edition && typeof edition === 'object' ?
         this.autocompleteValueBinding('selectedEditionId', edition.value) : this.filters.selectedEditionId = undefined)
@@ -260,10 +263,6 @@ export class TenantsDataSource extends DataSource<TenantListDto> {
           });
         }
         return result.items;
-      })
-      .catch(() => {
-        this.isLoadingResults = false;
-        return Observable.of([]);
       });
   }
 
