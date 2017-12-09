@@ -10,7 +10,7 @@
 
   <form #usersForm novalidate fxLayout="row" fxLayoutAlign="space-between center" fxLayoutWrap>
     <mat-form-field class="full-width form-field">
-      <input matInput [(ngModel)]="filterText" name="filterText" placeholder="{{l('SearchWithThreeDot')}}">
+      <input matInput [(ngModel)]="filters.filterText" name="filterText" placeholder="{{l('SearchWithThreeDot')}}">
       <button mat-raised-button color="accent" matSuffix>
         <mat-icon>search</mat-icon>
       </button>
@@ -74,7 +74,4 @@
     <mat-paginator #paginator [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
     </mat-paginator>
   </div>
-  {{ filterText}}
-  {{ selectedPermissionName}}
-  {{ roleId}}
 </mat-card>

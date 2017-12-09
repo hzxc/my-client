@@ -1,19 +1,20 @@
+
+import * as moment from 'moment';
+import { API_BASE_URL } from '../service-proxies';
+import { Observable } from 'rxjs/Observable';
+import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
+import { Http, Headers, ResponseContentType, Response } from '@angular/http';
+
 import 'rxjs/add/operator/finally';
 import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
-
-import { Observable } from 'rxjs/Observable';
-import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
-import { Http, Headers, ResponseContentType, Response } from '@angular/http';
-
-import * as moment from 'moment';
-import { API_BASE_URL } from '../service-proxies';
 
 @Injectable()
 export class CustomEditionService {
@@ -63,17 +64,18 @@ export class CustomEditionService {
       .do(res => console.log(res.json() as SubscribableEditionComboboxItemDto))
       .flatMap((response_: any) => {
         return this.processGetEditionComboboxItems(response_);
-      }).catch((response_: any) => {
-        if (response_ instanceof Response) {
-          try {
-            return this.processGetEditionComboboxItems(response_);
-          } catch (e) {
-            return <Observable<SubscribableEditionComboboxItemDto[]>><any>Observable.throw(e);
-          }
-        } else {
-          return <Observable<SubscribableEditionComboboxItemDto[]>><any>Observable.throw(response_);
-        }
       });
+      // .catch((response_: any) => {
+      //   if (response_ instanceof Response) {
+      //     try {
+      //       return this.processGetEditionComboboxItems(response_);
+      //     } catch (e) {
+      //       return <Observable<SubscribableEditionComboboxItemDto[]>><any>Observable.throw(e);
+      //     }
+      //   } else {
+      //     return <Observable<SubscribableEditionComboboxItemDto[]>><any>Observable.throw(response_);
+      //   }
+      // });
   }
 
   protected processGetEditionComboboxItems(response: Response): Observable<SubscribableEditionComboboxItemDto> {

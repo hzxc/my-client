@@ -25,6 +25,7 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/delay';
 import 'rxjs/add/observable/fromEvent';
 import { ActivatedRoute } from '@angular/router';
+import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
 
 @Component({
   selector: 'app-users',
@@ -53,9 +54,8 @@ export class UsersComponent extends AppComponentBase implements OnInit {
 
   private usersGroup: FormGroup;
   private checked = false;
-  private roleId: number = undefined;
-  private selectedPermissionName = undefined;
-  private filterText = '';
+  private filters: FilterDto = new FilterDto();
+
   constructor(
     injector: Injector,
     private _activatedRoute: ActivatedRoute,
@@ -63,37 +63,33 @@ export class UsersComponent extends AppComponentBase implements OnInit {
     private snackBar: MatSnackBar,
   ) {
     super(injector);
-    this.filterText = this._activatedRoute.snapshot.queryParams['filterText'] || '';
+    this.filters.filterText = this._activatedRoute.snapshot.queryParams['filterText'] || '';
   }
 
   ngOnInit() {
     this.dataSource = new UsersDataSource(
+      this.filters,
+      this.usersForm,
       this.paginator,
       this.sort,
       this.snackBar,
       this._userServiceProxy,
-      this.filterText,
-      this.selectedPermissionName,
-      this.roleId,
-      this.usersForm
     );
   }
 
-
-
   advancedFiltersChange(checked: boolean) {
     if (!checked) {
-      this.roleId = undefined;
-      this.selectedPermissionName = undefined;
+      this.filters.roleId = undefined;
+      this.filters.selectedPermissionName = undefined;
     }
   }
 
   selectedRoleIdChange(roleId: number) {
-    this.roleId = roleId;
+    this.filters.roleId = roleId;
   }
 
   selectedPermissionNameChange(name: string) {
-    this.selectedPermissionName = name;
+    this.filters.selectedPermissionName = name;
   }
 
   getRolesAsString(roles): string {
@@ -109,25 +105,31 @@ export class UsersComponent extends AppComponentBase implements OnInit {
   }
 }
 
+export class FilterDto {
+  filterText: string;
+  selectedPermissionName: string;
+  roleId: number;
+}
+
 export class UsersDataSource extends DataSource<UserListDto> {
 
   private isLoadingResults = true;
+
   reloadBehavior = new BehaviorSubject(false);
   get reload(): boolean { return this.reloadBehavior.value; }
   set reload(reloadActive: boolean) { this.reloadBehavior.next(reloadActive); }
 
   constructor(
+    private filters: FilterDto,
+    private usersForm: ElementRef,
     private paginator: MatPaginator,
     private sort: MatSort,
     private snackBar: MatSnackBar,
     private _userServiceProxy: UserServiceProxy,
-    private filterText: string,
-    private selectedPermissionName: string,
-    private roleId: number,
-    private usersForm: ElementRef
   ) {
     super();
   }
+
   connect(collectionViewer: CollectionViewer): Observable<UserListDto[]> {
     const displayDataChanges = [
       this.sort.sortChange,
@@ -148,16 +150,16 @@ export class UsersDataSource extends DataSource<UserListDto> {
       .do(_ => { this.isLoadingResults = true; })
       .delay(2000)
       .switchMap(() => {
-        console.log(`${this.filterText}--${this.selectedPermissionName}--${this.roleId}`);
         const result = this._userServiceProxy
           .getUsers(
-          this.filterText,
-          this.selectedPermissionName ? this.selectedPermissionName : undefined,
-          this.roleId,
+          this.filters.filterText,
+          this.filters.selectedPermissionName ? this.filters.selectedPermissionName : undefined,
+          this.filters.roleId,
           this.sort.active + ' ' + this.sort.direction,
           this.paginator.pageSize,
           this.paginator.pageIndex * this.paginator.pageSize)
           .finally(() => { this.isLoadingResults = false; });
+
         return result;
       })
       .map(result => {
@@ -170,7 +172,7 @@ export class UsersDataSource extends DataSource<UserListDto> {
         return result.items;
       });
   }
-  disconnect(collectionViewer: CollectionViewer): void {
+  disconnect() {
   }
 }
 
