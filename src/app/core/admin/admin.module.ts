@@ -22,6 +22,7 @@ import { CreateOrEditRoleComponent } from './roles/edit-role/create-or-edit-role
 import { PermissionTreeComponent } from './shared/permission-tree.component';
 import { PermissionComboComponent } from './shared/permission-combo/permission-combo.component';
 import { RoleComboComponent } from './shared/role-combo/role-combo.component';
+import { CreateOrEditUserTabComponent } from './users/create-or-edit-user-tab/create-or-edit-user-tab.component';
 
 @NgModule({
   imports: [
@@ -55,6 +56,7 @@ import { RoleComboComponent } from './shared/role-combo/role-combo.component';
     ConfirmDialogComponent,
     PermissionComboComponent,
     RoleComboComponent,
+    CreateOrEditUserTabComponent,
   ]
 })
 export class AdminModule { }

@@ -18,7 +18,7 @@
         </div>
         <mat-table [dataSource]="dataSource" matSort>
           <ng-container matColumnDef="actions">
-            <mat-header-cell *matHeaderCellDef class="custom-cell-width">
+            <mat-header-cell *matHeaderCellDef class="custom-cell-width actions-padding">
               {{l('Actions')}}
             </mat-header-cell>
             <mat-cell *matCellDef="let row" class="custom-cell-width">

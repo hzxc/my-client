@@ -1,6 +1,7 @@
-.users-card{
-  margin:10px;
+.users-card {
+  margin: 10px;
 }
+
 
 /* card header css*/
 
@@ -16,7 +17,9 @@
   margin-bottom: 0px !important;
 }
 
+
 /*table loading-shade*/
+
 .table-container {
   position: relative;
 }
@@ -33,3 +36,15 @@
   align-items: start;
   justify-content: center;
 }
+
+.custom-cell-width {
+  flex-grow: 0.5 !important;
+}
+
+
+/* mat-table css*/
+
+// .custom-cell-style {
+// flex: 0.05;
+//   padding-left:7px;
+// }

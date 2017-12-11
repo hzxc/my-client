@@ -75,11 +75,13 @@ export class RolesComponent extends AppComponentBase implements OnInit {
       // .delay(2000)
       .finally(() => {
         this.dataSource.isLoadingResults = false;
-        this.tabGroup.selectedIndex = 1;
       })
       .subscribe(
       result => {
-        this.roleForEditOutput = result;
+        if (result) {
+          this.tabGroup.selectedIndex = 1;
+          this.roleForEditOutput = result;
+        }
       }
       );
   }

@@ -48,14 +48,9 @@
 /* mat-table css*/
 
 .custom-cell-width {
-  flex: 0.3;
+  flex-grow: 0.3;
 }
 
-.mat-icon-button {
-  width: auto;
-  height: auto;
-  line-height: 40px;
-}
 
 
 /* mat-chip */

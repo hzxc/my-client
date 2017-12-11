@@ -9,7 +9,7 @@ import {
   Input
 } from '@angular/core';
 import { DataSource, CollectionViewer } from '@angular/cdk/collections';
-import { MatPaginator, MatSort, MatSnackBar } from '@angular/material';
+import { MatPaginator, MatSort, MatSnackBar, MatTabGroup } from '@angular/material';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { AppComponentBase } from '../../../shared/common/app-component-base';
@@ -36,6 +36,7 @@ import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
 
 export class UsersComponent extends AppComponentBase implements OnInit {
   displayedColumns = [
+    'actions',
     'userName',
     'name',
     'surname',
@@ -51,10 +52,14 @@ export class UsersComponent extends AppComponentBase implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('usersForm') usersForm: ElementRef;
+  @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
+
 
   private usersGroup: FormGroup;
   private checked = false;
   private filters: FilterDto = new FilterDto();
+  private showTab = false;
+  private userId: number;
 
   constructor(
     injector: Injector,
@@ -103,6 +108,15 @@ export class UsersComponent extends AppComponentBase implements OnInit {
     }
     return roleNames;
   }
+
+  openEditTabs(userId: number) {
+    this.userId = userId;
+    this.showTab = true;
+    this.tabGroup.selectedIndex = 1;
+    // setInterval(() => {
+    //   this.showTab = false;
+    // }, 5000);
+  }
 }
 
 export class FilterDto {
@@ -150,6 +164,7 @@ export class UsersDataSource extends DataSource<UserListDto> {
       .do(_ => { this.isLoadingResults = true; })
       .delay(2000)
       .switchMap(() => {
+        this.isLoadingResults = true;
         const result = this._userServiceProxy
           .getUsers(
           this.filters.filterText,
@@ -157,12 +172,12 @@ export class UsersDataSource extends DataSource<UserListDto> {
           this.filters.roleId,
           this.sort.active + ' ' + this.sort.direction,
           this.paginator.pageSize,
-          this.paginator.pageIndex * this.paginator.pageSize)
-          .finally(() => { this.isLoadingResults = false; });
-
+          this.paginator.pageIndex * this.paginator.pageSize);
+        // .finally(() => { this.isLoadingResults = false; });
         return result;
       })
       .map(result => {
+        this.isLoadingResults = false;
         this.paginator.length = result.items.length;
         if (result.items.length === 0 || !result.items) {
           this.snackBar.open('NoData', 'Close', {
