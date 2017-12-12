@@ -1,5 +1,5 @@
 import { Component, OnInit, Injector, Input } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { AppComponentBase } from '../../../../shared/common/app-component-base';
 import {
   PasswordComplexitySetting,
@@ -72,19 +72,30 @@ export class CreateOrEditUserTabComponent extends AppComponentBase implements On
       this.user = userResult.user;
       this.roles = userResult.roles;
       this.canChangeUserName = this.user.userName !== AppConsts.userManagement.defaultAdminUserName;
+      this.initUser(this.user);
 
       this.allOrganizationUnits = userResult.allOrganizationUnits;
       this.memberedOrganizationUnits = userResult.memberedOrganizationUnits;
 
       this.getProfilePicture(userResult.profilePictureId);
 
-      console.log(this.profilePicture);
-
       this._profileService.getPasswordComplexitySetting().subscribe(passwordComplexityResult => {
         this.passwordComplexitySetting = passwordComplexityResult.setting;
-        this.setPasswordComplexityInfo();
       });
     });
+  }
+
+  initUser(user: UserEditDto) {
+    this.userGroup.get('name').setValue(user.name);
+    this.userGroup.get('surname').setValue(user.surname);
+    this.userGroup.get('emailAddress').setValue(user.emailAddress);
+    this.userGroup.get('phoneNumber').setValue(user.phoneNumber);
+    this.userGroup.get('userName').setValue(user.userName);
+    this.userGroup.get('shouldChangePasswordOnNextLogin').setValue(user.shouldChangePasswordOnNextLogin);
+    this.userGroup.get('isActive').setValue(user.isActive);
+    if (!this.canChangeUserName) {
+      this.userGroup.get('userName').disable();
+    }
   }
 
   getProfilePicture(profilePictureId: string): void {
@@ -102,32 +113,51 @@ export class CreateOrEditUserTabComponent extends AppComponentBase implements On
     }
   }
 
-  setPasswordComplexityInfo(): void {
+  passwordGroupValidator(group: FormGroup): { [key: string]: any } {
 
-    this.passwordComplexityInfo = '<ul>';
+    // let isValid = true;
+    const setRandomPassword = group.get('setRandomPassword') as FormControl;
+    const password = group.get('password') as FormControl;
+    const passwordRepeat = group.get('passwordRepeat') as FormControl;
+
+    if (password !== passwordRepeat) {
+      return {
+        error: { desc: 'editionIdValidationFailed' }
+      };
+    }
+
+    // if (setRandomPassword) {
+    //   return {
+    //     error: { desc: 'editionIdValidationFailed' }
+    //   };
+    // }
+
+    // if (isUnlimited.value && subscriptionEndDateUtc.value != null) {
+    //   return {
+    //     edit: { desc: 'subscriptionEndDateUtcValidationFailed' }
+    //   };
+    // }
+
+    // if (!isUnlimited.value && subscriptionEndDateUtc.value == null) {
+    //   return {
+    //     edit: { desc: 'subscriptionEndDateUtcValidationFailed' }
+    //   };
+    // }
+
+    // if (edition.value.isFree && isInTrialPeriod.value) {
+    //   return {
+    //     edit: { desc: 'isInTrialPeriodValidationFailed' }
+    //   };
+    // }
+
+    return null;
+  }
+
+  passwordValidator(control: FormControl): { [key: string]: any } {
 
     if (this.passwordComplexitySetting.requireDigit) {
-      this.passwordComplexityInfo += '<li>' + this.l('PasswordComplexity_RequireDigit_Hint') + '</li>';
+      const re = /\d/i;
     }
-
-    if (this.passwordComplexitySetting.requireLowercase) {
-      this.passwordComplexityInfo += '<li>' + this.l('PasswordComplexity_RequireLowercase_Hint') + '</li>';
-    }
-
-    if (this.passwordComplexitySetting.requireUppercase) {
-      this.passwordComplexityInfo += '<li>' + this.l('PasswordComplexity_RequireUppercase_Hint') + '</li>';
-    }
-
-    if (this.passwordComplexitySetting.requireNonAlphanumeric) {
-      this.passwordComplexityInfo += '<li>' + this.l('PasswordComplexity_RequireNonAlphanumeric_Hint') + '</li>';
-    }
-
-    if (this.passwordComplexitySetting.requiredLength) {
-      this.passwordComplexityInfo += '<li>'
-        + this.l('PasswordComplexity_RequiredLength_Hint',
-          this.passwordComplexitySetting.requiredLength) + '</li>';
-    }
-
-    this.passwordComplexityInfo += '</ul>';
+    return null;
   }
 }
