@@ -1,5 +1,5 @@
 import { Component, OnInit, Injector, Input } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
 import { AppComponentBase } from '../../../../shared/common/app-component-base';
 import {
   PasswordComplexitySetting,
@@ -20,7 +20,16 @@ export class CreateOrEditUserTabComponent extends AppComponentBase implements On
 
   @Input() userId: number;
   private userGroup: FormGroup;
-  passwordComplexitySetting: PasswordComplexitySetting = new PasswordComplexitySetting();
+  private passGroup: FormGroup;
+  passwordComplexitySetting: PasswordComplexitySetting = new PasswordComplexitySetting(
+    // {
+    //   requireDigit: true,
+    //   requireLowercase: true,
+    //   requireNonAlphanumeric: false,
+    //   requireUppercase: false,
+    //   requiredLength: 6,
+    // }
+  );
   private user: UserEditDto = new UserEditDto();
   private roles: UserRoleDto[];
   private canChangeUserName = true;
@@ -41,26 +50,36 @@ export class CreateOrEditUserTabComponent extends AppComponentBase implements On
     private _profileService: ProfileServiceProxy
   ) {
     super(injector);
+
     this.userGroup = fb.group(
       {
         name: [],
         surname: [],
-        emailAddress: [],
+        emailAddress: ['', Validators.email],
         phoneNumber: [],
         userName: [],
         passwordGroup: fb.group({
           setRandomPassword: [false],
-          password: [],
-          passwordRepeat: [],
+          password: [''],
+          passwordRepeat: [''],
         }),
         shouldChangePasswordOnNextLogin: [],
         sendActivationEmail: [false],
         isActive: [],
       }
     );
+    this.passGroup = this.userGroup.get('passwordGroup') as FormGroup;
   }
 
   ngOnInit() {
+    this._profileService.getPasswordComplexitySetting().subscribe(passwordComplexityResult => {
+      this.passwordComplexitySetting = passwordComplexityResult.setting;
+      this.passGroup.setValidators(this.passwordGroupValidator(this.passwordComplexitySetting));
+    });
+
+    // this.passGroup.get('password').valueChanges.subscribe(_ => {
+    //   console.log(this.passGroup.get('password').getError('error'));
+    // });
   }
 
   ngOnChanges() {
@@ -78,10 +97,6 @@ export class CreateOrEditUserTabComponent extends AppComponentBase implements On
       this.memberedOrganizationUnits = userResult.memberedOrganizationUnits;
 
       this.getProfilePicture(userResult.profilePictureId);
-
-      this._profileService.getPasswordComplexitySetting().subscribe(passwordComplexityResult => {
-        this.passwordComplexitySetting = passwordComplexityResult.setting;
-      });
     });
   }
 
@@ -113,51 +128,136 @@ export class CreateOrEditUserTabComponent extends AppComponentBase implements On
     }
   }
 
-  passwordGroupValidator(group: FormGroup): { [key: string]: any } {
+  save() {
+    if (this.userGroup.invalid) {
+      console.log('no save');
+    } else {
+      console.log('save');
+    }
+  }
 
-    // let isValid = true;
-    const setRandomPassword = group.get('setRandomPassword') as FormControl;
-    const password = group.get('password') as FormControl;
-    const passwordRepeat = group.get('passwordRepeat') as FormControl;
+  passwordValidator(passwordComplexitySetting: PasswordComplexitySetting): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } => {
+      if (passwordComplexitySetting.requiredLength) {
+        const length = passwordComplexitySetting.requiredLength;
+        if (control.value.length < length) {
+          return {
+            error: { desc: `password require requiredLength ${length}` }
+          };
+        }
+      }
 
-    if (password !== passwordRepeat) {
-      return {
-        error: { desc: 'editionIdValidationFailed' }
-      };
+      if (passwordComplexitySetting.requireLowercase) {
+        const re = /[a-z]/;
+        if (control.value.search(re) === -1) {
+          return {
+            error: { desc: 'password require lowercase' }
+          };
+        }
+      }
+
+      if (passwordComplexitySetting.requireUppercase) {
+        const re = /[A-Z]/;
+        if (control.value.search(re) === -1) {
+          return {
+            error: { desc: 'password require uppercase' }
+          };
+        }
+      }
+
+      if (passwordComplexitySetting.requireDigit) {
+        const re = /\d/i;
+        if (!re.test(control.value)) {
+          return {
+            error: { desc: 'password require digit' }
+          };
+        }
+      }
+
+      if (passwordComplexitySetting.requireNonAlphanumeric) {
+        const re = /[\W]/;
+        if (control.value.search(re) === -1) {
+          return {
+            error: { desc: 'password require non alphanumeric' }
+          };
+        }
+      }
+      return null;
+    };
+  }
+
+  passwordValidationInfo(
+    control: AbstractControl,
+    passwordComplexitySetting: PasswordComplexitySetting,
+    errorCode: string
+  ) {
+    if (passwordComplexitySetting.requiredLength) {
+      const length = passwordComplexitySetting.requiredLength;
+      if (control.value.length < length) {
+        return {
+          errorCode: { desc: `password require requiredLength ${length}` }
+        };
+      }
     }
 
-    // if (setRandomPassword) {
-    //   return {
-    //     error: { desc: 'editionIdValidationFailed' }
-    //   };
-    // }
+    if (passwordComplexitySetting.requireLowercase) {
+      const re = /[a-z]/;
+      if (control.value.search(re) === -1) {
+        return {
+          errorCode: { desc: 'password require lowercase' }
+        };
+      }
+    }
 
-    // if (isUnlimited.value && subscriptionEndDateUtc.value != null) {
-    //   return {
-    //     edit: { desc: 'subscriptionEndDateUtcValidationFailed' }
-    //   };
-    // }
+    if (passwordComplexitySetting.requireUppercase) {
+      const re = /[A-Z]/;
+      if (control.value.search(re) === -1) {
+        return {
+          errorCode: { desc: 'password require uppercase' }
+        };
+      }
+    }
 
-    // if (!isUnlimited.value && subscriptionEndDateUtc.value == null) {
-    //   return {
-    //     edit: { desc: 'subscriptionEndDateUtcValidationFailed' }
-    //   };
-    // }
+    if (passwordComplexitySetting.requireDigit) {
+      const re = /\d/i;
+      if (!re.test(control.value)) {
+        return {
+          errorCode: { desc: 'password require digit' }
+        };
+      }
+    }
 
-    // if (edition.value.isFree && isInTrialPeriod.value) {
-    //   return {
-    //     edit: { desc: 'isInTrialPeriodValidationFailed' }
-    //   };
-    // }
-
+    if (passwordComplexitySetting.requireNonAlphanumeric) {
+      const re = /[\W]/;
+      if (control.value.search(re) === -1) {
+        return {
+          errorCode: { desc: 'password require non alphanumeric' }
+        };
+      }
+    }
     return null;
   }
 
-  passwordValidator(control: FormControl): { [key: string]: any } {
+  passwordGroupValidator(passwordComplexitySetting: PasswordComplexitySetting): ValidatorFn {
+    return (group: AbstractControl): { [key: string]: any } => {
+      const setRandomPassword = group.get('setRandomPassword');
+      const password = group.get('password');
+      const passwordRepeat = group.get('passwordRepeat');
 
-    if (this.passwordComplexitySetting.requireDigit) {
-      const re = /\d/i;
-    }
-    return null;
+      // if (setRandomPassword) {
+      //   return null;
+      // }
+
+      const result = this.passwordValidationInfo(password, passwordComplexitySetting, 'pwdError');
+      if (result) {
+        password.setErrors(result);
+        return result;
+      }
+
+      if (passwordRepeat.touched) {
+        return this.passwordValidationInfo(password, passwordComplexitySetting, 'pwdRptError');
+      }
+      return null;
+    };
   }
 }

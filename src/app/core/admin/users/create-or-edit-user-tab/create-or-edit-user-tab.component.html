@@ -1,26 +1,30 @@
 <mat-tab-group>
   <mat-tab label="{{l('UserInformations')}}">
-    <form class="form-container" [formGroup]="userGroup" novalidate fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutWrap>
+    <form class="form-container" [formGroup]="userGroup" novalidate (ngSubmit)="save()" fxLayout="row" fxLayoutAlign="space-evenly center"
+      fxLayoutWrap>
       <div fxFlex="20" style="text-align:center">
         <img src="{{profilePicture}}" width="128" height="128" />
       </div>
       <div fxFlex="68" fxFlex.lt-sm="100">
         <mat-form-field class="form-field" fxFill>
-          <input matInput formControlName="name" placeholder="{{l('Name')}}">
+          <input matInput required formControlName="name" placeholder="{{l('Name')}}">
         </mat-form-field>
         <mat-form-field class="form-field" fxFill>
-          <input matInput formControlName="surname" placeholder="{{l('Surname')}}">
+          <input matInput required formControlName="surname" placeholder="{{l('Surname')}}">
         </mat-form-field>
       </div>
       <div fxFill>
         <mat-form-field class="form-field" fxFill>
-          <input matInput formControlName="emailAddress" placeholder="{{l('EmailAddress')}}">
+          <input matInput required formControlName="emailAddress" placeholder="{{l('EmailAddress')}}">
+          <mat-error *ngIf="userGroup.hasError('email','emailAddress')">
+            email error
+          </mat-error>
         </mat-form-field>
         <mat-form-field class="form-field" fxFill>
           <input matInput formControlName="phoneNumber" placeholder="{{l('PhoneNumber')}}">
         </mat-form-field>
         <mat-form-field class="form-field" fxFill>
-          <input matInput formControlName="userName" placeholder="{{l('UserName')}}">
+          <input matInput required formControlName="userName" placeholder="{{l('UserName')}}">
         </mat-form-field>
         <div formGroupName="passwordGroup">
           <div class="checkbox-container">
@@ -28,11 +32,17 @@
               {{l("SetRandomPassword")}}
             </mat-checkbox>
           </div>
-          <mat-form-field *ngIf="!userGroup.controls['passwordGroup'].get('setRandomPassword').value" class="form-field" fxFill>
+          <mat-form-field class="form-field" *ngIf="!passGroup.get('setRandomPassword').value" class="form-field" fxFill>
             <input matInput formControlName="password" placeholder="{{l('Password')}}">
+            <mat-error *ngIf="passGroup.hasError('errorCode','password')">
+              {{passGroup.getError('errorCode','password')?.desc}}
+            </mat-error>
           </mat-form-field>
-          <mat-form-field *ngIf="!userGroup.controls['passwordGroup'].get('setRandomPassword').value" class="form-field" fxFill>
+          <mat-form-field class="form-field" *ngIf="!passGroup.get('setRandomPassword').value" class="form-field" fxFill>
             <input matInput formControlName="passwordRepeat" placeholder="{{l('PasswordRepeat')}}">
+            <mat-error *ngIf="passGroup.get('passwordRepeat').hasError('error')">
+              {{passGroup.get('passwordRepeat').getError('error')?.desc}}
+            </mat-error>
           </mat-form-field>
         </div>
         <mat-checkbox formControlName="shouldChangePasswordOnNextLogin">
@@ -44,9 +54,11 @@
         <mat-checkbox formControlName="isActive">
           {{l("Active")}}
         </mat-checkbox>
+        <button type="submit" mat-raised-button color="primary">{{l('Save')}}</button>
       </div>
     </form>
-    {{userGroup.value | json}}
+    {{userGroup.value | json}} {{passwordComplexitySetting | json}}
+    {{this.setRandomPassword}}
   </mat-tab>
   <mat-tab label="{{l('Roles')}}">
   </mat-tab>
