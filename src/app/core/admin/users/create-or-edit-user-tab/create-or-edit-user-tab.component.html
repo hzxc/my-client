@@ -1,6 +1,8 @@
 <mat-tab-group>
   <mat-tab label="{{l('UserInformations')}}">
-    <form class="form-container" [formGroup]="userGroup" novalidate (ngSubmit)="save()" fxLayout="row" fxLayoutAlign="space-evenly center"
+    <mat-progress-bar [mode]="saving? 'indeterminate':'Determinate'" class="custom-progress-bar" color="Primary">
+    </mat-progress-bar>
+    <form #ecForm class="form-container" [formGroup]="userGroup" novalidate (ngSubmit)="save()" fxLayout="row" fxLayoutAlign="space-evenly center"
       fxLayoutWrap>
       <div fxFlex="20" style="text-align:center">
         <img src="{{profilePicture}}" width="128" height="128" />
@@ -33,15 +35,15 @@
             </mat-checkbox>
           </div>
           <mat-form-field class="form-field" *ngIf="!passGroup.get('setRandomPassword').value" class="form-field" fxFill>
-            <input matInput formControlName="password" placeholder="{{l('Password')}}">
-            <mat-error *ngIf="passGroup.hasError('errorCode','password')">
-              {{passGroup.getError('errorCode','password')?.desc}}
+            <input type="password" required matInput formControlName="password" placeholder="{{l('Password')}}">
+            <mat-error *ngIf="passGroup.hasError('pwdError','password')">
+              {{passGroup.getError('pwdError','password')?.desc}}
             </mat-error>
           </mat-form-field>
           <mat-form-field class="form-field" *ngIf="!passGroup.get('setRandomPassword').value" class="form-field" fxFill>
-            <input matInput formControlName="passwordRepeat" placeholder="{{l('PasswordRepeat')}}">
-            <mat-error *ngIf="passGroup.get('passwordRepeat').hasError('error')">
-              {{passGroup.get('passwordRepeat').getError('error')?.desc}}
+            <input type="password" required matInput formControlName="passwordRepeat" placeholder="{{l('PasswordRepeat')}}">
+            <mat-error *ngIf="passGroup.get('passwordRepeat').hasError('pwdRptError')">
+              {{passGroup.get('passwordRepeat').getError('pwdRptError')?.desc}}
             </mat-error>
           </mat-form-field>
         </div>
@@ -54,14 +56,25 @@
         <mat-checkbox formControlName="isActive">
           {{l("Active")}}
         </mat-checkbox>
-        <button type="submit" mat-raised-button color="primary">{{l('Save')}}</button>
+        <mat-checkbox formControlName="isLockoutEnabled">
+          {{l("IsLockoutEnabled")}}
+        </mat-checkbox>
+      </div>
+      <div fxFlex="grow" style="margin-top:20px">
+        <button type="submit" [disabled]="saving" mat-raised-button color="primary">{{l('Save')}}</button>
+        <button type="button" (click)="cancel()" [disabled]="saving" mat-raised-button color="accent">{{l('Cancel')}}</button>
       </div>
     </form>
-    {{userGroup.value | json}} {{passwordComplexitySetting | json}}
-    {{this.setRandomPassword}}
+    <!-- {{userGroup.value | json}} {{passwordComplexitySetting | json}} {{this.setRandomPassword}} -->
   </mat-tab>
   <mat-tab label="{{l('Roles')}}">
+    <div class="form-container" fxLayoutAlign="start center" fxLayoutWrap>
+      <mat-checkbox *ngFor="let role of roles" fxFlex="grow" [(ngModel)]="role.isAssigned">
+        {{role.roleDisplayName}}
+      </mat-checkbox>
+    </div>
   </mat-tab>
   <mat-tab label="{{l('OrganizationUnits')}}">
+    <app-organization-unit-tree #organizationUnitTree></app-organization-unit-tree>
   </mat-tab>
 </mat-tab-group>

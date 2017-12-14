@@ -8,7 +8,6 @@
     <mat-card-subtitle>{{l("UsersHeaderInfo")}}</mat-card-subtitle>
   </mat-card-header>
 
-
   <mat-tab-group>
     <mat-tab label="UserList">
       <form #usersForm novalidate fxLayout="row" fxLayoutAlign="space-between center" fxLayoutWrap>
@@ -45,7 +44,11 @@
                 <mat-icon>settings</mat-icon>
               </button>
               <mat-menu #editMenu="matMenu">
-                <button mat-menu-item (click)="openEditTabs(row.id)">{{l('Edit')}}</button>
+                <button mat-menu-item (click)="loginAsThisUser(row.id)">{{l('LoginAsThisUser')}}</button>
+                <button mat-menu-item (click)="openEditTabs(row)">{{l('Edit')}}</button>
+                <button mat-menu-item (click)="openPermissionsTabs(row.id)">{{l('Permissions')}}</button>
+                <button mat-menu-item (click)="unlockUser(row.id)">{{l('Unlock')}}</button>
+                <button mat-menu-item (click)="deleteUser(row)">{{l('Delete')}}</button>
               </mat-menu>
             </mat-cell>
           </ng-container>
@@ -92,10 +95,11 @@
         </mat-paginator>
       </div>
     </mat-tab>
-    <mat-tab *ngIf="showTab" label="UserEditOrCreate">
-      <app-create-or-edit-user-tab [userId]="userId"></app-create-or-edit-user-tab>
+    <mat-tab *ngIf="showTab" label="{{userId? l('EditUser') +':'+ currentEditUserName: l('CreateNewUser')}}">
+      <app-create-or-edit-user-tab (saveState)="saveStateChange($event)" [userId]="userId"></app-create-or-edit-user-tab>
     </mat-tab>
   </mat-tab-group>
+  <button class="create-user-button" mat-fab color="primary" (click)="createUser()">
+    <mat-icon>exposure_plus_1</mat-icon>
+  </button>
 </mat-card>
-
-

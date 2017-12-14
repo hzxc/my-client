@@ -18,11 +18,12 @@ import { UtilsModule } from '../../shared/utils/utils.module';
 import { EditTenantModalComponent } from './tenants/edit-tenant-modal/edit-tenant-modal.component';
 import { RolesComponent } from './roles/roles.component';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
-import { CreateOrEditRoleComponent } from './roles/edit-role/create-or-edit-role.component';
+import { CreateOrEditRoleComponent } from './roles/create-or-edit-role/create-or-edit-role.component';
 import { PermissionTreeComponent } from './shared/permission-tree.component';
 import { PermissionComboComponent } from './shared/permission-combo/permission-combo.component';
 import { RoleComboComponent } from './shared/role-combo/role-combo.component';
 import { CreateOrEditUserTabComponent } from './users/create-or-edit-user-tab/create-or-edit-user-tab.component';
+import { OrganizationUnitTreeComponent } from './shared/organization-unit-tree/organization-unit-tree.component';
 
 @NgModule({
   imports: [
@@ -57,6 +58,7 @@ import { CreateOrEditUserTabComponent } from './users/create-or-edit-user-tab/cr
     PermissionComboComponent,
     RoleComboComponent,
     CreateOrEditUserTabComponent,
+    OrganizationUnitTreeComponent,
   ]
 })
 export class AdminModule { }

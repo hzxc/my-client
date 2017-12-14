@@ -1,3 +1,4 @@
+import { element } from 'protractor';
 import {
   Component,
   OnInit,
@@ -9,7 +10,7 @@ import {
   Input
 } from '@angular/core';
 import { DataSource, CollectionViewer } from '@angular/cdk/collections';
-import { MatPaginator, MatSort, MatSnackBar, MatTabGroup } from '@angular/material';
+import { MatPaginator, MatSort, MatSnackBar, MatTabGroup, MatTab, MatTabLabel, MatLabel } from '@angular/material';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { AppComponentBase } from '../../../shared/common/app-component-base';
@@ -26,6 +27,7 @@ import 'rxjs/add/operator/delay';
 import 'rxjs/add/observable/fromEvent';
 import { ActivatedRoute } from '@angular/router';
 import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
+import { AppConsts } from '../../../shared/AppConsts';
 
 @Component({
   selector: 'app-users',
@@ -54,12 +56,12 @@ export class UsersComponent extends AppComponentBase implements OnInit {
   @ViewChild('usersForm') usersForm: ElementRef;
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
 
-
   private usersGroup: FormGroup;
   private checked = false;
   private filters: FilterDto = new FilterDto();
   private showTab = false;
   private userId: number;
+  private currentEditUserName = '';
 
   constructor(
     injector: Injector,
@@ -109,13 +111,52 @@ export class UsersComponent extends AppComponentBase implements OnInit {
     return roleNames;
   }
 
-  openEditTabs(userId: number) {
-    this.userId = userId;
+  openEditTabs(user: UserListDto) {
+    this.currentEditUserName = user.userName;
+    this.userId = user.id;
     this.showTab = true;
     this.tabGroup.selectedIndex = 1;
+    // this.tabGroup._tabs.last.textLabel = 'CreateUser';
+    // $(this.tabLabel.).html('EditUser');
     // setInterval(() => {
     //   this.showTab = false;
     // }, 5000);
+  }
+  createUser() {
+    this.userId = undefined;
+    this.showTab = true;
+    this.tabGroup.selectedIndex = 1;
+  }
+
+  saveStateChange(state: boolean) {
+    if (state) {
+      this.tabGroup.selectedIndex = 0;
+      this.showTab = false;
+      this.dataSource.reload = state;
+    } else {
+      this.tabGroup.selectedIndex = 0;
+      this.showTab = false;
+    }
+  }
+
+  deleteUser(user: UserListDto): void {
+    if (user.userName === AppConsts.userManagement.defaultAdminUserName) {
+      this.message.warn(this.l('{0}UserCannotBeDeleted', AppConsts.userManagement.defaultAdminUserName));
+      return;
+    }
+
+    this.message.confirm(
+      this.l('UserDeleteWarningMessage', user.userName),
+      (isConfirmed) => {
+        if (isConfirmed) {
+          this._userServiceProxy.deleteUser(user.id)
+            .subscribe(() => {
+              this.dataSource.reload = true;
+              this.notify.success(this.l('SuccessfullyDeleted'));
+            });
+        }
+      }
+    );
   }
 }
 
@@ -162,7 +203,6 @@ export class UsersDataSource extends DataSource<UserListDto> {
       .merge(...displayDataChanges)
       .startWith(null)
       .do(_ => { this.isLoadingResults = true; })
-      .delay(2000)
       .switchMap(() => {
         this.isLoadingResults = true;
         const result = this._userServiceProxy
@@ -176,6 +216,7 @@ export class UsersDataSource extends DataSource<UserListDto> {
         // .finally(() => { this.isLoadingResults = false; });
         return result;
       })
+      .delay(2000)
       .map(result => {
         this.isLoadingResults = false;
         this.paginator.length = result.items.length;

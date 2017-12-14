@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector, Input } from '@angular/core';
+import { Component, OnInit, Injector, Input, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
 import { AppComponentBase } from '../../../../shared/common/app-component-base';
 import {
@@ -6,30 +6,37 @@ import {
   UserServiceProxy,
   ProfileServiceProxy,
   UserEditDto, UserRoleDto,
-  OrganizationUnitDto
+  OrganizationUnitDto,
+  CreateOrUpdateUserInput
 } from '../../../../shared/service-proxies/service-proxies';
-import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
+import { OnChanges, AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
 import { AppConsts } from '../../../../shared/AppConsts';
+import {
+  OrganizationUnitTreeComponent,
+  IOrganizationUnitsTreeComponentData
+} from '../../shared/organization-unit-tree/organization-unit-tree.component';
 
+import * as _ from 'lodash';
 @Component({
   selector: 'app-create-or-edit-user-tab',
   templateUrl: './create-or-edit-user-tab.component.html',
   styleUrls: ['./create-or-edit-user-tab.component.scss']
 })
-export class CreateOrEditUserTabComponent extends AppComponentBase implements OnInit, OnChanges {
+export class CreateOrEditUserTabComponent extends AppComponentBase implements OnInit, OnChanges, AfterViewInit {
 
   @Input() userId: number;
   private userGroup: FormGroup;
   private passGroup: FormGroup;
-  passwordComplexitySetting: PasswordComplexitySetting = new PasswordComplexitySetting(
-    // {
-    //   requireDigit: true,
-    //   requireLowercase: true,
-    //   requireNonAlphanumeric: false,
-    //   requireUppercase: false,
-    //   requiredLength: 6,
-    // }
-  );
+  passwordComplexitySetting: PasswordComplexitySetting;
+  //  = new PasswordComplexitySetting(
+  // {
+  //   requireDigit: true,
+  //   requireLowercase: true,
+  //   requireNonAlphanumeric: false,
+  //   requireUppercase: false,
+  //   requiredLength: 6,
+  // }
+  // );
   private user: UserEditDto = new UserEditDto();
   private roles: UserRoleDto[];
   private canChangeUserName = true;
@@ -42,6 +49,14 @@ export class CreateOrEditUserTabComponent extends AppComponentBase implements On
   private active = false;
 
   private passwordComplexityInfo = '';
+
+  private saving = false;
+
+  @Output()
+  saveState: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  @ViewChild('organizationUnitTree') organizationUnitTree: OrganizationUnitTreeComponent;
+
 
   constructor(
     injector: Injector,
@@ -66,17 +81,18 @@ export class CreateOrEditUserTabComponent extends AppComponentBase implements On
         shouldChangePasswordOnNextLogin: [],
         sendActivationEmail: [false],
         isActive: [],
+        isLockoutEnabled: []
       }
     );
     this.passGroup = this.userGroup.get('passwordGroup') as FormGroup;
+
+    this._profileService.getPasswordComplexitySetting().subscribe(passwordComplexityResult => {
+      this.passwordComplexitySetting = passwordComplexityResult.setting;
+      this.passGroup.setValidators(this.passwordGroupValidator(passwordComplexityResult.setting));
+    });
   }
 
   ngOnInit() {
-    this._profileService.getPasswordComplexitySetting().subscribe(passwordComplexityResult => {
-      this.passwordComplexitySetting = passwordComplexityResult.setting;
-      this.passGroup.setValidators(this.passwordGroupValidator(this.passwordComplexitySetting));
-    });
-
     // this.passGroup.get('password').valueChanges.subscribe(_ => {
     //   console.log(this.passGroup.get('password').getError('error'));
     // });
@@ -84,6 +100,13 @@ export class CreateOrEditUserTabComponent extends AppComponentBase implements On
 
   ngOnChanges() {
     this.getUserForEdit(this.userId);
+    this.passGroup.get('setRandomPassword').setValue(false);
+    this.passGroup.get('password').setValue('');
+    this.passGroup.get('passwordRepeat').setValue('');
+  }
+
+  ngAfterViewInit() {
+
   }
 
   getUserForEdit(userId: number) {
@@ -95,6 +118,11 @@ export class CreateOrEditUserTabComponent extends AppComponentBase implements On
 
       this.allOrganizationUnits = userResult.allOrganizationUnits;
       this.memberedOrganizationUnits = userResult.memberedOrganizationUnits;
+
+      this.organizationUnitTree.data = <IOrganizationUnitsTreeComponentData>{
+        allOrganizationUnits: this.allOrganizationUnits,
+        selectedOrganizationUnits: this.memberedOrganizationUnits
+      };
 
       this.getProfilePicture(userResult.profilePictureId);
     });
@@ -108,6 +136,7 @@ export class CreateOrEditUserTabComponent extends AppComponentBase implements On
     this.userGroup.get('userName').setValue(user.userName);
     this.userGroup.get('shouldChangePasswordOnNextLogin').setValue(user.shouldChangePasswordOnNextLogin);
     this.userGroup.get('isActive').setValue(user.isActive);
+    this.userGroup.get('isLockoutEnabled').setValue(user.isLockoutEnabled);
     if (!this.canChangeUserName) {
       this.userGroup.get('userName').disable();
     }
@@ -128,16 +157,53 @@ export class CreateOrEditUserTabComponent extends AppComponentBase implements On
     }
   }
 
-  save() {
+  cancel() {
+    this.saveState.emit(false);
+  }
+
+  save(ev: Event) {
     if (this.userGroup.invalid) {
-      console.log('no save');
-    } else {
-      console.log('save');
+      return;
     }
+    const input = new CreateOrUpdateUserInput();
+
+    input.user = this.user;
+    input.user.name = this.userGroup.get('name').value;
+    input.user.surname = this.userGroup.get('surname').value;
+    input.user.emailAddress = this.userGroup.get('emailAddress').value;
+    input.user.phoneNumber = this.userGroup.get('phoneNumber').value;
+    input.user.userName = this.userGroup.get('userName').value;
+    input.user.shouldChangePasswordOnNextLogin = this.userGroup.get('shouldChangePasswordOnNextLogin').value;
+    input.user.isActive = this.userGroup.get('isActive').value;
+    input.user.isLockoutEnabled = this.userGroup.get('isLockoutEnabled').value;
+    input.user.password = this.passGroup.get('password').value;
+
+    input.setRandomPassword = this.passGroup.get('setRandomPassword').value;
+    input.sendActivationEmail = this.userGroup.get('sendActivationEmail').value;
+
+    input.assignedRoleNames =
+      _.map(
+        _.filter(this.roles, { isAssigned: true }), role => role.roleName
+      );
+
+    input.organizationUnits = this.organizationUnitTree.getSelectedOrganizations();
+
+    this.saving = true;
+    this._userService.createOrUpdateUser(input)
+      .finally(() => { this.saving = false; })
+      .subscribe(() => {
+        this.saveState.emit(true);
+        this.notify.info(this.l('SavedSuccessfully'));
+      });
   }
 
   passwordValidator(passwordComplexitySetting: PasswordComplexitySetting): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
+
+      if (!control.value || !passwordComplexitySetting) {
+        return null;
+      }
+
       if (passwordComplexitySetting.requiredLength) {
         const length = passwordComplexitySetting.requiredLength;
         if (control.value.length < length) {
@@ -191,48 +257,82 @@ export class CreateOrEditUserTabComponent extends AppComponentBase implements On
     passwordComplexitySetting: PasswordComplexitySetting,
     errorCode: string
   ) {
+    if (control.value === undefined || !passwordComplexitySetting) {
+      return;
+    }
     if (passwordComplexitySetting.requiredLength) {
       const length = passwordComplexitySetting.requiredLength;
       if (control.value.length < length) {
-        return {
-          errorCode: { desc: `password require requiredLength ${length}` }
-        };
+        if (errorCode === 'pwdError') {
+          return {
+            pwdError: { desc: `password require requiredLength ${length}` }
+          };
+        } else if (errorCode === 'pwdRptError') {
+          return {
+            pwdRptError: { desc: `password require requiredLength ${length}` }
+          };
+        }
       }
     }
 
     if (passwordComplexitySetting.requireLowercase) {
       const re = /[a-z]/;
       if (control.value.search(re) === -1) {
-        return {
-          errorCode: { desc: 'password require lowercase' }
-        };
+        if (errorCode === 'pwdError') {
+          return {
+            pwdError: { desc: 'password require lowercase' }
+          };
+        } else if (errorCode === 'pwdRptError') {
+          return {
+            pwdRptError: { desc: 'password require lowercase' }
+          };
+        }
       }
     }
 
     if (passwordComplexitySetting.requireUppercase) {
       const re = /[A-Z]/;
       if (control.value.search(re) === -1) {
-        return {
-          errorCode: { desc: 'password require uppercase' }
-        };
+        if (errorCode === 'pwdError') {
+          return {
+            pwdError: { desc: 'password require uppercase' }
+          };
+        } else if (errorCode === 'pwdRptError') {
+          return {
+            pwdRptError: { desc: 'password require uppercase' }
+          };
+        }
       }
     }
 
     if (passwordComplexitySetting.requireDigit) {
       const re = /\d/i;
       if (!re.test(control.value)) {
-        return {
-          errorCode: { desc: 'password require digit' }
-        };
+        if (errorCode === 'pwdError') {
+          return {
+            pwdError: { desc: 'password require digit' }
+          };
+        } else if (errorCode === 'pwdRptError') {
+          return {
+            pwdRptError: { desc: 'password require digit' }
+          };
+        }
+
       }
     }
 
     if (passwordComplexitySetting.requireNonAlphanumeric) {
       const re = /[\W]/;
       if (control.value.search(re) === -1) {
-        return {
-          errorCode: { desc: 'password require non alphanumeric' }
-        };
+        if (errorCode === 'pwdError') {
+          return {
+            pwdError: { desc: 'password require non alphanumeric' }
+          };
+        } else if (errorCode === 'pwdRptError') {
+          return {
+            pwdRptError: { desc: 'password require non alphanumeric' }
+          };
+        }
       }
     }
     return null;
@@ -240,22 +340,42 @@ export class CreateOrEditUserTabComponent extends AppComponentBase implements On
 
   passwordGroupValidator(passwordComplexitySetting: PasswordComplexitySetting): ValidatorFn {
     return (group: AbstractControl): { [key: string]: any } => {
-      const setRandomPassword = group.get('setRandomPassword');
-      const password = group.get('password');
-      const passwordRepeat = group.get('passwordRepeat');
+      const setRandomPassword = group.get('setRandomPassword') as FormControl;
+      const password = group.get('password') as FormControl;
+      const passwordRepeat = group.get('passwordRepeat') as FormControl;
 
-      // if (setRandomPassword) {
-      //   return null;
-      // }
-
-      const result = this.passwordValidationInfo(password, passwordComplexitySetting, 'pwdError');
-      if (result) {
-        password.setErrors(result);
-        return result;
+      if (setRandomPassword && setRandomPassword.value) {
+        password.setErrors(null);
+        passwordRepeat.setErrors(null);
+        return null;
       }
 
-      if (passwordRepeat.touched) {
-        return this.passwordValidationInfo(password, passwordComplexitySetting, 'pwdRptError');
+      const pwdResult = this.passwordValidationInfo(password, passwordComplexitySetting, 'pwdError');
+      if (pwdResult) {
+        password.setErrors(pwdResult);
+        // return pwdResult;
+      } else {
+        password.setErrors(null);
+      }
+
+      const pwdRptResult = this.passwordValidationInfo(passwordRepeat, passwordComplexitySetting, 'pwdRptError');
+
+      if (pwdRptResult) {
+        passwordRepeat.setErrors(pwdRptResult);
+        // return pwdRptResult;
+      } else {
+        passwordRepeat.setErrors(null);
+      }
+
+      if (pwdResult || pwdRptResult) {
+        return {
+          error: true
+        };
+      } else if (password.value !== passwordRepeat.value) {
+        passwordRepeat.setErrors({
+          pwdRptError: { desc: 'inconsistent Password and confirmation password' }
+        });
+        return { error: true };
       }
       return null;
     };
