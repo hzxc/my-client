@@ -1,3 +1,10 @@
+<div class="loading-shade" *ngIf="loading">
+  <mat-progress-spinner *ngIf="loading" mode="indeterminate" diameter="70"></mat-progress-spinner>
+</div>
+<button class="refresh-button" mat-icon-button type="button" (click)="refresh()" [disabled]="saving" color="warn">
+  <mat-icon>refresh</mat-icon>
+  <!-- <span>{{l('Refresh')}}</span> -->
+</button>
 <mat-tab-group>
   <mat-tab label="{{l('UserInformations')}}">
     <mat-progress-bar [mode]="saving? 'indeterminate':'Determinate'" class="custom-progress-bar" color="Primary">
@@ -28,24 +35,27 @@
         <mat-form-field class="form-field" fxFill>
           <input matInput required formControlName="userName" placeholder="{{l('UserName')}}">
         </mat-form-field>
+        <mat-checkbox *ngIf="userId" formControlName="isChangePassword">
+          {{l("ChangePassword")}}
+        </mat-checkbox>
         <div formGroupName="passwordGroup">
-          <div class="checkbox-container">
+          <div *ngIf="userGroup.get('isChangePassword').value" class="password-container">
             <mat-checkbox formControlName="setRandomPassword">
               {{l("SetRandomPassword")}}
             </mat-checkbox>
+            <mat-form-field class="form-field" *ngIf="!passGroup.get('setRandomPassword').value" class="form-field" fxFill>
+              <input type="password" matInput formControlName="password" placeholder="{{l('Password')}}">
+              <mat-error *ngIf="passGroup.hasError('pwdError','password')">
+                {{passGroup.getError('pwdError','password')?.desc}}
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field class="form-field" *ngIf="!passGroup.get('setRandomPassword').value" class="form-field" fxFill>
+              <input type="password" matInput formControlName="passwordRepeat" placeholder="{{l('PasswordRepeat')}}">
+              <mat-error *ngIf="passGroup.get('passwordRepeat').hasError('pwdRptError')">
+                {{passGroup.get('passwordRepeat').getError('pwdRptError')?.desc}}
+              </mat-error>
+            </mat-form-field>
           </div>
-          <mat-form-field class="form-field" *ngIf="!passGroup.get('setRandomPassword').value" class="form-field" fxFill>
-            <input type="password" required matInput formControlName="password" placeholder="{{l('Password')}}">
-            <mat-error *ngIf="passGroup.hasError('pwdError','password')">
-              {{passGroup.getError('pwdError','password')?.desc}}
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field class="form-field" *ngIf="!passGroup.get('setRandomPassword').value" class="form-field" fxFill>
-            <input type="password" required matInput formControlName="passwordRepeat" placeholder="{{l('PasswordRepeat')}}">
-            <mat-error *ngIf="passGroup.get('passwordRepeat').hasError('pwdRptError')">
-              {{passGroup.get('passwordRepeat').getError('pwdRptError')?.desc}}
-            </mat-error>
-          </mat-form-field>
         </div>
         <mat-checkbox formControlName="shouldChangePasswordOnNextLogin">
           {{l("ShouldChangePasswordOnNextLogin")}}

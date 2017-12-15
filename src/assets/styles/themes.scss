@@ -52,6 +52,10 @@ $indigo-light-theme:mat-light-theme($indigo-light-primary, $indigo-light-accent,
     border-left-color: map-get($indigo-light-primary, 500);
     background-color: map-get($indigo-light-primary, 500);
   }
+  /*js-tree-custom-style*/
+  .jstree-hovered {
+    background-color: map-get($indigo-light-accent, 500) !important;
+  }
 }
 
 // @include angular-material-theme($indigo-light-theme);
@@ -109,6 +113,10 @@ $deeppurple-light-theme:mat-light-theme($deeppurple-light-primary, $deeppurple-l
     border-bottom-color: map-get($deeppurple-light-primary, 500);
     border-left-color: map-get($deeppurple-light-primary, 500);
     background-color: map-get($deeppurple-light-primary, 500);
+  }
+  /*js-tree-custom-style*/
+  .jstree-hovered {
+    background-color: map-get($deeppurple-light-accent, 500) !important;
   }
 }
 
@@ -168,6 +176,10 @@ $purple-dark-theme:mat-dark-theme($purple-dark-primary, $purple-dark-accent, $pu
     border-left-color: map-get($purple-dark-primary, 500);
     background-color: map-get($purple-dark-primary, 500);
   }
+  /*js-tree-custom-style*/
+  .jstree-hovered {
+    background-color: map-get($purple-dark-accent, 500) !important;
+  }
 }
 
 //pink
@@ -226,6 +238,10 @@ $pink-dark-theme:mat-dark-theme($pink-dark-primary, $pink-dark-accent, $pink-dar
     border-left-color: map-get($pink-dark-primary, 500);
     background-color: map-get($pink-dark-primary, 500);
   }
+  /*js-tree-custom-style*/
+  .jstree-hovered {
+    background-color: map-get($pink-dark-accent, 500) !important;
+  }
 }
 
 //custom bule
@@ -281,5 +297,9 @@ $blue-primary-dark: darken( map-get($blue-primary, 500), 8%);
     border-bottom-color: map-get($blue-primary, 500);
     border-left-color: map-get($blue-primary, 500);
     background-color: map-get($blue-primary, 500);
+  }
+  /*js-tree-custom-style*/
+  .jstree-hovered {
+    background-color: map-get($blue-accent, 500) !important;
   }
 }

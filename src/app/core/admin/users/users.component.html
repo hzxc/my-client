@@ -14,7 +14,8 @@
         <mat-form-field class="full-width form-field">
           <input matInput [(ngModel)]="filters.filterText" name="filterText" placeholder="{{l('SearchWithThreeDot')}}">
           <button mat-raised-button color="accent" matSuffix>
-            <mat-icon>search</mat-icon>
+            <mat-icon>search</mat-icon>/
+            <mat-icon>refresh</mat-icon>
           </button>
         </mat-form-field>
         <div *ngIf="checked" fxFlex="49" fxFlex.lt-sm="100">
@@ -34,6 +35,9 @@
           <!-- <mat-spinner></mat-spinner> -->
           <mat-progress-spinner *ngIf="dataSource.isLoadingResults" mode="indeterminate" diameter="70"></mat-progress-spinner>
         </div>
+        <button class="export-to-excel-button" mat-mini-fab color="primary" (click)="exportToExcel()">
+          <mat-icon>explicit</mat-icon>
+        </button>
         <mat-table #table [dataSource]="dataSource" matSort>
           <ng-container matColumnDef="actions">
             <mat-header-cell *matHeaderCellDef class="actions-padding custom-cell-width">
@@ -46,8 +50,8 @@
               <mat-menu #editMenu="matMenu">
                 <button mat-menu-item (click)="loginAsThisUser(row.id)">{{l('LoginAsThisUser')}}</button>
                 <button mat-menu-item (click)="openEditTabs(row)">{{l('Edit')}}</button>
-                <button mat-menu-item (click)="openPermissionsTabs(row.id)">{{l('Permissions')}}</button>
-                <button mat-menu-item (click)="unlockUser(row.id)">{{l('Unlock')}}</button>
+                <button mat-menu-item (click)="openPermissionsTab(row)">{{l('Permissions')}}</button>
+                <button mat-menu-item (click)="unlockUser(row)">{{l('Unlock')}}</button>
                 <button mat-menu-item (click)="deleteUser(row)">{{l('Delete')}}</button>
               </mat-menu>
             </mat-cell>
@@ -95,8 +99,12 @@
         </mat-paginator>
       </div>
     </mat-tab>
-    <mat-tab *ngIf="showTab" label="{{userId? l('EditUser') +':'+ currentEditUserName: l('CreateNewUser')}}">
+    <mat-tab *ngIf="ecTab" label="{{userId? l('EditUser') +':'+ currentEditUserName: l('CreateNewUser')}}">
       <app-create-or-edit-user-tab (saveState)="saveStateChange($event)" [userId]="userId"></app-create-or-edit-user-tab>
+    </mat-tab>
+    <mat-tab *ngIf="permissionTab" label="{{userId? l('Permissions') +':'+ currentEditUserName: l('Permissions')}}">
+      <app-edit-user-permissions-tab (permissionSaveState)="permissionSaveStateChange($event)" [userId]="userId">
+      </app-edit-user-permissions-tab>
     </mat-tab>
   </mat-tab-group>
   <button class="create-user-button" mat-fab color="primary" (click)="createUser()">

@@ -14,7 +14,7 @@ import { MatPaginator, MatSort, MatSnackBar, MatTabGroup, MatTab, MatTabLabel, M
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { AppComponentBase } from '../../../shared/common/app-component-base';
-import { UserListDto, UserServiceProxy } from '../../../shared/service-proxies/service-proxies';
+import { UserListDto, UserServiceProxy, EntityDtoOfInt64 } from '../../../shared/service-proxies/service-proxies';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
@@ -28,6 +28,7 @@ import 'rxjs/add/observable/fromEvent';
 import { ActivatedRoute } from '@angular/router';
 import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
 import { AppConsts } from '../../../shared/AppConsts';
+import { FileDownloadService } from '../../../shared/utils/file-download.service';
 
 @Component({
   selector: 'app-users',
@@ -59,7 +60,8 @@ export class UsersComponent extends AppComponentBase implements OnInit {
   private usersGroup: FormGroup;
   private checked = false;
   private filters: FilterDto = new FilterDto();
-  private showTab = false;
+  private ecTab = false;
+  private permissionTab = false;
   private userId: number;
   private currentEditUserName = '';
 
@@ -67,6 +69,7 @@ export class UsersComponent extends AppComponentBase implements OnInit {
     injector: Injector,
     private _activatedRoute: ActivatedRoute,
     private _userServiceProxy: UserServiceProxy,
+    private _fileDownloadService: FileDownloadService,
     private snackBar: MatSnackBar,
   ) {
     super(injector);
@@ -114,7 +117,7 @@ export class UsersComponent extends AppComponentBase implements OnInit {
   openEditTabs(user: UserListDto) {
     this.currentEditUserName = user.userName;
     this.userId = user.id;
-    this.showTab = true;
+    this.ecTab = true;
     this.tabGroup.selectedIndex = 1;
     // this.tabGroup._tabs.last.textLabel = 'CreateUser';
     // $(this.tabLabel.).html('EditUser');
@@ -124,19 +127,56 @@ export class UsersComponent extends AppComponentBase implements OnInit {
   }
   createUser() {
     this.userId = undefined;
-    this.showTab = true;
+    this.ecTab = true;
     this.tabGroup.selectedIndex = 1;
+  }
+
+  openPermissionsTab(user: UserListDto) {
+    this.currentEditUserName = user.userName;
+    this.userId = user.id;
+    this.permissionTab = true;
+    if (this.tabGroup._tabs.length === 3) {
+      this.tabGroup.selectedIndex = 2;
+    } else {
+      this.tabGroup.selectedIndex = 1;
+    }
   }
 
   saveStateChange(state: boolean) {
     if (state) {
       this.tabGroup.selectedIndex = 0;
-      this.showTab = false;
+      this.ecTab = false;
       this.dataSource.reload = state;
     } else {
       this.tabGroup.selectedIndex = 0;
-      this.showTab = false;
+      this.ecTab = false;
     }
+  }
+
+  permissionSaveStateChange(state: boolean) {
+    console.log(state);
+    if (state) {
+      this.tabGroup.selectedIndex = 0;
+      this.permissionTab = false;
+      this.dataSource.reload = state;
+    } else {
+      this.tabGroup.selectedIndex = 0;
+      this.permissionTab = false;
+    }
+  }
+
+
+  unlockUser(user: UserListDto): void {
+    this._userServiceProxy.unlockUser(new EntityDtoOfInt64({ id: user.id })).subscribe(() => {
+      this.notify.success(this.l('UnlockedTheUser', user.userName));
+    });
+  }
+
+  exportToExcel(): void {
+    this._userServiceProxy.getUsersToExcel()
+      .subscribe(result => {
+        this._fileDownloadService.downloadTempFile(result);
+      });
   }
 
   deleteUser(user: UserListDto): void {

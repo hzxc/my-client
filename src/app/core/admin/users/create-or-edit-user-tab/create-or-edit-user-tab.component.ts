@@ -51,6 +51,8 @@ export class CreateOrEditUserTabComponent extends AppComponentBase implements On
   private passwordComplexityInfo = '';
 
   private saving = false;
+  private loading = false;
+
 
   @Output()
   saveState: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -73,6 +75,7 @@ export class CreateOrEditUserTabComponent extends AppComponentBase implements On
         emailAddress: ['', Validators.email],
         phoneNumber: [],
         userName: [],
+        isChangePassword: [false],
         passwordGroup: fb.group({
           setRandomPassword: [false],
           password: [''],
@@ -88,18 +91,34 @@ export class CreateOrEditUserTabComponent extends AppComponentBase implements On
 
     this._profileService.getPasswordComplexitySetting().subscribe(passwordComplexityResult => {
       this.passwordComplexitySetting = passwordComplexityResult.setting;
-      this.passGroup.setValidators(this.passwordGroupValidator(passwordComplexityResult.setting));
+      // this.passGroup.setValidators(this.passwordGroupValidator(passwordComplexityResult.setting));
     });
   }
 
   ngOnInit() {
-    // this.passGroup.get('password').valueChanges.subscribe(_ => {
-    //   console.log(this.passGroup.get('password').getError('error'));
-    // });
+    this.userGroup.get('isChangePassword').valueChanges.subscribe(value => {
+      if (value) {
+        this.passGroup.clearValidators();
+        this.passGroup.setValidators(this.passwordGroupValidator(this.passwordComplexitySetting));
+      } else {
+        this.passGroup.clearValidators();
+        this.passGroup.setErrors(null);
+        this.passGroup.get('setRandomPassword').setValue(false);
+        this.passGroup.get('password').setValue('');
+        this.passGroup.get('passwordRepeat').setValue('');
+        this.passGroup.get('password').setErrors(null);
+        this.passGroup.get('passwordRepeat').setErrors(null);
+      }
+    });
   }
 
   ngOnChanges() {
     this.getUserForEdit(this.userId);
+    if (this.userId) {
+      this.userGroup.get('isChangePassword').setValue(false);
+    } else {
+      this.userGroup.get('isChangePassword').setValue(true);
+    }
     this.passGroup.get('setRandomPassword').setValue(false);
     this.passGroup.get('password').setValue('');
     this.passGroup.get('passwordRepeat').setValue('');
@@ -109,23 +128,31 @@ export class CreateOrEditUserTabComponent extends AppComponentBase implements On
 
   }
 
+  refresh() {
+    this.getUserForEdit(this.userId);
+  }
+
   getUserForEdit(userId: number) {
-    this._userService.getUserForEdit(userId).subscribe(userResult => {
-      this.user = userResult.user;
-      this.roles = userResult.roles;
-      this.canChangeUserName = this.user.userName !== AppConsts.userManagement.defaultAdminUserName;
-      this.initUser(this.user);
+    this.loading = true;
+    this._userService.getUserForEdit(userId)
+      // .delay(2000)
+      .finally(() => { this.loading = false; })
+      .subscribe(userResult => {
+        this.user = userResult.user;
+        this.roles = userResult.roles;
+        this.canChangeUserName = this.user.userName !== AppConsts.userManagement.defaultAdminUserName;
+        this.initUser(this.user);
 
-      this.allOrganizationUnits = userResult.allOrganizationUnits;
-      this.memberedOrganizationUnits = userResult.memberedOrganizationUnits;
+        this.allOrganizationUnits = userResult.allOrganizationUnits;
+        this.memberedOrganizationUnits = userResult.memberedOrganizationUnits;
 
-      this.organizationUnitTree.data = <IOrganizationUnitsTreeComponentData>{
-        allOrganizationUnits: this.allOrganizationUnits,
-        selectedOrganizationUnits: this.memberedOrganizationUnits
-      };
+        this.organizationUnitTree.data = <IOrganizationUnitsTreeComponentData>{
+          allOrganizationUnits: this.allOrganizationUnits,
+          selectedOrganizationUnits: this.memberedOrganizationUnits
+        };
 
-      this.getProfilePicture(userResult.profilePictureId);
-    });
+        this.getProfilePicture(userResult.profilePictureId);
+      });
   }
 
   initUser(user: UserEditDto) {
@@ -344,7 +371,7 @@ export class CreateOrEditUserTabComponent extends AppComponentBase implements On
       const password = group.get('password') as FormControl;
       const passwordRepeat = group.get('passwordRepeat') as FormControl;
 
-      if (setRandomPassword && setRandomPassword.value) {
+      if ((setRandomPassword && setRandomPassword.value)) {
         password.setErrors(null);
         passwordRepeat.setErrors(null);
         return null;
