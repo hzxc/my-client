@@ -35,9 +35,11 @@ export class EditUserPermissionsTabComponent extends AppComponentBase implements
   }
 
   ngOnChanges() {
-    this._userService.getUserPermissionsForEdit(this.userId).subscribe(result => {
-      this.permissionTree.editData = result;
-    });
+    if (this.userId) {
+      this._userService.getUserPermissionsForEdit(this.userId).subscribe(result => {
+        this.permissionTree.editData = result;
+      });
+    }
   }
 
   save() {

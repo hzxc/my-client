@@ -1,19 +1,27 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Injector } from '@angular/core';
 import * as domHelper from '../../shared/helpers/dom.helper';
 import { ThemeService } from '../../shared/theme/theme.service';
+import * as _ from 'lodash';
+import * as moment from 'moment';
+import { AppComponentBase } from '../../shared/common/app-component-base';
 
 @Component({
   selector: 'app-core-topbar',
   templateUrl: './topbar.component.html',
   styleUrls: ['./topbar.component.scss']
 })
-export class TopbarComponent implements OnInit {
+export class TopbarComponent extends AppComponentBase implements OnInit {
   @Input() sidenav;
   langue = [
     { value: 'steak-0', viewValue: 'Steak' },
     { value: 'pizza-1', viewValue: 'Pizza' },
     { value: 'tacos-2', viewValue: 'Tacos' }
   ];
+
+  languages: abp.localization.ILanguageInfo[];
+  currentLanguage: abp.localization.ILanguageInfo;
+  isImpersonatedLogin = false;
+
   availableLangs = [{
     name: 'English',
     code: 'en',
@@ -26,11 +34,17 @@ export class TopbarComponent implements OnInit {
     code: 'cn-zh',
   }
   ];
-  constructor(private themeService: ThemeService) {
+  constructor(
+    injector: Injector,
+    private themeService: ThemeService
+  ) {
+    super(injector);
     // this.themes = this.themeService.themes;
   }
 
   ngOnInit() {
+    this.languages = _.filter(this.localization.languages, l => (<any>l).isDisabled === false);
+    this.currentLanguage = this.localization.currentLanguage;
   }
   // themes:any[];
   // changeTheme(theme) {

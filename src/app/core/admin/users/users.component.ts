@@ -7,8 +7,9 @@ import {
   ElementRef,
   Injector,
   EventEmitter,
-  Input
+  Input,
 } from '@angular/core';
+
 import { DataSource, CollectionViewer } from '@angular/cdk/collections';
 import { MatPaginator, MatSort, MatSnackBar, MatTabGroup, MatTab, MatTabLabel, MatLabel } from '@angular/material';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -29,6 +30,7 @@ import { ActivatedRoute } from '@angular/router';
 import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
 import { AppConsts } from '../../../shared/AppConsts';
 import { FileDownloadService } from '../../../shared/utils/file-download.service';
+import { ImpersonationService } from './impersonation.service';
 
 @Component({
   selector: 'app-users',
@@ -36,6 +38,7 @@ import { FileDownloadService } from '../../../shared/utils/file-download.service
   styleUrls: ['./users.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
+
 
 export class UsersComponent extends AppComponentBase implements OnInit {
   displayedColumns = [
@@ -67,6 +70,7 @@ export class UsersComponent extends AppComponentBase implements OnInit {
 
   constructor(
     injector: Injector,
+    public _impersonationService: ImpersonationService,
     private _activatedRoute: ActivatedRoute,
     private _userServiceProxy: UserServiceProxy,
     private _fileDownloadService: FileDownloadService,
@@ -128,6 +132,7 @@ export class UsersComponent extends AppComponentBase implements OnInit {
   createUser() {
     this.userId = undefined;
     this.ecTab = true;
+    this.permissionTab = false;
     this.tabGroup.selectedIndex = 1;
   }
 
@@ -242,7 +247,7 @@ export class UsersDataSource extends DataSource<UserListDto> {
     return Observable
       .merge(...displayDataChanges)
       .startWith(null)
-      .do(_ => { this.isLoadingResults = true; })
+      // .do(_ => { this.isLoadingResults = true; })
       .switchMap(() => {
         this.isLoadingResults = true;
         const result = this._userServiceProxy
@@ -253,14 +258,14 @@ export class UsersDataSource extends DataSource<UserListDto> {
           this.sort.active + ' ' + this.sort.direction,
           this.paginator.pageSize,
           this.paginator.pageIndex * this.paginator.pageSize);
-        // .finally(() => { this.isLoadingResults = false; });
+          // .finally(() => { this.isLoadingResults = false; });
         return result;
       })
-      .delay(2000)
+      // .delay(2000)
       .map(result => {
         this.isLoadingResults = false;
         this.paginator.length = result.items.length;
-        if (result.items.length === 0 || !result.items) {
+        if (!result.items || result.items.length === 0) {
           this.snackBar.open('NoData', 'Close', {
             duration: 2000,
           });

@@ -1,6 +1,4 @@
-// .tenants-card {
-//   margin: 10px;
-// }
+/* card header css*/
 
 .icon-card-header {
   font-size: 40px;
@@ -14,10 +12,7 @@
   margin-bottom: 0px !important;
 }
 
-.mat-chip {
-  font-size: 7px;
-  line-height: 9px;
-}
+/*table loading-shade*/
 
 .table-container {
   position: relative;
@@ -36,13 +31,6 @@
   justify-content: center;
 }
 
-
 .custom-cell-width {
-  flex-grow: 0.3;
+  flex-grow: 0.5 !important;
 }
-
-// .mat-icon-button {
-//   width: auto;
-//   height: auto;
-//   line-height: 40px;
-// }

@@ -25,6 +25,7 @@ import { RoleComboComponent } from './shared/role-combo/role-combo.component';
 import { CreateOrEditUserTabComponent } from './users/create-or-edit-user-tab/create-or-edit-user-tab.component';
 import { OrganizationUnitTreeComponent } from './shared/organization-unit-tree/organization-unit-tree.component';
 import { EditUserPermissionsTabComponent } from './users/edit-user-permissions-tab/edit-user-permissions-tab.component';
+import { LanguagesComponent } from './languages/languages.component';
 
 @NgModule({
   imports: [
@@ -61,6 +62,7 @@ import { EditUserPermissionsTabComponent } from './users/edit-user-permissions-t
     CreateOrEditUserTabComponent,
     OrganizationUnitTreeComponent,
     EditUserPermissionsTabComponent,
+    LanguagesComponent,
   ]
 })
 export class AdminModule { }

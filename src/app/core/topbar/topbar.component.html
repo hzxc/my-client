@@ -1,30 +1,20 @@
 <mat-toolbar color="primary" class="topbar">
-  <button
-  mat-icon-button
-  id="sidenavToggle"
-  (click)="toggleSidenav()"
-  matTooltip="Toggle Hide/Open">
-  <mat-icon>menu</mat-icon>
+  <button mat-icon-button id="sidenavToggle" (click)="toggleSidenav()" matTooltip="Toggle Hide/Open">
+    <mat-icon>menu</mat-icon>
   </button>
 
-  <button
-  *ngIf="sidenav.opened"
-  mat-icon-button
-  id="collapseToggle"
-  fxHide.lt-md
-  (click)="toggleCollapse()"
-  matTooltip="Toggle Collapse"
-  class="toggle-collapsed">
-  <mat-icon>chevron_left</mat-icon>
+  <button *ngIf="sidenav.opened" mat-icon-button id="collapseToggle" fxHide.lt-md (click)="toggleCollapse()" matTooltip="Toggle Collapse"
+    class="toggle-collapsed">
+    <mat-icon>chevron_left</mat-icon>
   </button>
 
   <span fxFlex></span>
   <mat-form-field style="width:100px;">
-      <mat-select class="dropdown ">
-          <mat-option *ngFor="let lang of availableLangs" [value]="lang.code">
-          {{ lang.name }}
-          </mat-option>
-      </mat-select>
+    <mat-select>
+      <mat-option *ngFor="let language of languages" [value]="language.name">
+          <span [class]="language.icon"></span> {{language.displayName}}
+      </mat-option>
+    </mat-select>
   </mat-form-field>
   <!-- Theme Switcher -->
   <app-shared-theme-switcher class="topbar-button-left">

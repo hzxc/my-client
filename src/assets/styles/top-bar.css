@@ -18,3 +18,13 @@
   margin-left: 1rem !important;
 }
 
+/*Fixed Topbar*/
+.rightside-content-hold {
+  overflow: auto;
+  position: absolute !important;
+  padding: .5rem;
+  bottom:0;
+  left:0;
+  right:0;
+  top: 49px;
+}

@@ -1,5 +1,5 @@
 <!-- <div class="example-container mat-elevation-z8"> -->
-<mat-card class="users-card">
+<mat-card>
   <mat-card-header>
     <div mat-card-avatar>
       <mat-icon class="icon-card-header">supervisor_account</mat-icon>
@@ -7,7 +7,6 @@
     <mat-card-title>{{l("Users")}}</mat-card-title>
     <mat-card-subtitle>{{l("UsersHeaderInfo")}}</mat-card-subtitle>
   </mat-card-header>
-
   <mat-tab-group>
     <mat-tab label="UserList">
       <form #usersForm novalidate fxLayout="row" fxLayoutAlign="space-between center" fxLayoutWrap>
@@ -48,7 +47,9 @@
                 <mat-icon>settings</mat-icon>
               </button>
               <mat-menu #editMenu="matMenu">
-                <button mat-menu-item (click)="loginAsThisUser(row.id)">{{l('LoginAsThisUser')}}</button>
+                <button *ngIf="row.id !== appSession.userId" mat-menu-item (click)="_impersonationService.impersonate(row.id, appSession.tenantId)">
+                  {{l('LoginAsThisUser')}}
+                </button>
                 <button mat-menu-item (click)="openEditTabs(row)">{{l('Edit')}}</button>
                 <button mat-menu-item (click)="openPermissionsTab(row)">{{l('Permissions')}}</button>
                 <button mat-menu-item (click)="unlockUser(row)">{{l('Unlock')}}</button>

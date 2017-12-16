@@ -1,0 +1,27 @@
+<mat-card>
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon class="icon-card-header">language</mat-icon>
+    </div>
+    <mat-card-title>{{l("Languages")}}</mat-card-title>
+    <mat-card-subtitle>{{l("LanguagesHeaderInfo")}}</mat-card-subtitle>
+  </mat-card-header>
+  <div class="table-container">
+    <hr class="hr-class">
+    <div class="loading-shade">
+      <!-- <mat-spinner></mat-spinner> -->
+      <mat-progress-spinner mode="indeterminate" diameter="70"></mat-progress-spinner>
+    </div>
+
+    <mat-table #table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="userName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{l('UserName')}} </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.userName}} </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
+    </mat-paginator>
+  </div>
+</mat-card>

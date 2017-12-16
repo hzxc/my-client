@@ -1,11 +1,9 @@
 <mat-sidenav-container class="app-side-nav-container">
-  <mat-sidenav
-      #sidenav
-      [opened]="!isNavOver()"
-      [mode]="isNavOver() ? 'over' : 'side'"
-      class="sidebar-panel">
+  <mat-sidenav #sidenav [opened]="!isNavOver()" [mode]="isNavOver() ? 'over' : 'side'" class="sidebar-panel">
     <app-core-navigation></app-core-navigation>
   </mat-sidenav>
   <app-core-topbar [sidenav]="sidenav"></app-core-topbar>
-  <router-outlet></router-outlet>
+  <div class="rightside-content-hold">
+    <router-outlet></router-outlet>
+  </div>
 </mat-sidenav-container>
