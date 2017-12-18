@@ -24,7 +24,7 @@
             <mat-icon>keyboard_arrow_down</mat-icon>
           </button>
           <mat-menu #editMenu="matMenu">
-            <button mat-menu-item (click)="createOrEditLanguageModal(row)">{{l('Edit')}}</button>
+            <button mat-menu-item (click)="createOrEditLanguageDialog(row)">{{l('Edit')}}</button>
             <button mat-menu-item (click)="changeTexts(row)">{{l('ChangeTexts')}}</button>
             <button mat-menu-item (click)="setAsDefaultLanguage(row)">{{l('SetAsDefaultLanguage')}}</button>
             <button mat-menu-item (click)="deleteLanguage(row)">{{l('Delete')}}</button>

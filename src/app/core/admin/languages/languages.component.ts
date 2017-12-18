@@ -3,8 +3,9 @@ import { AppComponentBase } from '../../../shared/common/app-component-base';
 import { DataSource, CollectionViewer } from '@angular/cdk/collections';
 import { ApplicationLanguageListDto, LanguageServiceProxy, SetDefaultLanguageInput } from '../../../shared/service-proxies/service-proxies';
 import { Observable } from 'rxjs/Observable';
-import { MatPaginator, MatSort, MatSnackBar } from '@angular/material';
+import { MatPaginator, MatSort, MatSnackBar, MatDialog } from '@angular/material';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { CreateOrEditLanguageModalComponent } from './create-or-edit-language-modal/create-or-edit-language-modal.component';
 
 @Component({
   selector: 'app-languages',
@@ -28,6 +29,7 @@ export class LanguagesComponent extends AppComponentBase implements OnInit {
     injector: Injector,
     private _languageService: LanguageServiceProxy,
     private snackBar: MatSnackBar,
+    public dialog: MatDialog,
   ) {
     super(injector);
   }
@@ -47,6 +49,21 @@ export class LanguagesComponent extends AppComponentBase implements OnInit {
     this._languageService.setDefaultLanguage(input).subscribe(() => {
       this.dataSource.reload = true;
       this.notify.success(this.l('SuccessfullySaved'));
+    });
+  }
+
+  createOrEditLanguageDialog(language: ApplicationLanguageListDto) {
+    const dialogRef = this.dialog.open(CreateOrEditLanguageModalComponent, {
+      width: '400px',
+      data: {
+        language: language,
+      },
+      disableClose: true
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.dataSource.reload = true;
+      }
     });
   }
 }
