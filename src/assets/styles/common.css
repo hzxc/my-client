@@ -67,3 +67,12 @@ font-weight: 900 */
   font-weight: bold;
   font-style: italic;
 }
+
+
+/*ialog-progress-bar*/
+.dialog-progress-bar {
+  margin-left: -24px;
+  margin-right: -24px;
+  margin-top:-24px;
+  width: auto !important;
+}

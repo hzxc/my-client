@@ -35,7 +35,7 @@
         <mat-header-cell *matHeaderCellDef mat-sort-header> {{l('Name')}} </mat-header-cell>
         <mat-cell *matCellDef="let row">
           <span [class]="row.icon"></span>
-          <span [ngClass]="{'text-bold-italic' : dataSource.defaultLanguageName === row.name}">{{row.displayName}}</span>
+          <span [ngClass]="{'text-bold' : dataSource.defaultLanguageName === row.name}">{{row.displayName}}</span>
         </mat-cell>
       </ng-container>
       <ng-container matColumnDef="name">

@@ -56,7 +56,7 @@ export class LanguagesComponent extends AppComponentBase implements OnInit {
     const dialogRef = this.dialog.open(CreateOrEditLanguageModalComponent, {
       width: '400px',
       data: {
-        language: language,
+        languageId: language.id,
       },
       disableClose: true
     });
