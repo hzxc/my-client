@@ -5,8 +5,8 @@ $indigo-light-primary:mat-palette($mat-indigo);
 $indigo-light-accent:mat-palette($mat-pink, A200, A100, A400);
 $indigo-light-warn:mat-palette($mat-red);
 $indigo-light-theme:mat-light-theme($indigo-light-primary, $indigo-light-accent, $indigo-light-warn);
+@include angular-material-theme($indigo-light-theme);
 .indigo-light-theme {
-  @include angular-material-theme($indigo-light-theme);
   .mat-bg-primary {
     background: map-get($mat-indigo, 500) !important;
     color: #ffffff !important;

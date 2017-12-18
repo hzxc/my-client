@@ -1,7 +1,7 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild } from '@angular/core';
 import { AppComponentBase } from '../../../shared/common/app-component-base';
 import { DataSource, CollectionViewer } from '@angular/cdk/collections';
-import { ApplicationLanguageListDto, LanguageServiceProxy } from '../../../shared/service-proxies/service-proxies';
+import { ApplicationLanguageListDto, LanguageServiceProxy, SetDefaultLanguageInput } from '../../../shared/service-proxies/service-proxies';
 import { Observable } from 'rxjs/Observable';
 import { MatPaginator, MatSort, MatSnackBar } from '@angular/material';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -13,24 +13,19 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 })
 export class LanguagesComponent extends AppComponentBase implements OnInit {
 
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   private dataSource: UsersDataSource | null;
   displayedColumns = [
     'actions',
-    'userName',
+    'displayName',
     'name',
-    'surname',
-    'roles',
-    'emailAddress',
-    'isEmailConfirmed',
-    'isActive',
-    'lastLoginTime',
-    'creationTime'
+    'creationTime',
+    'isDisabled'
   ];
 
   constructor(
     injector: Injector,
-    private paginator: MatPaginator,
-    private sort: MatSort,
     private _languageService: LanguageServiceProxy,
     private snackBar: MatSnackBar,
   ) {
@@ -39,30 +34,46 @@ export class LanguagesComponent extends AppComponentBase implements OnInit {
 
   ngOnInit() {
     this.dataSource = new UsersDataSource(
+      this._languageService,
       this.paginator,
       this.sort,
-      this._languageService,
       this.snackBar,
     );
   }
 
+  setAsDefaultLanguage(language: ApplicationLanguageListDto): void {
+    const input = new SetDefaultLanguageInput();
+    input.name = language.name;
+    this._languageService.setDefaultLanguage(input).subscribe(() => {
+      this.dataSource.reload = true;
+      this.notify.success(this.l('SuccessfullySaved'));
+    });
+  }
 }
 
 export class UsersDataSource extends DataSource<ApplicationLanguageListDto> {
 
   private isLoadingResults = true;
+  private defaultLanguageName: string;
 
   reloadBehavior = new BehaviorSubject(false);
   get reload(): boolean { return this.reloadBehavior.value; }
   set reload(reloadActive: boolean) { this.reloadBehavior.next(reloadActive); }
-
+  private paginator: MatPaginator;
+  private _languageService: LanguageServiceProxy;
+  private sort: MatSort;
+  private snackBar: MatSnackBar;
   constructor(
-    private paginator: MatPaginator,
-    private sort: MatSort,
-    private _languageService: LanguageServiceProxy,
-    private snackBar: MatSnackBar,
+    _languageService: LanguageServiceProxy,
+    paginator: MatPaginator,
+    sort: MatSort,
+    snackBar: MatSnackBar,
   ) {
     super();
+    this._languageService = _languageService;
+    this.paginator = paginator;
+    this.sort = sort;
+    this.snackBar = snackBar;
   }
   connect(collectionViewer: CollectionViewer): Observable<ApplicationLanguageListDto[]> {
     const displayDataChanges = [
@@ -90,6 +101,7 @@ export class UsersDataSource extends DataSource<ApplicationLanguageListDto> {
       .map(result => {
         this.isLoadingResults = false;
         this.paginator.length = result.items.length;
+        this.defaultLanguageName = result.defaultLanguageName;
         if (!result.items || result.items.length === 0) {
           this.snackBar.open('NoData', 'Close', {
             duration: 2000,

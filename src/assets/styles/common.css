@@ -1,20 +1,69 @@
 /*---- Common -----*/
+
 .full-width {
-    width: 100% !important;
+  width: 100% !important;
 }
 
-.form-field .mat-form-field-subscript-wrapper
-{
-   overflow: visible !important;
+.form-field .mat-form-field-subscript-wrapper {
+  overflow: visible !important;
 }
 
 .text-center {
-    text-align: center;
+  text-align: center;
 }
+
 
 /*table header actions css*/
-.actions-padding{
-  padding-left:7px;
+
+.actions-padding {
+  padding-left: 7px;
 }
 
 
+/*flag-icon*/
+
+.flag-icon {
+  margin-right: 5px;
+}
+
+
+/*actions & Enabled button*/
+
+.mat-raised-button.actions-button {
+  padding: 0px;
+}
+
+.actions-width {
+  flex: 0 0 auto !important;
+  width: 100px !important;
+}
+
+.enabled-button{
+  flex: 0 0 auto !important;
+  width: 42px !important;
+}
+
+/*font style*/
+
+
+/* font-style:normal
+font-style:italic
+font-style:oblique */
+
+
+/* font-weight: normal}
+font-weight: bold
+font-weight: 900 */
+
+.text-bold {
+  font-weight: bold
+}
+
+.text-italic {
+  font-style: italic
+}
+
+.text-bold-italic{
+  font-weight: bold;
+  font-style: italic;
+}
