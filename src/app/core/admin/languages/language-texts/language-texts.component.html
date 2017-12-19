@@ -1,0 +1,58 @@
+<mat-card>
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon class="icon-card-header">text_format</mat-icon>
+    </div>
+    <mat-card-title>{{l("LanguageTexts")}}</mat-card-title>
+    <mat-card-subtitle>{{l("LanguageTextsHeaderInfo")}}</mat-card-subtitle>
+  </mat-card-header>
+  <form #usersForm novalidate fxLayout="row" fxLayoutAlign="space-between center" fxLayoutWrap>
+  </form>
+  <div class="table-container">
+    <hr class="hr-class">
+    <div class="loading-shade" *ngIf="dataSource.isLoadingResults">
+      <mat-progress-spinner *ngIf="dataSource.isLoadingResults" mode="indeterminate" diameter="70"></mat-progress-spinner>
+    </div>
+    <mat-table #table [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef class="actions-width">
+          {{l('Actions')}}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" class="actions-width">
+          <button color="accent" class="actions-button" mat-raised-button [matMenuTriggerFor]="editMenu">
+            <mat-icon>settings</mat-icon>
+            {{l('Actions')}}
+            <mat-icon>keyboard_arrow_down</mat-icon>
+          </button>
+          <mat-menu #editMenu="matMenu">
+            <button mat-menu-item (click)="openEditDialog(row)">{{l('Edit')}}</button>
+          </mat-menu>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="key">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>{{l('Key')}}</mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          {{truncateString(row.key)}}
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="baseValue">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>{{l('BaseValue')}}</mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          {{truncateString(row.baseValue)}}
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="targetValue">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>{{l('TargetValue')}}</mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          {{truncateString(row.targetValue) }}
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
+    </mat-paginator>
+  </div>
+</mat-card>

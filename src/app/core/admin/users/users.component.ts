@@ -264,7 +264,7 @@ export class UsersDataSource extends DataSource<UserListDto> {
       // .delay(2000)
       .map(result => {
         this.isLoadingResults = false;
-        this.paginator.length = result.items.length;
+        this.paginator.length = result.totalCount;
         if (!result.items || result.items.length === 0) {
           this.snackBar.open('NoData', 'Close', {
             duration: 2000,

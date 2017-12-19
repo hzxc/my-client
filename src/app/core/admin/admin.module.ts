@@ -26,7 +26,8 @@ import { CreateOrEditUserTabComponent } from './users/create-or-edit-user-tab/cr
 import { OrganizationUnitTreeComponent } from './shared/organization-unit-tree/organization-unit-tree.component';
 import { EditUserPermissionsTabComponent } from './users/edit-user-permissions-tab/edit-user-permissions-tab.component';
 import { LanguagesComponent } from './languages/languages.component';
-import { CreateOrEditLanguageModalComponent } from './languages/create-or-edit-language-modal/create-or-edit-language-modal.component';
+import { LanguageTextsComponent } from './languages/language-texts/language-texts.component';
+import { EditTextDialogComponent } from './languages/edit-text-dialog/edit-text-dialog.component';
 
 @NgModule({
   imports: [
@@ -45,7 +46,7 @@ import { CreateOrEditLanguageModalComponent } from './languages/create-or-edit-l
   entryComponents: [
     EditTenantModalComponent,
     ConfirmDialogComponent,
-    CreateOrEditLanguageModalComponent
+    EditTextDialogComponent
   ],
   providers: [
     ImpersonationService,
@@ -65,7 +66,8 @@ import { CreateOrEditLanguageModalComponent } from './languages/create-or-edit-l
     OrganizationUnitTreeComponent,
     EditUserPermissionsTabComponent,
     LanguagesComponent,
-    CreateOrEditLanguageModalComponent,
+    LanguageTextsComponent,
+    EditTextDialogComponent,
   ]
 })
 export class AdminModule { }

@@ -1,0 +1,12 @@
+<mat-progress-bar [mode]="loading? 'indeterminate':'Determinate'" class="dialog-progress-bar" color="Primary">
+</mat-progress-bar>
+<span mat-dialog-title style="text-align:center">
+  {{l("EditText")}}
+</span>
+<mat-dialog-content class="dialog-content">
+</mat-dialog-content>
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">
+  <button mat-raised-button [disabled]="loading" color="accent" mat-dialog-close>{{l('Cancel')}}</button>
+  <button mat-raised-button [disabled]="loading" color="accent">{{l('Save')}}</button>
+  <!-- <mat-progress-spinner diameter="30px" value = "50" mode="Indeterminate"></mat-progress-spinner> -->
+</mat-dialog-actions>

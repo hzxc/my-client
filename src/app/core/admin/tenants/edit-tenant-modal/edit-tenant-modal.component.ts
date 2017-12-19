@@ -79,6 +79,7 @@ export class EditTenantModalComponent extends AppComponentBase implements OnInit
     }
 
     this._tenantService.updateTenant(this.tenantEditDto)
+      // .delay(2000)
       .finally(() => this.saving = false)
       .subscribe(() => {
         this.snackBar.open(this.l('SavedSuccessfully'), this.l('Close'), {
