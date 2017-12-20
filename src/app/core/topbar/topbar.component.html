@@ -9,15 +9,24 @@
   </button>
 
   <span fxFlex></span>
-  <mat-form-field style="width:100px;">
+  <!-- <mat-form-field style="width:100px;">
     <mat-select>
       <mat-option *ngFor="let language of languages" [value]="language.name">
-          <span [class]="language.icon"></span> {{language.displayName}}
+        <span [class]="language.icon"></span> {{language.displayName}}
       </mat-option>
     </mat-select>
+  </mat-form-field> -->
+  <mat-form-field class="top-language-select-container">
+    <mat-select #languageSelect="matSelect" [(ngModel)]="currentLanguage">
+      <mat-select-trigger>{{ languageSelect.selected?.value.displayName}}</mat-select-trigger>
+      <mat-option *ngFor="let language of languages" [value]="language">
+        <span [class]="language.icon"></span>
+        {{ language.displayName }}
+      </mat-option>
+    </mat-select>
+    <span matPrefix [class]="languageSelect.selected?.value.icon"></span>
   </mat-form-field>
   <!-- Theme Switcher -->
   <app-shared-theme-switcher class="topbar-button-left">
   </app-shared-theme-switcher>
 </mat-toolbar>
-

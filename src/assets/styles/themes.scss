@@ -46,11 +46,11 @@ $indigo-light-theme:mat-light-theme($indigo-light-primary, $indigo-light-accent,
     border-right-style: solid;
     border-bottom-style: solid;
     border-left-style: solid;
-    border-top-color: map-get($indigo-light-primary, 500);
-    border-right-color: map-get($indigo-light-primary, 500);
-    border-bottom-color: map-get($indigo-light-primary, 500);
-    border-left-color: map-get($indigo-light-primary, 500);
-    background-color: map-get($indigo-light-primary, 500);
+    border-top-color: map-get($indigo-light-accent, 500);
+    border-right-color: map-get($indigo-light-accent, 500);
+    border-bottom-color: map-get($indigo-light-accent, 500);
+    border-left-color: map-get($indigo-light-accent, 500);
+    background-color: map-get($indigo-light-accent, 500);
   }
   /*js-tree-custom-style*/
   .jstree-hovered {
@@ -108,11 +108,11 @@ $deeppurple-light-theme:mat-light-theme($deeppurple-light-primary, $deeppurple-l
     border-right-style: solid;
     border-bottom-style: solid;
     border-left-style: solid;
-    border-top-color: map-get($deeppurple-light-primary, 500);
-    border-right-color: map-get($deeppurple-light-primary, 500);
-    border-bottom-color: map-get($deeppurple-light-primary, 500);
-    border-left-color: map-get($deeppurple-light-primary, 500);
-    background-color: map-get($deeppurple-light-primary, 500);
+    border-top-color: map-get($deeppurple-light-accent, 500);
+    border-right-color: map-get($deeppurple-light-accent, 500);
+    border-bottom-color: map-get($deeppurple-light-accent, 500);
+    border-left-color: map-get($deeppurple-light-accent, 500);
+    background-color: map-get($deeppurple-light-accent, 500);
   }
   /*js-tree-custom-style*/
   .jstree-hovered {
@@ -170,11 +170,11 @@ $purple-dark-theme:mat-dark-theme($purple-dark-primary, $purple-dark-accent, $pu
     border-right-style: solid;
     border-bottom-style: solid;
     border-left-style: solid;
-    border-top-color: map-get($purple-dark-primary, 500);
-    border-right-color: map-get($purple-dark-primary, 500);
-    border-bottom-color: map-get($purple-dark-primary, 500);
-    border-left-color: map-get($purple-dark-primary, 500);
-    background-color: map-get($purple-dark-primary, 500);
+    border-top-color: map-get($purple-dark-accent, 500);
+    border-right-color: map-get($purple-dark-accent, 500);
+    border-bottom-color: map-get($purple-dark-accent, 500);
+    border-left-color: map-get($purple-dark-accent, 500);
+    background-color: map-get($purple-dark-accent, 500);
   }
   /*js-tree-custom-style*/
   .jstree-hovered {
@@ -232,11 +232,11 @@ $pink-dark-theme:mat-dark-theme($pink-dark-primary, $pink-dark-accent, $pink-dar
     border-right-style: solid;
     border-bottom-style: solid;
     border-left-style: solid;
-    border-top-color: map-get($pink-dark-primary, 500);
-    border-right-color: map-get($pink-dark-primary, 500);
-    border-bottom-color: map-get($pink-dark-primary, 500);
-    border-left-color: map-get($pink-dark-primary, 500);
-    background-color: map-get($pink-dark-primary, 500);
+    border-top-color: map-get($pink-dark-accent, 500);
+    border-right-color: map-get($pink-dark-accent, 500);
+    border-bottom-color: map-get($pink-dark-accent, 500);
+    border-left-color: map-get($pink-dark-accent, 500);
+    background-color: map-get($pink-dark-accent, 500);
   }
   /*js-tree-custom-style*/
   .jstree-hovered {
@@ -292,11 +292,11 @@ $blue-primary-dark: darken( map-get($blue-primary, 500), 8%);
     border-right-style: solid;
     border-bottom-style: solid;
     border-left-style: solid;
-    border-top-color: map-get($blue-primary, 500);
-    border-right-color: map-get($blue-primary, 500);
-    border-bottom-color: map-get($blue-primary, 500);
-    border-left-color: map-get($blue-primary, 500);
-    background-color: map-get($blue-primary, 500);
+    border-top-color: map-get($blue-accent, 500);
+    border-right-color: map-get($blue-accent, 500);
+    border-bottom-color: map-get($blue-accent, 500);
+    border-left-color: map-get($blue-accent, 500);
+    background-color: map-get($blue-accent, 500);
   }
   /*js-tree-custom-style*/
   .jstree-hovered {

@@ -24,6 +24,8 @@ export class LanguageTextsComponent extends AppComponentBase implements AfterVie
   private sourceNames: string[] = [];
   private filters: FilterDto = new FilterDto();
   private languages: abp.localization.ILanguageInfo[] = [];
+  private currentLanguage: abp.localization.ILanguageInfo;
+  private targetLanguage: abp.localization.ILanguageInfo;
   private dataSource: LanguageTextDataSource;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -54,31 +56,43 @@ export class LanguageTextsComponent extends AppComponentBase implements AfterVie
     );
   }
 
-  openEditDialog(tenantId: number): void {
+  init(): void {
+    this._activatedRoute.params.subscribe((params: Params) => {
+      this.filters.baseLanguageName = params['baseLanguageName'] || abp.localization.currentLanguage.name;
+      this.currentLanguage = this.languages.find(item => item.name === this.filters.baseLanguageName);
+      this.filters.targetLanguageName = params['name'];
+      this.targetLanguage = this.languages.find(item => item.name === this.filters.targetLanguageName);
+      this.filters.sourceName = params['sourceName'] || 'AbpZeroTemplate';
+      this.filters.targetValueFilter = params['targetValueFilter'] || 'ALL';
+      this.filters.filterText = params['filterText'] || '';
+    });
+  }
+
+  baseLanguageChange(language: abp.localization.ILanguageInfo) {
+    this.filters.baseLanguageName = language.name;
+  }
+  targetLanguageChange(language: abp.localization.ILanguageInfo) {
+    this.filters.targetLanguageName = language.name;
+  }
+
+  openEditDialog(row: LanguageTextListDto): void {
     const dialogRef = this.dialog.open(EditTextDialogComponent, {
       width: '400px',
       data: {
-        tenantId: tenantId,
+        baseLanguageName: this.filters.baseLanguageName,
+        targetLanguageName: this.filters.targetLanguageName,
+        sourceName: this.filters.sourceName,
+        key: row.key,
+        baseValue: row.baseValue,
+        targetValue: row.targetValue,
       },
       disableClose: true
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.reloadEvent.emit(result);
-        // this.paginator.page.
-        // this.tenantsForm.nativeElement.submit();
+        this.dataSource.reloadTable();
       }
-    });
-  }
-
-  init(): void {
-    this._activatedRoute.params.subscribe((params: Params) => {
-      this.filters.baseLanguageName = params['baseLanguageName'] || abp.localization.currentLanguage.name;
-      this.filters.targetLanguageName = params['name'];
-      this.filters.sourceName = params['sourceName'] || 'AbpZeroTemplate';
-      this.filters.targetValueFilter = params['targetValueFilter'] || 'ALL';
-      this.filters.filterText = params['filterText'] || '';
     });
   }
 
@@ -87,6 +101,10 @@ export class LanguageTextsComponent extends AppComponentBase implements AfterVie
 
   truncateString(text): string {
     return abp.utils.truncateStringWithPostfix(text, 32, '...');
+  }
+
+  search() {
+    this.dataSource.reloadTable();
   }
 }
 
@@ -120,7 +138,7 @@ export class LanguageTextDataSource extends DataSource<LanguageTextListDto> {
   reloadBehavior = new BehaviorSubject(false);
   get reload(): boolean { return this.reloadBehavior.value; }
   set reload(reloadActive: boolean) { this.reloadBehavior.next(reloadActive); }
-  reloadTable() {
+  public reloadTable() {
     this.reloadBehavior.next(true);
   }
 

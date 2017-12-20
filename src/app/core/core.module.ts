@@ -13,6 +13,7 @@ import { CoreCommonModule } from './shared/common/core-common.module';
 import { AppAuthService } from './shared/common/auth/app-auth.service';
 import { AppRouteGuard } from './shared/common/auth/auth-route-guard';
 import { ConfirmDialogComponent } from './shared/confirm-dialog/confirm-dialog.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { ConfirmDialogComponent } from './shared/confirm-dialog/confirm-dialog.c
     MaterialModule,
     FlexLayoutModule,
     ThemeModule,
+    FormsModule
   ],
   providers: [
     NavigationService,

@@ -44,8 +44,11 @@ export class TopbarComponent extends AppComponentBase implements OnInit {
 
   ngOnInit() {
     this.languages = _.filter(this.localization.languages, l => (<any>l).isDisabled === false);
-    this.currentLanguage = this.localization.currentLanguage;
+    this.currentLanguage = this.languages.find(item => item.name === this.localization.currentLanguage.name);
   }
+  // languageChange(language: abp.localization.ILanguageInfo) {
+  //   this.currentLanguage = language;
+  // }
   // themes:any[];
   // changeTheme(theme) {
   //   this.themeService.changeTheme(theme);

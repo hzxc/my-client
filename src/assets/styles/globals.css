@@ -107,5 +107,9 @@ body .mat-select-trigger {
   text-overflow: ellipsis;
 }
 
+/*mat-select-value*/
+.mat-select-value{
+  overflow: visible !important;
+}
 
 
