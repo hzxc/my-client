@@ -17,7 +17,7 @@
     </mat-select>
   </mat-form-field> -->
   <mat-form-field class="top-language-select-container">
-    <mat-select #languageSelect="matSelect" [(ngModel)]="currentLanguage">
+    <mat-select #languageSelect="matSelect" [(ngModel)]="currentLanguage" (change)="changeLanguage($event.value.name)">
       <mat-select-trigger>{{ languageSelect.selected?.value.displayName}}</mat-select-trigger>
       <mat-option *ngFor="let language of languages" [value]="language">
         <span [class]="language.icon"></span>

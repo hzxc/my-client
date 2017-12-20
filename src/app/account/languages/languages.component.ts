@@ -1,6 +1,5 @@
 import { Component, OnInit, Injector } from '@angular/core';
 
-import * as _ from 'lodash';
 import { AppComponentBase } from '../../shared/common/app-component-base';
 
 @Component({
@@ -19,7 +18,8 @@ export class LanguagesComponent extends AppComponentBase implements OnInit {
       super(injector);
   }
   ngOnInit() {
-    this.languages = _.filter(this.localization.languages, l => !l.isDisabled);
+    this.languages = this.localization.languages.filter(l => (<any>l).isDisabled === false);
+    this.languages.unshift(this.languages.pop());
     // this.languages = this.localization.languages;
     this.currentLanguage = this.localization.currentLanguage;
   }
