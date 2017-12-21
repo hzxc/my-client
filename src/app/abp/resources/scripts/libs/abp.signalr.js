@@ -9,7 +9,6 @@
     //Create namespaces
     abp.signalr = abp.signalr || {};
     abp.signalr.hubs = abp.signalr.hubs || {};
-
     //Get the common hub
     abp.signalr.hubs.common = $.connection.abpCommonHub;
 

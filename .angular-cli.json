@@ -43,7 +43,6 @@
         "../node_modules/moment/min/moment.min.js",
         "../node_modules/spin.js/spin.min.js",
         "../node_modules/spin.js/jquery.spin.js",
-        "../node_modules/signalr/jquery.signalR.js",
         "../node_modules/toastr/toastr.js",
         "../node_modules/sweetalert/dist/sweetalert-dev.js",
         "../node_modules/block-ui/jquery.blockUI.js",

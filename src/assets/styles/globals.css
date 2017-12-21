@@ -1,5 +1,3 @@
-
-
 html {
   font-size: 16px;
 }
@@ -107,9 +105,21 @@ body .mat-select-trigger {
   text-overflow: ellipsis;
 }
 
+
 /*mat-select-value*/
-.mat-select-value{
-  overflow: visible !important;
-}
+
+/* .mat-select.dropdown>.mat-select-trigger>.mat-select-value>.mat-select-value-text { */
+  /* overflow-y: visible; */
+  /* overflow-x: hidden; */
+  /* overflow: visible !important; */
+  /* overflow-x: hidden !important; */
+  /* overflow-y: visible !important; */
+/* } */
+
+/* .mat-select.dropdown>.mat-select-trigger {
+  overflow-x: hidden;
+} */
+
+
 
 

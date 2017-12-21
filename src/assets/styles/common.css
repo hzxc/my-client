@@ -15,11 +15,15 @@
 }
 
 
-/*table header actions css*/
+/*table css*/
 
-.actions-padding {
-  padding-left: 7px;
+.mat-row,.mat-header-row{
+  padding: 0px !important;
 }
+
+/* .actions-padding {
+  padding-left: 7px;
+} */
 
 
 /*flag-icon*/
@@ -28,16 +32,16 @@
   margin-right: 5px;
 }
 
-
 /*actions & Enabled button*/
-
 .mat-raised-button.actions-button {
   padding: 0px;
+  min-width: 60px;
 }
 
 .actions-width {
   flex: 0 0 auto !important;
-  width: 100px !important;
+  width: 45px !important;
+  padding: 2px;
 }
 
 .enabled-button{
