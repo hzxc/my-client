@@ -82,3 +82,9 @@ font-weight: 900 */
   margin-top:-24px;
   width: auto !important;
 }
+/*common bg-warn*/
+.bg-warn {
+  background-color: #f44336;
+  color: white;
+}
+

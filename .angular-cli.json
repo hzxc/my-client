@@ -46,6 +46,7 @@
         "../node_modules/toastr/toastr.js",
         "../node_modules/sweetalert/dist/sweetalert-dev.js",
         "../node_modules/block-ui/jquery.blockUI.js",
+        "../node_modules/signalr/jquery.signalR.js",
         "./app/abp/resources/scripts/abp.js",
         "./app/abp/resources/scripts/libs/abp.jquery.js",
         "./app/abp/resources/scripts/libs/abp.toastr.js",

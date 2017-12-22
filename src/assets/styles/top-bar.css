@@ -1,5 +1,6 @@
 /*---- Top Bar -----*/
 
+
 /* .mat-select.dropdown .mat-select-trigger>.mat-select-value {
   overflow: visible !important;
 } */
@@ -44,15 +45,29 @@
   color: rgba(255, 255, 255, 0.7) !important;
 }
 
-.top-language-select-container.mat-form-field{
+.top-language-select-container.mat-form-field {
   line-height: 1.15;
 }
 
 .top-language-select-container .mat-select-value {
-
   color: white !important;
 }
 
 .top-language-select-container .mat-form-field-underline {
   background-color: rgba(255, 255, 255, 0.7) !important;
+}
+
+
+/*topbar-notifications-menu*/
+
+.notifications-menu {
+  /* overflow:visible; */
+}
+
+.notifications-menu>.mat-menu-content {
+  padding-top: 0px !important;
+  overflow: visible !important;
+}
+
+.cdk-overlay-pane {
 }

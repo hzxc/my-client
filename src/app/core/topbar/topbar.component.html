@@ -26,6 +26,22 @@
     </mat-select>
     <span matPrefix [class]="languageSelect.selected?.value.icon"></span>
   </mat-form-field>
+  <!-- Notification toggle button -->
+  <button class="topbar-button-left" mat-icon-button matTooltip="Notifications" [matMenuTriggerFor]="notificationsMenu">
+    <mat-icon>notifications</mat-icon>
+    <span class="notification-number bg-warn">3</span>
+  </button>
+  <mat-menu classList="notifications-menu" #notificationsMenu="matMenu" overlapTrigger="false" yPosition="below" xPosition="before">
+      <div class="notifications-arrow">
+          <mat-icon  color="warn" >arrow_drop_up</mat-icon>
+      </div>
+      <div>
+        12312312312312312311111111111111111111111111111
+        <br> 12312312312312312311111111111111111111111111111
+        <br> 12312312312312312311111111111111111111111111111
+        <br>
+      </div>
+  </mat-menu>
   <!-- Theme Switcher -->
   <app-shared-theme-switcher class="topbar-button-left">
   </app-shared-theme-switcher>
