@@ -14,6 +14,7 @@ import { AppAuthService } from './shared/common/auth/app-auth.service';
 import { AppRouteGuard } from './shared/common/auth/auth-route-guard';
 import { ConfirmDialogComponent } from './shared/confirm-dialog/confirm-dialog.component';
 import { FormsModule } from '@angular/forms';
+import { UserNotificationHelper } from './shared/notifications/UserNotificationHelper';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { FormsModule } from '@angular/forms';
   providers: [
     NavigationService,
     AppAuthService,
-    AppRouteGuard
+    AppRouteGuard,
+    UserNotificationHelper
   ],
   declarations: [
     CoreComponent,

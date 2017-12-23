@@ -6,10 +6,10 @@
 } */
 
 .topbar.mat-toolbar {
-  /* box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12); */
-  box-shadow: 0 3px 5px -1px rgba(0, 0, 0, .2), 0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12);
-  min-height: 49px;
-  height: 49px;
+    /* box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12); */
+    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, .2), 0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12);
+    min-height: 49px;
+    height: 49px;
 }
 
 
@@ -18,56 +18,63 @@
 } */
 
 .topbar-button-left {
-  margin-left: 0.5rem !important;
+    margin-left: 0.5rem !important;
 }
 
 
 /*Fixed Topbar*/
 
 .rightside-content-hold {
-  overflow: auto;
-  position: absolute !important;
-  padding: .5rem;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  top: 49px;
+    overflow: auto;
+    position: absolute !important;
+    padding: .5rem;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 49px;
 }
 
 
 /*top-language-select*/
 
 .top-language-select-container .mat-form-field-infix {
-  width: 79px !important;
+    width: 79px !important;
 }
 
 .top-language-select-container .mat-select-arrow {
-  color: rgba(255, 255, 255, 0.7) !important;
+    color: rgba(255, 255, 255, 0.7) !important;
 }
 
 .top-language-select-container.mat-form-field {
-  line-height: 1.15;
+    line-height: 1.15;
 }
 
 .top-language-select-container .mat-select-value {
-  color: white !important;
+    color: white !important;
 }
 
 .top-language-select-container .mat-form-field-underline {
-  background-color: rgba(255, 255, 255, 0.7) !important;
+    background-color: rgba(255, 255, 255, 0.7) !important;
 }
 
 
 /*topbar-notifications-menu*/
 
-.notifications-menu {
-  /* overflow:visible; */
+.mat-menu-panel.notifications-menu {
+    overflow: visible !important;
+    /* width: 380px !important; */
+    max-width: 380px;
+    border-radius: 6px;
 }
+
+.notifications-menu {}
 
 .notifications-menu>.mat-menu-content {
-  padding-top: 0px !important;
-  overflow: visible !important;
+    padding-top: 0px !important;
+    overflow-y: visible !important;
+    overflow-x: auto !important;
 }
 
-.cdk-overlay-pane {
+.notification-item.mat-list-item .mat-list-item-content {
+  padding: 16px !important;
 }

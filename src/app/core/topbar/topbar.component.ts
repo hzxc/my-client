@@ -3,7 +3,8 @@ import * as domHelper from '../../shared/helpers/dom.helper';
 import { ThemeService } from '../../shared/theme/theme.service';
 import * as moment from 'moment';
 import { AppComponentBase } from '../../shared/common/app-component-base';
-import { ChangeUserLanguageDto, ProfileServiceProxy } from '../../shared/service-proxies/service-proxies';
+import { ChangeUserLanguageDto, ProfileServiceProxy, NotificationServiceProxy, UserNotification } from '../../shared/service-proxies/service-proxies';
+import { IFormattedUserNotification, UserNotificationHelper } from '../shared/notifications/UserNotificationHelper';
 
 @Component({
   selector: 'app-core-topbar',
@@ -22,22 +23,15 @@ export class TopbarComponent extends AppComponentBase implements OnInit {
   currentLanguage: abp.localization.ILanguageInfo;
   isImpersonatedLogin = false;
 
-  availableLangs = [{
-    name: 'English',
-    code: 'en',
-  }, {
-    name: 'Chinese',
-    code: 'cn-zh',
-  },
-  {
-    name: 'Chinese',
-    code: 'cn-zh',
-  }
-  ];
+  notifications: IFormattedUserNotification[] = [];
+  unreadNotificationCount = 0;
+
   constructor(
     injector: Injector,
     private themeService: ThemeService,
     private _profileServiceProxy: ProfileServiceProxy,
+    private _notificationService: NotificationServiceProxy,
+    private _userNotificationHelper: UserNotificationHelper
   ) {
     super(injector);
     // this.themes = this.themeService.themes;
@@ -47,6 +41,23 @@ export class TopbarComponent extends AppComponentBase implements OnInit {
     this.languages = this.localization.languages.filter(l => (<any>l).isDisabled === false);
     this.languages.unshift(this.languages.pop());
     this.currentLanguage = this.languages.find(item => item.name === this.localization.currentLanguage.name);
+    this.loadNotifications();
+  }
+
+  loadNotifications(): void {
+    this._notificationService.getUserNotifications(undefined, 3, undefined).subscribe(result => {
+      this.unreadNotificationCount = result.unreadCount;
+      this.notifications = [];
+      $.each(result.items, (index, item: UserNotification) => {
+        this.notifications.push(this._userNotificationHelper.format(<any>item));
+      });
+    });
+  }
+
+  gotoUrl(url): void {
+    if (url) {
+      location.href = url;
+    }
   }
 
   changeLanguage(languageName: string): void {

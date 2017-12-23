@@ -46,7 +46,7 @@
 
 .enabled-button{
   flex: 0 0 auto !important;
-  width: 42px !important;
+  width: 45px !important;
 }
 
 /*font style*/
@@ -86,5 +86,10 @@ font-weight: 900 */
 .bg-warn {
   background-color: #f44336;
   color: white;
+}
+
+/*pull-right*/
+.pull-right {
+  float: right;
 }
 
