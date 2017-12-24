@@ -3,21 +3,22 @@ import * as domHelper from '../../shared/helpers/dom.helper';
 import { ThemeService } from '../../shared/theme/theme.service';
 import * as moment from 'moment';
 import { AppComponentBase } from '../../shared/common/app-component-base';
-import { ChangeUserLanguageDto, ProfileServiceProxy, NotificationServiceProxy, UserNotification } from '../../shared/service-proxies/service-proxies';
+import {
+  ChangeUserLanguageDto,
+  ProfileServiceProxy,
+  NotificationServiceProxy,
+  UserNotification
+} from '../../shared/service-proxies/service-proxies';
 import { IFormattedUserNotification, UserNotificationHelper } from '../shared/notifications/UserNotificationHelper';
+import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
 
 @Component({
   selector: 'app-core-topbar',
   templateUrl: './topbar.component.html',
   styleUrls: ['./topbar.component.scss']
 })
-export class TopbarComponent extends AppComponentBase implements OnInit {
+export class TopbarComponent extends AppComponentBase implements OnInit, AfterViewInit {
   @Input() sidenav;
-  langue = [
-    { value: 'steak-0', viewValue: 'Steak' },
-    { value: 'pizza-1', viewValue: 'Pizza' },
-    { value: 'tacos-2', viewValue: 'Tacos' }
-  ];
 
   languages: abp.localization.ILanguageInfo[];
   currentLanguage: abp.localization.ILanguageInfo;
@@ -44,6 +45,9 @@ export class TopbarComponent extends AppComponentBase implements OnInit {
     this.loadNotifications();
   }
 
+  ngAfterViewInit() {
+  }
+
   loadNotifications(): void {
     this._notificationService.getUserNotifications(undefined, 3, undefined).subscribe(result => {
       this.unreadNotificationCount = result.unreadCount;
@@ -53,6 +57,8 @@ export class TopbarComponent extends AppComponentBase implements OnInit {
       });
     });
   }
+
+
 
   gotoUrl(url): void {
     if (url) {

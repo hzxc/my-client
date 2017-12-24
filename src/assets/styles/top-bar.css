@@ -77,4 +77,5 @@
 
 .notification-item.mat-list-item .mat-list-item-content {
   padding: 16px !important;
+  flex-wrap:wrap;
 }

@@ -10,7 +10,6 @@ import { BusyIfDirective } from './busy-if.directive';
 import { LocalStorageService } from './local-storage.service';
 import { FriendProfilePictureComponent } from './friend-profile-picture.component';
 import { MomentFormatPipe } from './moment-format.pipe';
-import { CurrencyInputDirective } from './currency-input.directive';
 import { NormalizeDropdownPositionDirective } from './normalize-dropdown-position.directive';
 import { ConvertStringToNumberPipe } from './convert-string-to-number.pipe';
 
@@ -30,7 +29,6 @@ import { ConvertStringToNumberPipe } from './convert-string-to-number.pipe';
         FriendProfilePictureComponent,
         MomentFormatPipe,
         ConvertStringToNumberPipe,
-        CurrencyInputDirective,
         NormalizeDropdownPositionDirective
     ],
     exports: [
@@ -43,7 +41,6 @@ import { ConvertStringToNumberPipe } from './convert-string-to-number.pipe';
         FriendProfilePictureComponent,
         MomentFormatPipe,
         ConvertStringToNumberPipe,
-        CurrencyInputDirective,
         NormalizeDropdownPositionDirective
     ]
 })

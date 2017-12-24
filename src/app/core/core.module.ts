@@ -15,6 +15,7 @@ import { AppRouteGuard } from './shared/common/auth/auth-route-guard';
 import { ConfirmDialogComponent } from './shared/confirm-dialog/confirm-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { UserNotificationHelper } from './shared/notifications/UserNotificationHelper';
+import { JqPluginDirective } from './shared/common/libs/jq-plugin.directive';
 
 @NgModule({
   imports: [
@@ -35,7 +36,8 @@ import { UserNotificationHelper } from './shared/notifications/UserNotificationH
     CoreComponent,
     NavigationComponent,
     TopbarComponent,
-    SideNavAccordionDirective,
+    JqPluginDirective,
+    SideNavAccordionDirective
   ]
 })
 export class CoreModule { }

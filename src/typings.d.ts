@@ -14,8 +14,9 @@ declare var module: NodeModule;
 interface NodeModule {
   id: string;
 }
+
 interface JQuery {
-  inputmask(...any): any;
+  timeago(...any): any;
 }
 
 
