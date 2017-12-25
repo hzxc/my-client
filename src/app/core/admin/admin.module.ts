@@ -28,6 +28,7 @@ import { EditUserPermissionsTabComponent } from './users/edit-user-permissions-t
 import { LanguagesComponent } from './languages/languages.component';
 import { LanguageTextsComponent } from './languages/language-texts/language-texts.component';
 import { EditTextDialogComponent } from './languages/edit-text-dialog/edit-text-dialog.component';
+import { NotificationsComponent } from './notifications/notifications.component';
 
 @NgModule({
   imports: [
@@ -68,6 +69,7 @@ import { EditTextDialogComponent } from './languages/edit-text-dialog/edit-text-
     LanguagesComponent,
     LanguageTextsComponent,
     EditTextDialogComponent,
+    NotificationsComponent,
   ]
 })
 export class AdminModule { }

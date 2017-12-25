@@ -6,6 +6,7 @@ import { TenantsComponent } from './tenants/tenants.component';
 import { RolesComponent } from './roles/roles.component';
 import { LanguagesComponent } from './languages/languages.component';
 import { LanguageTextsComponent } from './languages/language-texts/language-texts.component';
+import { NotificationsComponent } from './notifications/notifications.component';
 
 const routes: Routes = [
   { path: 'users', component: UsersComponent },
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'roles', component: RolesComponent },
   { path: 'languages', component: LanguagesComponent },
   { path: 'languages/:name/texts', component: LanguageTextsComponent, data: { permission: 'Pages.Administration.Languages.ChangeTexts' } },
+  { path: 'notifications', component: NotificationsComponent },
 ];
 
 @NgModule({
