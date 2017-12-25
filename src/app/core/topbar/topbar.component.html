@@ -32,27 +32,42 @@
     <span class="notification-number bg-warn">{{unreadNotificationCount}}</span>
   </button>
   <mat-menu classList="notifications-menu" #notificationsMenu="matMenu" overlapTrigger="false" yPosition="below" xPosition="before">
-    <!-- <mat-icon class="arrow" color="warn">arrow_drop_up</mat-icon> -->
+    <mat-icon class="arrow">arrow_drop_up</mat-icon>
     <div class="notifications-header" style="background: url(/assets/images/bg/notification_bg.jpg); background-size: cover;">
       <span class="m-dropdown__header-title">
         {{unreadNotificationCount}} New notifications
       </span>
     </div>
-    <div class="notifications-body">
-      <div class="notifications-actions">
-        <a href="" (click)="setAllNotificationsAsRead()" *ngIf="unreadNotificationCount">{{l("SetAllAsRead")}}</a>
-        <a class="pull-right" (click)="openNotificationSettingsModal()">{{l("Settings")}}</a>
+      <div class="notifications-actions" fxLayoutAlign="space-between center">
+        <span (click)="setAllNotificationsAsRead()" *ngIf="unreadNotificationCount" style="cursor:pointer;" class="mat-color-primary">
+          <mat-icon color="primary">done_all</mat-icon>
+          {{l("SetAllAsRead")}}
+        </span>
+        <span (click)="openNotificationSettingsModal()" style="cursor:pointer;" class="mat-color-primary">
+          <mat-icon color="primary">settings</mat-icon>
+          {{l("Settings")}}
+        </span>
       </div>
-      <hr>
-      <mat-nav-list>
+      <!-- <mat-chip-list fxLayoutAlign="start center" class="notifications-actions">
+        <mat-chip (click)="setAllNotificationsAsRead()" *ngIf="unreadNotificationCount" color="primary" selected="true">{{l("SetAllAsRead")}}</mat-chip>
+        <mat-chip (click)="openNotificationSettingsModal()" color="accent" selected="true">{{l("Settings")}}</mat-chip>
+      </mat-chip-list> -->
+      <!-- <a href="" (click)="setAllNotificationsAsRead()" *ngIf="unreadNotificationCount">{{l("SetAllAsRead")}}</a>
+        <a class="pull-right" (click)="openNotificationSettingsModal()">{{l("Settings")}}</a> -->
+      <mat-nav-list class="notification-list">
         <mat-list-item class="notification-item" *ngFor="let notification of notifications">
-          <mat-icon color="accent">{{notification.icon}}</mat-icon>
+          <div class="item-content">
+            <mat-icon color="accent">{{notification.icon}}</mat-icon>
             {{notification.text}}
-            {{notification.time}}
-          <span title="{{notification.time}}" jq-plugin="timeago"></span>
+          </div>
+          <span [isTrigger]="isTrigger" title="{{notification.time}}" appTopbarTimeago="timeago">{{notification.time}}</span>
+          <span *ngIf="notification.state=='UNREAD'">  - <span class="mat-color-primary" style="cursor:pointer;" (click)="setNotificationAsRead(notification);">{{l("SetAsRead")}}</span></span>
+        </mat-list-item>
+        <mat-list-item *ngIf="!notifications.length">
+            {{l("ThereIsNoNotification")}}
         </mat-list-item>
       </mat-nav-list>
-    </div>
+      <div class="text-center"><span class="mat-color-accent" style="cursor:pointer;" routerLink="notifications">{{l("SeeAllNotifications")}}</span></div>
   </mat-menu>
   <!-- Theme Switcher -->
   <app-shared-theme-switcher class="topbar-button-left">

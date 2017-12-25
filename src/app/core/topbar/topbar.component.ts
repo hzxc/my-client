@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Injector } from '@angular/core';
+import { Component, OnInit, Input, Injector, ViewChild } from '@angular/core';
 import * as domHelper from '../../shared/helpers/dom.helper';
 import { ThemeService } from '../../shared/theme/theme.service';
 import * as moment from 'moment';
@@ -11,6 +11,7 @@ import {
 } from '../../shared/service-proxies/service-proxies';
 import { IFormattedUserNotification, UserNotificationHelper } from '../shared/notifications/UserNotificationHelper';
 import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
+import { MatMenuTrigger } from '@angular/material';
 
 @Component({
   selector: 'app-core-topbar',
@@ -19,6 +20,8 @@ import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
 })
 export class TopbarComponent extends AppComponentBase implements OnInit, AfterViewInit {
   @Input() sidenav;
+  @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
+  private isTrigger = false;
 
   languages: abp.localization.ILanguageInfo[];
   currentLanguage: abp.localization.ILanguageInfo;
@@ -43,6 +46,10 @@ export class TopbarComponent extends AppComponentBase implements OnInit, AfterVi
     this.languages.unshift(this.languages.pop());
     this.currentLanguage = this.languages.find(item => item.name === this.localization.currentLanguage.name);
     this.loadNotifications();
+    this.trigger.onMenuOpen.subscribe(_ => {
+      this.isTrigger = true;
+    }
+    );
   }
 
   ngAfterViewInit() {
@@ -87,5 +94,16 @@ export class TopbarComponent extends AppComponentBase implements OnInit, AfterVi
     const appBody = document.body;
     domHelper.toggleClass(appBody, 'collapsed-menu');
     domHelper.removeClass(document.getElementsByClassName('has-submenu'), 'open');
+  }
+
+  setAllNotificationsAsRead() {
+    console.log('setAllNotificationsAsRead');
+  }
+  openNotificationSettingsModal() {
+    console.log('openNotificationSettingsModal');
+  }
+
+  setNotificationAsRead(notification: IFormattedUserNotification) {
+    console.log('setNotificationAsRead');
   }
 }

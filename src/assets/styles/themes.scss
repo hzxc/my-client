@@ -22,6 +22,12 @@ $indigo-light-theme:mat-light-theme($indigo-light-primary, $indigo-light-accent,
   .sidebar-panel.mat-sidenav .sidebar-list-item.open .sub-menu .mat-list-item.selected a {
     color: map-get($mat-indigo, 500) !important;
   }
+  .mat-color-accent {
+    color: map-get($indigo-light-accent, 500) !important;
+  }
+  .mat-color-warn {
+    color: map-get($indigo-light-warn, 500) !important;
+  }
   .sidebar-panel.mat-sidenav .sidebar-list-item.open>.mat-list-item-content>.sub-menu,
   .sidebar-panel.mat-sidenav .sidebar-list-item.open>.mat-list-item-content>a>mat-icon:not(.menu-caret),
   .list-item-active {
@@ -80,6 +86,12 @@ $deeppurple-light-theme:mat-light-theme($deeppurple-light-primary, $deeppurple-l
   .sidebar-panel.mat-sidenav .sidebar-list-item.open>.mat-list-item-content>a>span,
   .sidebar-panel.mat-sidenav .sidebar-list-item.open .sub-menu .mat-list-item.selected a {
     color: map-get($mat-deep-purple, 500) !important;
+  }
+  .mat-color-accent {
+    color: map-get($deeppurple-light-accent, 500) !important;
+  }
+  .mat-color-warn {
+    color: map-get($deeppurple-light-warn, 500) !important;
   }
   .sidebar-panel.mat-sidenav .sidebar-list-item.open>.mat-list-item-content>.sub-menu,
   .sidebar-panel.mat-sidenav .sidebar-list-item.open>.mat-list-item-content>a>mat-icon:not(.menu-caret),
@@ -142,6 +154,12 @@ $purple-dark-theme:mat-dark-theme($purple-dark-primary, $purple-dark-accent, $pu
   .sidebar-panel.mat-sidenav .sidebar-list-item.open .sub-menu .mat-list-item.selected a {
     color: map-get($mat-purple, 500) !important;
   }
+  .mat-color-accent {
+    color: map-get($purple-dark-accent, 500) !important;
+  }
+  .mat-color-warn {
+    color: map-get($purple-dark-warn, 500) !important;
+  }
   .sidebar-panel.mat-sidenav .sidebar-list-item.open>.mat-list-item-content>.sub-menu,
   .sidebar-panel.mat-sidenav .sidebar-list-item.open>.mat-list-item-content>a>mat-icon:not(.menu-caret),
   .list-item-active {
@@ -203,6 +221,12 @@ $pink-dark-theme:mat-dark-theme($pink-dark-primary, $pink-dark-accent, $pink-dar
   .sidebar-panel.mat-sidenav .sidebar-list-item.open>.mat-list-item-content>a>span,
   .sidebar-panel.mat-sidenav .sidebar-list-item.open .sub-menu .mat-list-item.selected a {
     color: map-get($mat-pink, 500) !important;
+  }
+  .mat-color-accent {
+    color: map-get($pink-dark-accent, 500) !important;
+  }
+  .mat-color-warn {
+    color: map-get($pink-dark-warn, 500) !important;
   }
   .sidebar-panel.mat-sidenav .sidebar-list-item.open>.mat-list-item-content>.sub-menu,
   .sidebar-panel.mat-sidenav .sidebar-list-item.open>.mat-list-item-content>a>mat-icon:not(.menu-caret),
@@ -268,6 +292,12 @@ $blue-primary-dark: darken( map-get($blue-primary, 500), 8%);
   .sidebar-panel.mat-sidenav .sidebar-list-item.open>.mat-list-item-content>a>span,
   .sidebar-panel.mat-sidenav .sidebar-list-item.open .sub-menu .mat-list-item.selected a {
     color: map-get($blue-primary, 500) !important;
+  }
+  .mat-color-accent {
+    color: map-get($blue-accent, 500) !important;
+  }
+  .mat-color-warn {
+    color: #f44336;
   }
   .sidebar-panel.mat-sidenav .sidebar-list-item.open>.mat-list-item-content>.sub-menu,
   .sidebar-panel.mat-sidenav .sidebar-list-item.open>.mat-list-item-content>a>mat-icon:not(.menu-caret),

@@ -1,4 +1,5 @@
-import { Directive, ElementRef, AfterViewInit } from '@angular/core';
+import { Directive, ElementRef, AfterViewInit, OnInit, Input } from '@angular/core';
+import { AfterContentInit, OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
 
 @Directive({
   // tslint:disable-next-line:directive-selector
@@ -15,6 +16,7 @@ export class JqPluginDirective implements AfterViewInit {
     const $element = $(this._element.nativeElement);
     const pluginName = $element.attr('jq-plugin');
     const options = $element.attr('jq-options');
+
     if (!options) {
       $element[pluginName]();
     } else {

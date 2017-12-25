@@ -16,6 +16,7 @@ import { ConfirmDialogComponent } from './shared/confirm-dialog/confirm-dialog.c
 import { FormsModule } from '@angular/forms';
 import { UserNotificationHelper } from './shared/notifications/UserNotificationHelper';
 import { JqPluginDirective } from './shared/common/libs/jq-plugin.directive';
+import { TopbarTimeagoDirective } from './topbar/topbar-timeago.directive';
 
 @NgModule({
   imports: [
@@ -35,9 +36,10 @@ import { JqPluginDirective } from './shared/common/libs/jq-plugin.directive';
   declarations: [
     CoreComponent,
     NavigationComponent,
-    TopbarComponent,
     JqPluginDirective,
-    SideNavAccordionDirective
+    TopbarComponent,
+    SideNavAccordionDirective,
+    TopbarTimeagoDirective,
   ]
 })
 export class CoreModule { }

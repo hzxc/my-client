@@ -60,7 +60,7 @@ function handleLogoutRequest(authService: AppAuthService) {
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
