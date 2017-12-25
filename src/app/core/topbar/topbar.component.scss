@@ -1,43 +1,44 @@
     .notification-number {
-        position: absolute;
-        top: 0;
-        left: 50%;
-        width: 20px;
-        height: 20px;
-        font-size: 12px;
-        font-weight: 700;
-        line-height: 20px;
-        color: #fff;
-        text-align: center;
-        border-radius: 50%;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #fff;
+      text-align: center;
+      border-radius: 50%;
     }
 
     .arrow {
-        font-size: 2rem;
-        position: absolute; // top:-15px;
-        top: -18px;
-        right: 11px; // display: inline-block;
+      font-size: 2rem;
+      position: absolute; // top:-15px;
+      top: -18px;
+      right: 11px; // display: inline-block;
     }
 
     .notifications-header {
-        padding: 20px 20px;
-        border-radius: 5px 5px 0 0;
-        text-align: center;
-        color: white;
-        font-style: italic;
-        font-weight: bold;
-        font-size: 1.25rem;
+      padding: 20px 20px;
+      border-radius: 5px 5px 0 0;
+      text-align: center;
+      color: white;
+      font-style: italic;
+      font-weight: bold;
+      font-size: 1.25rem;
     }
 
     .notifications-body {
-        position: relative;
-        padding: 0px;
+      position: relative;
+      padding: 0px;
     }
 
     .notification-item.mat-list-item {
-        height: auto;
+      height: auto;
     }
 
     .notifications-actions {
-        padding: 0 16px;
+      padding: 0 16px;
+      height: 17px;
     }

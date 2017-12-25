@@ -47,12 +47,8 @@
       <mat-nav-list>
         <mat-list-item class="notification-item" *ngFor="let notification of notifications">
           <mat-icon color="accent">{{notification.icon}}</mat-icon>
-          <div>
             {{notification.text}}
             {{notification.time}}
-          </div>
-
-          <span #timeago title="2017-12-23 16:32:26" jq-plugin="timeago"></span>
           <span title="{{notification.time}}" jq-plugin="timeago"></span>
         </mat-list-item>
       </mat-nav-list>

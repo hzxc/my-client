@@ -58,8 +58,6 @@ export class TopbarComponent extends AppComponentBase implements OnInit, AfterVi
     });
   }
 
-
-
   gotoUrl(url): void {
     if (url) {
       location.href = url;
