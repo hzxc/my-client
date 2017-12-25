@@ -63,7 +63,7 @@
 .mat-menu-panel.notifications-menu {
     overflow: visible !important;
     /* width: 380px !important; */
-    max-width: 340px;
+    max-width: 380px;
     border-radius: 6px;
 }
 
