@@ -13,6 +13,7 @@ import { IFormattedUserNotification, UserNotificationHelper } from '../shared/no
 import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
 import { MatMenuTrigger } from '@angular/material';
 import { SharedTopbarNotificationService } from '../shared/notifications/shared-topbar-notification.service';
+import { AbpSessionService } from '../../abp/session/abp-session.service';
 
 @Component({
   selector: 'app-core-topbar',
@@ -27,6 +28,7 @@ export class TopbarComponent extends AppComponentBase implements OnInit, AfterVi
   languages: abp.localization.ILanguageInfo[];
   currentLanguage: abp.localization.ILanguageInfo;
   isImpersonatedLogin = false;
+  shownLoginNameTitle = '';
 
   notifications: IFormattedUserNotification[] = [];
   unreadNotificationCount = 0;
@@ -37,7 +39,9 @@ export class TopbarComponent extends AppComponentBase implements OnInit, AfterVi
     private _profileServiceProxy: ProfileServiceProxy,
     private _notificationService: NotificationServiceProxy,
     private _userNotificationHelper: UserNotificationHelper,
-    private _sharedNotificationSrv: SharedTopbarNotificationService
+    private _sharedNotificationSrv: SharedTopbarNotificationService,
+    private _abpSessionService: AbpSessionService,
+
   ) {
     super(injector);
     // this.themes = this.themeService.themes;
@@ -56,6 +60,9 @@ export class TopbarComponent extends AppComponentBase implements OnInit, AfterVi
     this._sharedNotificationSrv.notificationReloadSource.subscribe(_ => {
       this.loadNotifications();
     });
+
+    this.isImpersonatedLogin = this._abpSessionService.impersonatorUserId > 0;
+    this.shownLoginNameTitle = this.isImpersonatedLogin ? this.l('YouCanBackToYourAccount') : '';
 
   }
 

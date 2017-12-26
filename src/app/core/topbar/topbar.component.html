@@ -7,15 +7,6 @@
     class="toggle-collapsed">
     <mat-icon>chevron_left</mat-icon>
   </button>
-
-  <span fxFlex></span>
-  <!-- <mat-form-field style="width:100px;">
-    <mat-select>
-      <mat-option *ngFor="let language of languages" [value]="language.name">
-        <span [class]="language.icon"></span> {{language.displayName}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field> -->
   <mat-form-field class="top-language-select-container">
     <mat-select class="dropdown" #languageSelect="matSelect" [(ngModel)]="currentLanguage" (change)="changeLanguage($event.value.name)">
       <mat-select-trigger>{{ languageSelect.selected?.value.displayName}}</mat-select-trigger>
@@ -26,6 +17,15 @@
     </mat-select>
     <span matPrefix [class]="languageSelect.selected?.value.icon"></span>
   </mat-form-field>
+  <span fxFlex></span>
+  <!-- <mat-form-field style="width:100px;">
+    <mat-select>
+      <mat-option *ngFor="let language of languages" [value]="language.name">
+        <span [class]="language.icon"></span> {{language.displayName}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field> -->
+
   <!-- Notification toggle button -->
   <button class="topbar-button-left" mat-icon-button matTooltip="Notifications" [matMenuTriggerFor]="notificationsMenu">
     <mat-icon>notifications</mat-icon>
@@ -34,42 +34,81 @@
   <mat-menu classList="notifications-menu" #notificationsMenu="matMenu" overlapTrigger="false" yPosition="below" xPosition="before">
     <mat-icon class="arrow">arrow_drop_up</mat-icon>
     <div class="notifications-header" style="background: url(/assets/images/bg/notification_bg.jpg); background-size: cover;">
-      <span class="m-dropdown__header-title">
+      <span>
         {{unreadNotificationCount}} New notifications
       </span>
     </div>
-      <div class="notifications-actions" fxLayoutAlign="space-between center">
-        <span (click)="setAllNotificationsAsRead()" *ngIf="unreadNotificationCount" style="cursor:pointer;" class="mat-color-primary">
-          <mat-icon color="primary">done_all</mat-icon>
-          {{l("SetAllAsRead")}}
-        </span>
-        <span (click)="openNotificationSettingsModal()" style="cursor:pointer;" class="mat-color-primary">
-          <mat-icon color="primary">settings</mat-icon>
-          {{l("Settings")}}
-        </span>
-      </div>
-      <!-- <mat-chip-list fxLayoutAlign="start center" class="notifications-actions">
+    <div class="notifications-actions" fxLayoutAlign="space-between center">
+      <span (click)="setAllNotificationsAsRead()" *ngIf="unreadNotificationCount" style="cursor:pointer;" class="mat-color-primary">
+        <mat-icon color="primary">done_all</mat-icon>
+        {{l("SetAllAsRead")}}
+      </span>
+      <span (click)="openNotificationSettingsModal()" style="cursor:pointer;" class="mat-color-primary">
+        <mat-icon color="primary">settings</mat-icon>
+        {{l("Settings")}}
+      </span>
+    </div>
+    <!-- <mat-chip-list fxLayoutAlign="start center" class="notifications-actions">
         <mat-chip (click)="setAllNotificationsAsRead()" *ngIf="unreadNotificationCount" color="primary" selected="true">{{l("SetAllAsRead")}}</mat-chip>
         <mat-chip (click)="openNotificationSettingsModal()" color="accent" selected="true">{{l("Settings")}}</mat-chip>
       </mat-chip-list> -->
-      <!-- <a href="" (click)="setAllNotificationsAsRead()" *ngIf="unreadNotificationCount">{{l("SetAllAsRead")}}</a>
+    <!-- <a href="" (click)="setAllNotificationsAsRead()" *ngIf="unreadNotificationCount">{{l("SetAllAsRead")}}</a>
         <a class="pull-right" (click)="openNotificationSettingsModal()">{{l("Settings")}}</a> -->
-      <mat-nav-list class="notification-list">
-        <mat-list-item class="notification-item" *ngFor="let notification of notifications">
-          <div class="item-content">
-            <mat-icon color="accent">{{notification.icon}}</mat-icon>
-            {{notification.text}}
-          </div>
-          <span [isTrigger]="isTrigger" title="{{notification.time}}" appTopbarTimeago="timeago">{{notification.time}}</span>
-          <span *ngIf="notification.state=='UNREAD'">  - <span class="mat-color-primary" style="cursor:pointer;" (click)="setNotificationAsRead(notification);">{{l("SetAsRead")}}</span></span>
-        </mat-list-item>
-        <mat-list-item *ngIf="!notifications.length">
-            {{l("ThereIsNoNotification")}}
-        </mat-list-item>
-      </mat-nav-list>
-      <div class="text-center"><span class="mat-color-accent" style="cursor:pointer;" routerLink="/admin/notifications">{{l("SeeAllNotifications")}}</span></div>
+    <mat-nav-list class="notification-list">
+      <mat-list-item class="notification-item" *ngFor="let notification of notifications">
+        <div class="item-content">
+          <mat-icon color="accent">{{notification.icon}}</mat-icon>
+          {{notification.text}}
+        </div>
+        <span [isTrigger]="isTrigger" title="{{notification.time}}" appTopbarTimeago="timeago">{{notification.time}}</span>
+        <span *ngIf="notification.state=='UNREAD'"> -
+          <span class="mat-color-primary" style="cursor:pointer;" (click)="setNotificationAsRead(notification);">{{l("SetAsRead")}}</span>
+        </span>
+      </mat-list-item>
+      <mat-list-item *ngIf="!notifications.length">
+        {{l("ThereIsNoNotification")}}
+      </mat-list-item>
+    </mat-nav-list>
+    <div class="text-center">
+      <span class="mat-color-accent" style="cursor:pointer;" routerLink="/admin/notifications">{{l("SeeAllNotifications")}}</span>
+    </div>
+  </mat-menu>
+  <!-- Top user menu -->
+  <button class="topbar-button-left img-button" mat-icon-button [matMenuTriggerFor]="currentUserMenu">
+    <img src="assets/common/images/face-7.jpg" alt="">
+  </button>
+  <mat-menu classList="current-user-menu" #currentUserMenu="matMenu" overlapTrigger="false" yPosition="below" xPosition="before">
+    <button mat-menu-item>
+      <mat-icon>reply</mat-icon>
+      {{l("LinkedAccounts")}}
+      <!-- <mat-icon>reply</mat-icon>
+      {{shownLoginName}} -->
+    </button>
+    <button mat-menu-item>
+      <mat-icon>reply</mat-icon>
+      {{l("ChangePassword")}}
+      <!-- <mat-icon>reply</mat-icon>
+      {{shownLoginName}} -->
+    </button>
+    <button mat-menu-item>
+      <mat-icon>reply</mat-icon>
+      {{l("LoginAttempts")}}
+    </button>
+    <button mat-menu-item>
+      <mat-icon>reply</mat-icon>
+      {{l("ChangeProfilePicture")}}
+    </button>
+    <button mat-menu-item>
+      <mat-icon>reply</mat-icon>
+      {{l("MySettings")}}
+    </button>
+    <button mat-menu-item>
+      <mat-icon>reply</mat-icon>
+      {{l("Logout")}}
+    </button>
   </mat-menu>
   <!-- Theme Switcher -->
   <app-shared-theme-switcher class="topbar-button-left">
+
   </app-shared-theme-switcher>
 </mat-toolbar>
