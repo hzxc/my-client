@@ -17,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { UserNotificationHelper } from './shared/notifications/UserNotificationHelper';
 import { JqPluginDirective } from './shared/common/libs/jq-plugin.directive';
 import { TopbarTimeagoDirective } from './topbar/topbar-timeago.directive';
+import { SharedTopbarNotificationService } from './shared/notifications/shared-topbar-notification.service';
 
 @NgModule({
   imports: [
@@ -31,7 +32,8 @@ import { TopbarTimeagoDirective } from './topbar/topbar-timeago.directive';
     NavigationService,
     AppAuthService,
     AppRouteGuard,
-    UserNotificationHelper
+    UserNotificationHelper,
+    SharedTopbarNotificationService
   ],
   declarations: [
     CoreComponent,

@@ -12,6 +12,7 @@ import {
 import { IFormattedUserNotification, UserNotificationHelper } from '../shared/notifications/UserNotificationHelper';
 import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
 import { MatMenuTrigger } from '@angular/material';
+import { SharedTopbarNotificationService } from '../shared/notifications/shared-topbar-notification.service';
 
 @Component({
   selector: 'app-core-topbar',
@@ -35,7 +36,8 @@ export class TopbarComponent extends AppComponentBase implements OnInit, AfterVi
     private themeService: ThemeService,
     private _profileServiceProxy: ProfileServiceProxy,
     private _notificationService: NotificationServiceProxy,
-    private _userNotificationHelper: UserNotificationHelper
+    private _userNotificationHelper: UserNotificationHelper,
+    private _sharedNotificationSrv: SharedTopbarNotificationService
   ) {
     super(injector);
     // this.themes = this.themeService.themes;
@@ -50,6 +52,11 @@ export class TopbarComponent extends AppComponentBase implements OnInit, AfterVi
       this.isTrigger = true;
     }
     );
+
+    this._sharedNotificationSrv.notificationReloadSource.subscribe(_ => {
+      this.loadNotifications();
+    });
+
   }
 
   ngAfterViewInit() {

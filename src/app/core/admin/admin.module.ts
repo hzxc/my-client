@@ -29,6 +29,7 @@ import { LanguagesComponent } from './languages/languages.component';
 import { LanguageTextsComponent } from './languages/language-texts/language-texts.component';
 import { EditTextDialogComponent } from './languages/edit-text-dialog/edit-text-dialog.component';
 import { NotificationsComponent } from './notifications/notifications.component';
+import { NotificationsSettingDialogComponent } from './notifications/notifications-setting-dialog/notifications-setting-dialog.component';
 
 @NgModule({
   imports: [
@@ -47,7 +48,8 @@ import { NotificationsComponent } from './notifications/notifications.component'
   entryComponents: [
     EditTenantModalComponent,
     ConfirmDialogComponent,
-    EditTextDialogComponent
+    EditTextDialogComponent,
+    NotificationsSettingDialogComponent
   ],
   providers: [
     ImpersonationService,
@@ -70,6 +72,7 @@ import { NotificationsComponent } from './notifications/notifications.component'
     LanguageTextsComponent,
     EditTextDialogComponent,
     NotificationsComponent,
+    NotificationsSettingDialogComponent,
   ]
 })
 export class AdminModule { }

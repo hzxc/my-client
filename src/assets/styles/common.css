@@ -93,3 +93,14 @@ font-weight: 900 */
   float: right;
 }
 
+/*little chip*/
+
+.little-chip.mat-chip{
+  padding: 2px 3px !important;
+}
+
+/*dialog-content-padding*/
+.dialog-content {
+  padding-top: 15px !important;
+  padding-bottom: 15px !important;
+}

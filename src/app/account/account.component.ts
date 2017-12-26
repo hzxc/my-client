@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { SharedAccountLoginService } from './services/shared-account-login.service';
 
 @Component({
   selector: 'app-account',
@@ -8,9 +9,14 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 })
 export class AccountComponent implements OnInit {
 
-  constructor() { }
-
-  ngOnInit() {
+  private submitting = false;
+  constructor(
+    private sharedAccountLoginService: SharedAccountLoginService) {
   }
 
+  ngOnInit() {
+    this.sharedAccountLoginService.progressBar$.subscribe(submitting => {
+      this.submitting = submitting;
+    });
+  }
 }

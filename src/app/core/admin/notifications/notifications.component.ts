@@ -8,6 +8,8 @@ import { MatPaginator, MatSort, MatSnackBar, MatDialog } from '@angular/material
 import { AppUserNotificationState } from '../../../shared/AppEnums';
 import { IFormattedUserNotification, UserNotificationHelper } from '../../shared/notifications/UserNotificationHelper';
 import * as moment from 'moment';
+import { SharedTopbarNotificationService } from '../../shared/notifications/shared-topbar-notification.service';
+import { NotificationsSettingDialogComponent } from './notifications-setting-dialog/notifications-setting-dialog.component';
 
 @Component({
   selector: 'app-notifications',
@@ -26,27 +28,46 @@ export class NotificationsComponent extends AppComponentBase implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   private dataSource: UserNotificationDataSource;
-  private readStateFilter: string;
+
 
   constructor(
     injector: Injector,
     private _notificationService: NotificationServiceProxy,
     private _userNotificationHelper: UserNotificationHelper,
     private snackBar: MatSnackBar,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private _sharedNotificationSrv: SharedTopbarNotificationService
   ) {
     super(injector);
   }
 
   ngOnInit() {
     this.dataSource = new UserNotificationDataSource(
-      this.readStateFilter,
       this.paginator,
       this.sort,
       this.snackBar,
       this._notificationService,
       this._userNotificationHelper
     );
+
+    this._sharedNotificationSrv.notificationReloadSource.subscribe(_ => {
+      this.dataSource.reloadTable();
+    });
+  }
+
+  openNotificationSettingsDialog(): void {
+    const dialogRef = this.dialog.open(NotificationsSettingDialogComponent, {
+      width: '400px',
+      data: {
+      },
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // this.dataSource.reloadTable();
+      }
+    });
   }
 
   fromNow(date: moment.Moment): string {
@@ -56,11 +77,38 @@ export class NotificationsComponent extends AppComponentBase implements OnInit {
   truncateString(text: any, length: number): string {
     return abp.utils.truncateStringWithPostfix(text, length);
   }
+
+  setAsRead(row: any): void {
+    this.setNotificationAsRead(row, () => {
+      this._sharedNotificationSrv.notificationReloadTrigger(true);
+      this.dataSource.reloadTable();
+    });
+  }
+
+  setNotificationAsRead(userNotification: UserNotification, callback: () => void): void {
+    this._userNotificationHelper
+      .setAsRead(userNotification.id, () => {
+        if (callback) {
+          callback();
+        }
+      });
+  }
+
+  setAllNotificationsAsRead(): void {
+    this._userNotificationHelper.setAllAsRead(() => {
+      this._sharedNotificationSrv.notificationReloadTrigger(true);
+      this.dataSource.reloadTable();
+    });
+  }
+
+  refresh() {
+    this.dataSource.reloadTable();
+  }
 }
 
 export class UserNotificationDataSource extends DataSource<UserNotification> {
 
-
+  private readStateFilter = 'ALL';
   private isLoadingResults = true;
 
   reloadBehavior = new BehaviorSubject(false);
@@ -71,12 +119,11 @@ export class UserNotificationDataSource extends DataSource<UserNotification> {
   }
 
   constructor(
-    private readStateFilter: string,
     private paginator: MatPaginator,
     private sort: MatSort,
     private snackBar: MatSnackBar,
     private _notificationService: NotificationServiceProxy,
-    private _userNotificationHelper: UserNotificationHelper
+    private _userNotificationHelper: UserNotificationHelper,
   ) {
     super();
   }
@@ -100,7 +147,9 @@ export class UserNotificationDataSource extends DataSource<UserNotification> {
           this.readStateFilter === 'ALL' ? undefined : AppUserNotificationState.Unread,
           this.paginator.pageSize,
           this.paginator.pageIndex * this.paginator.pageSize);
-      }).map(result => {
+      })
+      // .delay(2000)
+      .map(result => {
         this.isLoadingResults = false;
         this.paginator.length = result.totalCount;
         if (!result.items || result.items.length === 0) {

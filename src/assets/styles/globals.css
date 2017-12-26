@@ -168,3 +168,8 @@ body .mat-select-trigger {
   margin-bottom: 0px !important;
 }
 
+/*notification read or unread chips*/
+.notification-read .mat-chip-list-wrapper {
+  display: inline-flex !important;
+}
+
