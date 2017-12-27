@@ -5,6 +5,7 @@ import { DataSource, CollectionViewer } from '@angular/cdk/collections';
 import { LinkedUserDto, UserLinkServiceProxy } from '../../../shared/service-proxies/service-proxies';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
+import { AbpMultiTenancyService } from '../../../abp/multi-tenancy/abp-multi-tenancy.service';
 
 @Component({
   selector: 'app-linked-accounts-dialog',
@@ -13,6 +14,11 @@ import { Observable } from 'rxjs/Observable';
 })
 export class LinkedAccountsDialogComponent extends AppComponentBase implements OnInit {
 
+  displayedColumns = [
+    'actions',
+    'username',
+    'delete-actions'
+  ];
   private dataSource: LinkedAccountsDataSource;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -21,15 +27,28 @@ export class LinkedAccountsDialogComponent extends AppComponentBase implements O
     injector: Injector,
     public dialogRef: MatDialogRef<LinkedAccountsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-
+    private snackBar: MatSnackBar,
+    private _userLinkService: UserLinkServiceProxy,
+    private abpMultiTenancyService: AbpMultiTenancyService,
   ) {
     super(injector);
   }
 
   ngOnInit() {
     this.dataSource = new LinkedAccountsDataSource(
-
+      this.paginator,
+      this.sort,
+      this.snackBar,
+      this._userLinkService
     );
+  }
+
+  getShownLinkedUserName(linkedUser: LinkedUserDto): string {
+    if (!this.abpMultiTenancyService.isEnabled) {
+      return linkedUser.username;
+    }
+
+    return (linkedUser.tenantId ? linkedUser.tenancyName : '.') + '\\' + linkedUser.username;
   }
 }
 
@@ -69,7 +88,9 @@ export class LinkedAccountsDataSource extends DataSource<LinkedUserDto> {
           this.paginator.pageIndex * this.paginator.pageSize,
           this.sort.active ? this.sort.active + ' ' + this.sort.direction : '',
         );
-      }).map(result => {
+      })
+      // .delay(2000)
+      .map(result => {
         this.isLoadingResults = false;
         this.paginator.length = result.totalCount;
         if (!result.items || result.items.length === 0) {

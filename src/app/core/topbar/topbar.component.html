@@ -28,7 +28,7 @@
   <!-- Top user menu -->
   <div>
     <span style="font-size:.875rem">
-      <mat-icon class="small-icon">reply</mat-icon>
+      <mat-icon class="small-icon" color="warn">reply</mat-icon>
       {{shownLoginName}}</span>
     <button class="img-button" mat-icon-button [matMenuTriggerFor]="currentUserMenu">
       <img [src]="profilePicture" alt="profilePicture">
@@ -37,6 +37,7 @@
   <mat-menu classList="current-user-menu" #currentUserMenu="matMenu">
     <button class="user-menu-item" [matMenuTriggerFor]="linkedAccountSubMenu" mat-menu-item>
       <mat-icon>link</mat-icon>
+      <!-- <mat-icon>all_inclusive</mat-icon> -->
       {{l("LinkedAccounts")}}
     </button>
     <button class="user-menu-item" mat-menu-item>

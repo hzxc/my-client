@@ -39,10 +39,10 @@ import { NotificationsSettingDialogComponent } from './notifications/notificatio
     MatPaginatorModule,
     MatSortModule,
     MaterialModule,
+    FlexLayoutModule,
     ReactiveFormsModule,
     FormsModule,
     HttpModule,
-    FlexLayoutModule,
     UtilsModule
   ],
   entryComponents: [
