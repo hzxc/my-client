@@ -7,6 +7,13 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { AbpMultiTenancyService } from '../../../abp/multi-tenancy/abp-multi-tenancy.service';
 
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/observable/merge';
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/delay';
+
 @Component({
   selector: 'app-linked-accounts-dialog',
   templateUrl: './linked-accounts-dialog.component.html',
@@ -19,17 +26,18 @@ export class LinkedAccountsDialogComponent extends AppComponentBase implements O
     'username',
     'delete-actions'
   ];
-  private dataSource: LinkedAccountsDataSource;
+  dataSource: LinkedAccountsDataSource | null;
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     injector: Injector,
     public dialogRef: MatDialogRef<LinkedAccountsDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
     private snackBar: MatSnackBar,
     private _userLinkService: UserLinkServiceProxy,
     private abpMultiTenancyService: AbpMultiTenancyService,
+    @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
     super(injector);
   }
@@ -53,6 +61,7 @@ export class LinkedAccountsDialogComponent extends AppComponentBase implements O
 }
 
 export class LinkedAccountsDataSource extends DataSource<LinkedUserDto> {
+
   private isLoadingResults = true;
   constructor(
     private paginator: MatPaginator,
