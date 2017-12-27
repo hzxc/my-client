@@ -1,0 +1,38 @@
+<mat-progress-bar [mode]="loading? 'indeterminate':'Determinate'" class="dialog-progress-bar" color="Primary">
+</mat-progress-bar>
+<div class="linked-accounts-dialog-header" fxLayoutAlign="space-between center" mat-dialog-title>
+  <span style="font-weight:bold;">
+    {{l("LinkedAccounts")}}:
+  </span>
+  <button mat-button color="primary">
+    <mat-icon>add</mat-icon>
+    {{l("LinkNewAccount")}}
+  </button>
+</div>
+<mat-dialog-content class="dialog-content">
+  <mat-table #table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef class="actions-width">
+        <button color="primary" mat-icon-button>
+          <mat-icon>face</mat-icon>
+        </button>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row" class="actions-width">
+        <button color="accent" mat-icon-button [matMenuTriggerFor]="editMenu">
+          <mat-icon>settings</mat-icon>
+        </button>
+        <mat-menu #editMenu="matMenu">
+          <button mat-menu-item (click)="openEditDialog(row)">{{l('Edit')}}</button>
+        </mat-menu>
+      </mat-cell>
+    </ng-container>
+    <mat-paginator #paginator [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100,1000]">
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  </mat-table>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-paginator>
+</mat-dialog-content>
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">
+  <button mat-raised-button [disabled]="loading" color="accent" mat-dialog-close>{{l('Close')}}</button>
+  <!-- <button mat-raised-button [disabled]="loading" color="accent" (click)="save()">{{l('Save')}}</button> -->
+</mat-dialog-actions>

@@ -57,5 +57,12 @@
         border-radius: 50%;
     }
     /*current-user-menu-css*/
+    .user-menu-item.mat-menu-item > .mat-icon{
+      margin-right: 4px !important;
+    }
 
+    .small-icon.mat-icon{
+      font-size:14px !important;
+      width:9px;
+    }
 

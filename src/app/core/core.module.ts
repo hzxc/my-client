@@ -18,6 +18,8 @@ import { UserNotificationHelper } from './shared/notifications/UserNotificationH
 import { JqPluginDirective } from './shared/common/libs/jq-plugin.directive';
 import { TopbarTimeagoDirective } from './topbar/topbar-timeago.directive';
 import { SharedTopbarNotificationService } from './shared/notifications/shared-topbar-notification.service';
+import { LinkedAccountsDialogComponent } from './topbar/linked-accounts-dialog/linked-accounts-dialog.component';
+import { LinkAccountsDialogComponent } from './topbar/link-accounts-dialog/link-accounts-dialog.component';
 
 @NgModule({
   imports: [
@@ -35,6 +37,10 @@ import { SharedTopbarNotificationService } from './shared/notifications/shared-t
     UserNotificationHelper,
     SharedTopbarNotificationService
   ],
+  entryComponents: [
+    LinkedAccountsDialogComponent,
+    LinkAccountsDialogComponent
+  ],
   declarations: [
     CoreComponent,
     NavigationComponent,
@@ -42,6 +48,8 @@ import { SharedTopbarNotificationService } from './shared/notifications/shared-t
     TopbarComponent,
     SideNavAccordionDirective,
     TopbarTimeagoDirective,
+    LinkedAccountsDialogComponent,
+    LinkAccountsDialogComponent,
   ]
 })
 export class CoreModule { }

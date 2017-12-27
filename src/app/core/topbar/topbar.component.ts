@@ -7,13 +7,20 @@ import {
   ChangeUserLanguageDto,
   ProfileServiceProxy,
   NotificationServiceProxy,
-  UserNotification
+  UserNotification,
+  SessionServiceProxy,
+  GetCurrentLoginInformationsOutput,
+  TenantLoginInfoDto,
+  LinkedUserDto,
+  UserLinkServiceProxy
 } from '../../shared/service-proxies/service-proxies';
 import { IFormattedUserNotification, UserNotificationHelper } from '../shared/notifications/UserNotificationHelper';
 import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
-import { MatMenuTrigger } from '@angular/material';
+import { MatMenuTrigger, MatDialog } from '@angular/material';
 import { SharedTopbarNotificationService } from '../shared/notifications/shared-topbar-notification.service';
 import { AbpSessionService } from '../../abp/session/abp-session.service';
+import { AbpMultiTenancyService } from '../../abp/multi-tenancy/abp-multi-tenancy.service';
+import { LinkedAccountsDialogComponent } from './linked-accounts-dialog/linked-accounts-dialog.component';
 
 @Component({
   selector: 'app-core-topbar',
@@ -25,13 +32,19 @@ export class TopbarComponent extends AppComponentBase implements OnInit, AfterVi
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
   private isTrigger = false;
 
-  languages: abp.localization.ILanguageInfo[];
-  currentLanguage: abp.localization.ILanguageInfo;
-  isImpersonatedLogin = false;
-  shownLoginNameTitle = '';
 
-  notifications: IFormattedUserNotification[] = [];
-  unreadNotificationCount = 0;
+  private languages: abp.localization.ILanguageInfo[];
+  private currentLanguage: abp.localization.ILanguageInfo;
+  private isImpersonatedLogin = false;
+  private shownLoginNameTitle = '';
+  private shownLoginName = '';
+  private tenant: TenantLoginInfoDto = new TenantLoginInfoDto();
+  private recentlyLinkedUsers: LinkedUserDto[];
+  private profilePicture = '/assets/common/images/default-profile-picture.png';
+
+
+  private notifications: IFormattedUserNotification[] = [];
+  private unreadNotificationCount = 0;
 
   constructor(
     injector: Injector,
@@ -41,7 +54,10 @@ export class TopbarComponent extends AppComponentBase implements OnInit, AfterVi
     private _userNotificationHelper: UserNotificationHelper,
     private _sharedNotificationSrv: SharedTopbarNotificationService,
     private _abpSessionService: AbpSessionService,
-
+    private _sessionService: SessionServiceProxy,
+    private _abpMultiTenancyService: AbpMultiTenancyService,
+    private _userLinkServiceProxy: UserLinkServiceProxy,
+    public dialog: MatDialog,
   ) {
     super(injector);
     // this.themes = this.themeService.themes;
@@ -64,9 +80,62 @@ export class TopbarComponent extends AppComponentBase implements OnInit, AfterVi
     this.isImpersonatedLogin = this._abpSessionService.impersonatorUserId > 0;
     this.shownLoginNameTitle = this.isImpersonatedLogin ? this.l('YouCanBackToYourAccount') : '';
 
+    this.getCurrentLoginInformations();
+
+    this.getProfilePicture();
+    this.getRecentlyLinkedUsers();
+
   }
 
   ngAfterViewInit() {
+  }
+
+  getCurrentLoginInformations(): void {
+    this.shownLoginName = this.appSession.getShownLoginName();
+    this._sessionService.getCurrentLoginInformations()
+      .subscribe((result: GetCurrentLoginInformationsOutput) => {
+        this.tenant = result.tenant;
+      });
+  }
+
+  getProfilePicture(): void {
+    this._profileServiceProxy.getProfilePicture().subscribe(result => {
+      if (result && result.profilePicture) {
+        this.profilePicture = 'data:image/jpeg;base64,' + result.profilePicture;
+      }
+    });
+  }
+
+  getRecentlyLinkedUsers(): void {
+    this._userLinkServiceProxy.getRecentlyUsedLinkedUsers().subscribe(result => {
+      this.recentlyLinkedUsers = result.items;
+    });
+  }
+
+
+  get multiTenancySideIsTenant(): boolean {
+    return this._abpSessionService.tenantId > 0;
+  }
+
+  getShownUserName(linkedUser: LinkedUserDto): string {
+    if (!this._abpMultiTenancyService.isEnabled) {
+      return linkedUser.username;
+    }
+
+    return (linkedUser.tenantId ? linkedUser.tenancyName : '.') + '\\' + linkedUser.username;
+  }
+
+  showLinkedAccounts() {
+    const dialogRef = this.dialog.open(LinkedAccountsDialogComponent, {
+      width: '550px',
+      data: {
+      },
+      disableClose: true
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+      }
+    });
   }
 
   loadNotifications(): void {
