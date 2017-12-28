@@ -1,8 +1,8 @@
 import { Component, OnInit, Injector, Inject, ViewChild } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatPaginator, MatSort, MatSnackBar } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatPaginator, MatSort, MatSnackBar, MatDialog } from '@angular/material';
 import { AppComponentBase } from '../../../shared/common/app-component-base';
 import { DataSource, CollectionViewer } from '@angular/cdk/collections';
-import { LinkedUserDto, UserLinkServiceProxy } from '../../../shared/service-proxies/service-proxies';
+import { LinkedUserDto, UserLinkServiceProxy, UnlinkUserInput } from '../../../shared/service-proxies/service-proxies';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { AbpMultiTenancyService } from '../../../abp/multi-tenancy/abp-multi-tenancy.service';
@@ -13,6 +13,7 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/delay';
+import { LinkAccountsDialogComponent } from '../link-accounts-dialog/link-accounts-dialog.component';
 
 @Component({
   selector: 'app-linked-accounts-dialog',
@@ -38,6 +39,7 @@ export class LinkedAccountsDialogComponent extends AppComponentBase implements O
     private _userLinkService: UserLinkServiceProxy,
     private abpMultiTenancyService: AbpMultiTenancyService,
     @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialog: MatDialog,
   ) {
     super(injector);
   }
@@ -58,6 +60,40 @@ export class LinkedAccountsDialogComponent extends AppComponentBase implements O
 
     return (linkedUser.tenantId ? linkedUser.tenancyName : '.') + '\\' + linkedUser.username;
   }
+
+  openLinkAccountsDialog(): void {
+    const dialogRef = this.dialog.open(LinkAccountsDialogComponent, {
+      width: '400px',
+      data: {
+      },
+      disableClose: true
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.dataSource.reloadTable();
+      }
+    });
+  }
+
+  deleteLinkedUser(linkedUser: LinkedUserDto): void {
+    const username = linkedUser.username;
+    this.message.confirm(
+      this.l('LinkedUserDeleteWarningMessage', username),
+      isConfirmed => {
+        if (isConfirmed) {
+          const unlinkUserInput = new UnlinkUserInput();
+          unlinkUserInput.userId = linkedUser.id;
+          unlinkUserInput.tenantId = linkedUser.tenantId;
+
+          this._userLinkService.unlinkUser(unlinkUserInput).subscribe(() => {
+            this.dataSource.reloadTable();
+            this.notify.success(this.l('SuccessfullyUnlinked'));
+          });
+        }
+      }
+    );
+  }
+
 }
 
 export class LinkedAccountsDataSource extends DataSource<LinkedUserDto> {

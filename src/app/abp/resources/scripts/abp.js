@@ -585,7 +585,6 @@
             var placeHolder = '{' + (i - 1) + '}';
             str = abp.utils.replaceAll(str, placeHolder, arguments[i]);
         }
-
         return str;
     };
 
@@ -703,7 +702,7 @@
      * This is a simple implementation created to be used by ABP.
      * Please use a complete cookie library if you need.
      * @param {string} key
-     * @param {string} value 
+     * @param {string} value
      * @param {Date} expireDate (optional). If not specified the cookie will expire at the end of session.
      * @param {string} path (optional)
      */

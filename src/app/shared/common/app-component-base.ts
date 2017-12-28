@@ -12,63 +12,66 @@ import { AppSessionService } from './session/app-session.service';
 
 export abstract class AppComponentBase {
 
-    localizationSourceName = AppConsts.localization.defaultLocalizationSourceName;
+  localizationSourceName = AppConsts.localization.defaultLocalizationSourceName;
 
-    localization: LocalizationService;
-    permission: PermissionCheckerService;
-    feature: FeatureCheckerService;
-    notify: NotifyService;
-    setting: SettingService;
-    message: MessageService;
-    multiTenancy: AbpMultiTenancyService;
-    appSession: AppSessionService;
+  localization: LocalizationService;
+  permission: PermissionCheckerService;
+  feature: FeatureCheckerService;
+  notify: NotifyService;
+  setting: SettingService;
+  message: MessageService;
+  multiTenancy: AbpMultiTenancyService;
+  appSession: AppSessionService;
 
-    constructor(injector: Injector) {
-        this.localization = injector.get(LocalizationService);
-        this.permission = injector.get(PermissionCheckerService);
-        this.feature = injector.get(FeatureCheckerService);
-        this.notify = injector.get(NotifyService);
-        this.setting = injector.get(SettingService);
-        this.message = injector.get(MessageService);
-        this.multiTenancy = injector.get(AbpMultiTenancyService);
-        this.appSession = injector.get(AppSessionService);
+  constructor(injector: Injector) {
+    this.localization = injector.get(LocalizationService);
+    this.permission = injector.get(PermissionCheckerService);
+    this.feature = injector.get(FeatureCheckerService);
+    this.notify = injector.get(NotifyService);
+    this.setting = injector.get(SettingService);
+    this.message = injector.get(MessageService);
+    this.multiTenancy = injector.get(AbpMultiTenancyService);
+    this.appSession = injector.get(AppSessionService);
+  }
+
+  l(key: string, ...args: any[]): string {
+    return this.ls(this.localizationSourceName, key, args);
+  }
+
+  ls(sourcename: string, key: string, ...args: any[]): string {
+    let localizedText = this.localization.localize(key, sourcename);
+
+    if (!localizedText) {
+      localizedText = key;
     }
 
-    l(key: string, ...args: any[]): string {
-        return this.ls(this.localizationSourceName, key, args);
+    if (!args || !args.length) {
+      return localizedText;
     }
 
-    ls(sourcename: string, key: string, ...args: any[]): string {
-        let localizedText = this.localization.localize(key, sourcename);
-
-        if (!localizedText) {
-            localizedText = key;
-        }
-
-        if (!args || !args.length) {
-            return localizedText;
-        }
-
-        args[0].unshift(localizedText);
-
-        return abp.utils.formatString.apply(this, args[0]);
+    args[0].unshift(localizedText);
+    if (key === 'LinkedUserDeleteWarningMessage' || key === 'UserDeleteWarningMessage') {
+      console.log(args[0]);
     }
 
-    isGranted(permissionName: string): boolean {
-        return this.permission.isGranted(permissionName);
+    return abp.utils.formatString.apply(this, args[0]);
+  }
+
+  isGranted(permissionName: string): boolean {
+    return this.permission.isGranted(permissionName);
+  }
+
+  isGrantedAny(...permissions: string[]): boolean {
+    if (!permissions) {
+      return false;
     }
 
-    isGrantedAny(...permissions: string[]): boolean {
-        if (!permissions) {
-            return false;
-        }
-
-        for (const permission of permissions) {
-            if (this.isGranted(permission)) {
-                return true;
-            }
-        }
-
-        return false;
+    for (const permission of permissions) {
+      if (this.isGranted(permission)) {
+        return true;
+      }
     }
+
+    return false;
+  }
 }

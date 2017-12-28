@@ -17,6 +17,7 @@ import { AppComponentBase } from '../../../../shared/common/app-component-base';
   templateUrl: './edit-user-permissions-tab.component.html',
   styleUrls: ['./edit-user-permissions-tab.component.scss']
 })
+
 export class EditUserPermissionsTabComponent extends AppComponentBase implements OnInit, OnChanges {
 
   @Input() userId: number;

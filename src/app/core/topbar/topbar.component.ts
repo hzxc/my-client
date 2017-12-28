@@ -21,6 +21,7 @@ import { SharedTopbarNotificationService } from '../shared/notifications/shared-
 import { AbpSessionService } from '../../abp/session/abp-session.service';
 import { AbpMultiTenancyService } from '../../abp/multi-tenancy/abp-multi-tenancy.service';
 import { LinkedAccountsDialogComponent } from './linked-accounts-dialog/linked-accounts-dialog.component';
+import { AppAuthService } from '../shared/common/auth/app-auth.service';
 
 @Component({
   selector: 'app-core-topbar',
@@ -58,6 +59,8 @@ export class TopbarComponent extends AppComponentBase implements OnInit, AfterVi
     private _abpMultiTenancyService: AbpMultiTenancyService,
     private _userLinkServiceProxy: UserLinkServiceProxy,
     public dialog: MatDialog,
+    private _authService: AppAuthService,
+
   ) {
     super(injector);
     // this.themes = this.themeService.themes;
@@ -112,7 +115,6 @@ export class TopbarComponent extends AppComponentBase implements OnInit, AfterVi
     });
   }
 
-
   get multiTenancySideIsTenant(): boolean {
     return this._abpSessionService.tenantId > 0;
   }
@@ -134,8 +136,13 @@ export class TopbarComponent extends AppComponentBase implements OnInit, AfterVi
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.getRecentlyLinkedUsers();
       }
     });
+  }
+
+  logout(): void {
+    this._authService.logout();
   }
 
   loadNotifications(): void {

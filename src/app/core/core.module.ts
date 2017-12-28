@@ -36,8 +36,8 @@ import { UtilsModule } from '../shared/utils/utils.module';
     MaterialModule,
     FlexLayoutModule,
     ThemeModule,
-    HttpModule,
     FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     NavigationService,

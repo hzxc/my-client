@@ -58,8 +58,8 @@
       <mat-icon>reply</mat-icon>
       {{l("MySettings")}}
     </button>
-    <button class="user-menu-item" mat-menu-item>
-      <mat-icon>reply</mat-icon>
+    <button (click)="logout()" class="user-menu-item" mat-menu-item>
+      <mat-icon>call_received</mat-icon>
       {{l("Logout")}}
     </button>
   </mat-menu>

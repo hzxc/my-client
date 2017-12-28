@@ -4,7 +4,7 @@
   <span style="font-weight:bold;">
     {{l("LinkedAccounts")}}:
   </span>
-  <button mat-raised-button color="primary">
+  <button mat-raised-button color="primary" (click)="openLinkAccountsDialog()">
     <mat-icon>add</mat-icon>
     {{l("LinkNewAccount")}}
   </button>
@@ -39,7 +39,7 @@
           </button>
         </mat-header-cell>
         <mat-cell *matCellDef="let row" class="linked-account-actions-width">
-          <button color="warn" mat-button class="linked-account-action-button">
+          <button color="warn" (click)="deleteLinkedUser(row)" mat-button class="linked-account-action-button">
             <mat-icon>delete</mat-icon>
             {{l('Delete')}}
           </button>
@@ -53,6 +53,6 @@
   </div>
 </mat-dialog-content>
 <mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">
-  <button mat-raised-button [disabled]="loading" color="accent" mat-dialog-close>{{l('Close')}}</button>
+  <button mat-raised-button [disabled]="loading" color="accent" [mat-dialog-close]="true">{{l('Close')}}</button>
   <!-- <button mat-raised-button [disabled]="loading" color="accent" (click)="save()">{{l('Save')}}</button> -->
 </mat-dialog-actions>
