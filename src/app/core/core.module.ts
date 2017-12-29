@@ -25,6 +25,13 @@ import { HttpModule } from '@angular/http';
 import { ImpersonationService } from './admin/users/impersonation.service';
 import { AppUrlService } from '../shared/common/nav/app-url.service';
 import { UtilsModule } from '../shared/utils/utils.module';
+import { ChangePasswordDialogComponent } from './topbar/profile/change-password-dialog/change-password-dialog.component';
+import {
+  ChangeProfilePictureDialogComponent
+} from './topbar/profile/change-profile-picture-dialog/change-profile-picture-dialog.component';
+import { MySettingsDialogComponent } from './topbar/profile/my-settings-dialog/my-settings-dialog.component';
+import { SmsVerificationDialogComponent } from './topbar/profile/sms-verification-dialog/sms-verification-dialog.component';
+import { FileUploadModule } from 'ng2-file-upload';
 
 @NgModule({
   imports: [
@@ -37,7 +44,7 @@ import { UtilsModule } from '../shared/utils/utils.module';
     FlexLayoutModule,
     ThemeModule,
     FormsModule,
-    ReactiveFormsModule
+    FileUploadModule
   ],
   providers: [
     NavigationService,
@@ -48,7 +55,8 @@ import { UtilsModule } from '../shared/utils/utils.module';
   ],
   entryComponents: [
     LinkedAccountsDialogComponent,
-    LinkAccountsDialogComponent
+    LinkAccountsDialogComponent,
+    ChangeProfilePictureDialogComponent
   ],
   declarations: [
     CoreComponent,
@@ -59,6 +67,10 @@ import { UtilsModule } from '../shared/utils/utils.module';
     TopbarTimeagoDirective,
     LinkedAccountsDialogComponent,
     LinkAccountsDialogComponent,
+    ChangePasswordDialogComponent,
+    ChangeProfilePictureDialogComponent,
+    MySettingsDialogComponent,
+    SmsVerificationDialogComponent,
   ]
 })
 export class CoreModule { }

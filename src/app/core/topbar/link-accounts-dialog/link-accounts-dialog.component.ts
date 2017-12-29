@@ -20,18 +20,11 @@ export class LinkAccountsDialogComponent extends AppComponentBase implements OnI
     injector: Injector,
     public dialogRef: MatDialogRef<LinkAccountsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    fb: FormBuilder,
     private _userLinkService: UserLinkServiceProxy
 
   ) {
     super(injector);
-    this.linkAccountGroup = fb.group(
-      {
-        tenancyName: [],
-        usernameOrEmailAddress: [],
-        password: [],
-      }
-    );
+
   }
 
   ngOnInit() {

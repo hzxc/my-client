@@ -50,8 +50,8 @@
       <mat-icon>reply</mat-icon>
       {{l("LoginAttempts")}}
     </button>
-    <button class="user-menu-item" mat-menu-item>
-      <mat-icon>reply</mat-icon>
+    <button (click)="changeProfilePicture()" class="user-menu-item" mat-menu-item>
+      <mat-icon>person_outline</mat-icon>
       {{l("ChangeProfilePicture")}}
     </button>
     <button class="user-menu-item" mat-menu-item>
@@ -59,7 +59,7 @@
       {{l("MySettings")}}
     </button>
     <button (click)="logout()" class="user-menu-item" mat-menu-item>
-      <mat-icon>call_received</mat-icon>
+      <mat-icon>exit_to_app</mat-icon>
       {{l("Logout")}}
     </button>
   </mat-menu>

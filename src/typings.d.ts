@@ -16,6 +16,10 @@ interface NodeModule {
 }
 
 interface JQuery {
+  Jcrop(...any): any;
+}
+
+interface JQuery {
   timeago(...any): any;
 }
 

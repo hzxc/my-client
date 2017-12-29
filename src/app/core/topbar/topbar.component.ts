@@ -22,6 +22,7 @@ import { AbpSessionService } from '../../abp/session/abp-session.service';
 import { AbpMultiTenancyService } from '../../abp/multi-tenancy/abp-multi-tenancy.service';
 import { LinkedAccountsDialogComponent } from './linked-accounts-dialog/linked-accounts-dialog.component';
 import { AppAuthService } from '../shared/common/auth/app-auth.service';
+import { ChangeProfilePictureDialogComponent } from './profile/change-profile-picture-dialog/change-profile-picture-dialog.component';
 
 @Component({
   selector: 'app-core-topbar',
@@ -137,6 +138,20 @@ export class TopbarComponent extends AppComponentBase implements OnInit, AfterVi
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.getRecentlyLinkedUsers();
+      }
+    });
+  }
+
+  changeProfilePicture(): void {
+    const dialogRef = this.dialog.open(ChangeProfilePictureDialogComponent, {
+      width: '450px',
+      data: {
+      },
+      disableClose: true
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.getProfilePicture();
       }
     });
   }
