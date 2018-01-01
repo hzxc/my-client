@@ -32,6 +32,9 @@ import {
 import { MySettingsDialogComponent } from './topbar/profile/my-settings-dialog/my-settings-dialog.component';
 import { SmsVerificationDialogComponent } from './topbar/profile/sms-verification-dialog/sms-verification-dialog.component';
 import { FileUploadModule } from 'ng2-file-upload';
+import { EqualValidator } from '../shared/utils/validation/equal-validator.directive';
+import { MinValueValidator } from '../shared/utils/validation/min-value-validator.directive';
+import { PasswordComplexityValidator } from '../shared/utils/validation/password-complexity-validator.directive';
 
 @NgModule({
   imports: [
@@ -56,7 +59,8 @@ import { FileUploadModule } from 'ng2-file-upload';
   entryComponents: [
     LinkedAccountsDialogComponent,
     LinkAccountsDialogComponent,
-    ChangeProfilePictureDialogComponent
+    ChangeProfilePictureDialogComponent,
+    ChangePasswordDialogComponent
   ],
   declarations: [
     CoreComponent,
@@ -71,6 +75,10 @@ import { FileUploadModule } from 'ng2-file-upload';
     ChangeProfilePictureDialogComponent,
     MySettingsDialogComponent,
     SmsVerificationDialogComponent,
+    EqualValidator,
+    MinValueValidator,
+    PasswordComplexityValidator
+
   ]
 })
 export class CoreModule { }

@@ -23,6 +23,7 @@ import { AbpMultiTenancyService } from '../../abp/multi-tenancy/abp-multi-tenanc
 import { LinkedAccountsDialogComponent } from './linked-accounts-dialog/linked-accounts-dialog.component';
 import { AppAuthService } from '../shared/common/auth/app-auth.service';
 import { ChangeProfilePictureDialogComponent } from './profile/change-profile-picture-dialog/change-profile-picture-dialog.component';
+import { ChangePasswordDialogComponent } from './profile/change-password-dialog/change-password-dialog.component';
 
 @Component({
   selector: 'app-core-topbar',
@@ -138,6 +139,19 @@ export class TopbarComponent extends AppComponentBase implements OnInit, AfterVi
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.getRecentlyLinkedUsers();
+      }
+    });
+  }
+
+  changePassword(): void {
+    const dialogRef = this.dialog.open(ChangePasswordDialogComponent, {
+      width: '400px',
+      data: {
+      },
+      disableClose: true
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
       }
     });
   }
