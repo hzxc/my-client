@@ -34,7 +34,6 @@ import { SmsVerificationDialogComponent } from './topbar/profile/sms-verificatio
 import { FileUploadModule } from 'ng2-file-upload';
 import { EqualValidator } from '../shared/utils/validation/equal-validator.directive';
 import { MinValueValidator } from '../shared/utils/validation/min-value-validator.directive';
-import { PasswordComplexityValidator } from '../shared/utils/validation/password-complexity-validator.directive';
 
 @NgModule({
   imports: [
@@ -47,7 +46,8 @@ import { PasswordComplexityValidator } from '../shared/utils/validation/password
     FlexLayoutModule,
     ThemeModule,
     FormsModule,
-    FileUploadModule
+    FileUploadModule,
+    UtilsModule
   ],
   providers: [
     NavigationService,
@@ -75,10 +75,6 @@ import { PasswordComplexityValidator } from '../shared/utils/validation/password
     ChangeProfilePictureDialogComponent,
     MySettingsDialogComponent,
     SmsVerificationDialogComponent,
-    EqualValidator,
-    MinValueValidator,
-    PasswordComplexityValidator
-
   ]
 })
 export class CoreModule { }
