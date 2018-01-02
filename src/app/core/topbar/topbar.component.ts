@@ -32,9 +32,9 @@ import { ChangePasswordDialogComponent } from './profile/change-password-dialog/
 })
 export class TopbarComponent extends AppComponentBase implements OnInit, AfterViewInit {
   @Input() sidenav;
+  @Input() chatBar;
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
   private isTrigger = false;
-
 
   private languages: abp.localization.ILanguageInfo[];
   private currentLanguage: abp.localization.ILanguageInfo;
@@ -44,7 +44,6 @@ export class TopbarComponent extends AppComponentBase implements OnInit, AfterVi
   private tenant: TenantLoginInfoDto = new TenantLoginInfoDto();
   private recentlyLinkedUsers: LinkedUserDto[];
   private profilePicture = '/assets/common/images/default-profile-picture.png';
-
 
   private notifications: IFormattedUserNotification[] = [];
   private unreadNotificationCount = 0;

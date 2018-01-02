@@ -34,6 +34,7 @@ import { SmsVerificationDialogComponent } from './topbar/profile/sms-verificatio
 import { FileUploadModule } from 'ng2-file-upload';
 import { EqualValidator } from '../shared/utils/validation/equal-validator.directive';
 import { MinValueValidator } from '../shared/utils/validation/min-value-validator.directive';
+import { ChatBarComponent } from './topbar/chat/chat-bar/chat-bar.component';
 
 @NgModule({
   imports: [
@@ -75,6 +76,7 @@ import { MinValueValidator } from '../shared/utils/validation/min-value-validato
     ChangeProfilePictureDialogComponent,
     MySettingsDialogComponent,
     SmsVerificationDialogComponent,
+    ChatBarComponent,
   ]
 })
 export class CoreModule { }
