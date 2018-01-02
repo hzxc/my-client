@@ -35,7 +35,6 @@ export class ChangePasswordDialogComponent extends AppComponentBase implements O
     this._profileService.getPasswordComplexitySetting()
       .subscribe(result => {
         this.passwordComplexitySetting = result.setting;
-        console.log(this.passwordComplexitySetting);
         this.loading = false;
       });
   }
@@ -56,5 +55,4 @@ export class ChangePasswordDialogComponent extends AppComponentBase implements O
         this.dialogRef.close(true);
       });
   }
-
 }
