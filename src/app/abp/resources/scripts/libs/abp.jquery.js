@@ -1,4 +1,4 @@
-﻿﻿var abp = abp || {};
+﻿﻿﻿var abp = abp || {};
 (function ($) {
 
     if (!$) {
@@ -192,6 +192,10 @@
         ajaxSendHandler: function (event, request, settings) {
             var token = abp.security.antiForgery.getToken();
             if (!token) {
+                return;
+            }
+
+            if (!abp.security.antiForgery.shouldSendToken(settings)) {
                 return;
             }
 
